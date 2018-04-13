@@ -1,23 +1,29 @@
 // common/mp_gw.js
 
-const db = require('db.js').db;
-const api = require('api.js').api;
+const db = require('../db.js').db;
+const api = require('../api.js').api;
+
+function redirectTo(name, opengid, gid) {
+	let url = `/pages/${name}/${name}?opengid=${opengid}`;
+
+	if (gid) {
+		url = `${url}?gid=${gid}`;
+	}
+
+	console.log(`start over redirectTo ${url}`);
+	api.redirectTo(url);
+}
 
 const mp_gw = {
-	start_post: (app, group = {}) => {
+	start_post: (app, g = {}) => {
 		db.user.save(app.user);
 
 		api.hideLoadingEx();
 
-		if (group.opengid) {
-			let url = `/pages/guide/guide?opengid=${group.opengid}`;
+		if (g.opengid) {
+			let name = g.gid ? "group" : "guide";
 
-			if (group.gid) {
-				url = `${url}?gid=${group.gid}`;
-			}
-
-			console.log(`start over redirectTo ${url}`);
-			api.redirectTo(url);
+			redirectTo(name, g.opengid, g.gid);
 		} else {
 			console.log(`start over`);
 		}

@@ -1,66 +1,21 @@
 // pages/group/group.js
+const m_name = "group";
+const app = getApp();
+
+const pg = require('../../utils/pg.js').pg;
+const mp = require('mp.js').mp;
+
+function load(page, options) {
+	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
+}
+
 Page({
+	name: m_name,
+	data: {
 
-  /**
-   * 页面的初始数据
-   */
-  data: {
-  
-  },
+	},
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
-  }
+	onLoad: function (options) {
+		load(this, options);
+	},
 })

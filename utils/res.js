@@ -26,7 +26,7 @@ function join(app, ...keys) {
 }
 
 const $res = {
-	app: ["xxx", "xxx"],
+	app: ["班级事务小助手", "small assistant in class affairs"],
 	success: ["成功", "success"],
 	fail: ["失败", "fail"],
 	login: ["登陆", "login"],

@@ -77,9 +77,7 @@ const $gw = {
 	check: (name, obj, ...fields) => {
 		let checker = $gw.checker(name, obj);
 
-		for (let field of fields) {
-			checker = checker.exist(field)
-		}
+		fields.map(v=>checker.exist(v));
 
 		return obj;
 	},

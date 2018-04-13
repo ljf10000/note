@@ -18,16 +18,11 @@ function page_load(page, options) {
 
 Page({
 	name: m_name,
-	/**
-	 * 页面的初始数据
-	 */
+
 	data: {
 		opengid: "",
 	},
 
-	/**
-	 * 生命周期函数--监听页面加载
-	 */
 	onLoad: function (options) {
 		page_load(this, options);
 	},

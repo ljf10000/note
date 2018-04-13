@@ -1,5 +1,5 @@
-// pages/list/list.js
-const m_name = "list";
+// pages/notice/notice.js
+const m_name = "notice";
 const app = getApp();
 
 const pg = require('../../utils/pg.js').pg;

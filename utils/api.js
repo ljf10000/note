@@ -51,7 +51,6 @@ const api = {
 	authorize: (scope) => helper.promisify(wx.authorize, { scope }),
 
 	getUserInfo: () => helper.promisify(wx.getUserInfo, {
-		withCredentials: true,
 		lang: deft.lang.zhCN,
 	}),
 

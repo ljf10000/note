@@ -5,16 +5,19 @@ const mp = require('utils/mp.js').mp;
 const mq = require('utils/mq.js').mq;
 
 function app_load(app, options) {
-	console.log(`app launch options=${JSON.stringify(options)}`);
-
-	[
-		"checkin",
+	let names = [
 		"group",
 		"guide",
 		"index",
 		"list",
-		"logs",
-	].map(v => app.mq.addTopic(v));
+		"manage",
+		"notice",
+		"vote",
+	];
+
+	console.log(`app launch options=${JSON.stringify(options)}`);
+
+	names.map(v => app.mq.addTopic(v));
 
 	// load user
 	// todo: load group
