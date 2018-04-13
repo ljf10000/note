@@ -1,11 +1,8 @@
 // com.js
 // common of mp & gw
 
-const m_db = require('db.js');
-const m_api = require('api.js');
-
-const db = m_db.db;
-const api = m_api.api;
+const db = require('db.js').db;
+const api = require('api.js').api;
 
 const com = {
 	start_post: (app, param = {}) => {

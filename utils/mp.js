@@ -1,14 +1,9 @@
 // mp.js
 
-const m_com = require('com.js');
-const m_res = require('res.js');
-const m_api = require('api.js');
-const m_gw = require('gw.js');
-
-const com = m_com.com;
-const res = m_res.res;
-const api = m_api.api;
-const gw = m_gw.gw;
+const com = require('com.js').com;
+const res = require('res.js').res;
+const api = require('api.js').api;
+const gw = require('gw.js').gw;
 
 const $mp = {
 	login_fail: (app, msg, e) => {

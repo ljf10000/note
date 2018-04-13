@@ -1,14 +1,9 @@
 // gw.js
 
-const m_util = require('util.js');
-const m_com = require('com.js');
-const m_api = require('api.js');
-const m_db = require('db.js');
-
-const helper = m_util.helper;
-const com = m_com.com;
-const api = m_api.api;
-const db = m_db.db;
+const helper = require('helper.js').helper;
+const com = require('com.js').com;
+const api = require('api.js').api;
+const db = require('db.js').db;
 
 const $domain = {
 	master: "lambda-lab.cn",

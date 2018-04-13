@@ -1,7 +1,6 @@
 // db.js
 
-const m_api = require('api.js');
-const api = m_api.api;
+const api = require('api.js').api;
 
 const $db = {
 	gkey: gid => 'g-' + gid,

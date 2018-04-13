@@ -1,8 +1,7 @@
 // api.js
 
-const m_util = require('util.js');
-const helper = m_util.helper;
-const deft = m_util.deft;
+const helper = require('helper.js').helper;
+const deft = require('deft.js').deft;
 
 const api = {
 	alert: (content) => api.showModal({ title: "alert", content }),
