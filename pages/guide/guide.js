@@ -1,9 +1,11 @@
 // pages/guide/guide.js
-
 const m_name = "guide";
-const app = getApp();
+const include = (name) => require(`../../utils/${name}.js`)[name];
 
-const db = require('../../utils/db.js').db;
+const pg = include("pg");
+const mp = include("mp");
+
+const app = getApp();
 
 function page_load(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);

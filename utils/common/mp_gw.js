@@ -1,7 +1,8 @@
 // common/mp_gw.js
+const include = (name) => require(`../${name}.js`)[name];
 
-const db = require('../db.js').db;
-const api = require('../api.js').api;
+const db = include("db");
+const api = include("api");
 
 function redirectTo(name, opengid, gid) {
 	let url = `/pages/${name}/${name}?opengid=${opengid}`;

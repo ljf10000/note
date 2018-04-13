@@ -1,10 +1,11 @@
 // pages/manage/manage.js
-
 const m_name = "manage";
-const app = getApp();
+const include = (name) => require(`../../utils/${name}.js`)[name];
 
-const pg = require('../../utils/pg.js').pg;
-const mp = require('mp.js').mp;
+const pg = include("pg");
+const mp = include("mp");
+
+const app = getApp();
 
 function load(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
