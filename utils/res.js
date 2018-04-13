@@ -1,4 +1,4 @@
-// util.js
+// res.js
 
 function Get(app, id) {
 	let obj = $res[id];

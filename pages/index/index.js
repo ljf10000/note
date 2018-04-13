@@ -10,6 +10,7 @@ const m_mp = require('../../utils/mp.js');
 const mp = m_mp.mp;
 
 Page({
+	name: m_name,
 	data: {
 		motto: 'Hello SB',
 		user: app.user,
@@ -18,12 +19,10 @@ Page({
 	onLoad: function (options) {
 		console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 
-		db.page.create(app.pages, this);
-
-		mp.start(app, { shareTicket: app.shareTicket });
+		mp.start(app, app.login.shareTicket);
 	},
 	onUnload: function () {
-		db.page.destroy(app.pages, this);
+
 	},
 
 	onShow: function () {
@@ -45,9 +44,7 @@ Page({
 
 				console.info(`${m_name} share success v=${JSON.stringify(v)}`);
 
-				app.shareTicket = shareTicket;
-
-				mp.start(app, { shareTicket  });
+				mp.start(app, shareTicket);
 			},
 			fail: e => {
 				console.info(`${m_name} share failed e=${e}`);

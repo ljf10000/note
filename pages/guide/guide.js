@@ -7,7 +7,7 @@ const m_db = require('../../utils/db.js');
 const db = m_db.db;
 
 Page({
-
+	name: m_name,
 	/**
 	 * 页面的初始数据
 	 */
@@ -19,8 +19,6 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad: function (options) {
-		db.page.create(app.pages, this);
-
 		console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 
 		let opengid = options.opengid;
