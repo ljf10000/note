@@ -1,0 +1,6 @@
+<!--pages/guide/guide.wxml-->
+<text>pages/guide/guide.wxml</text>
+
+<view>
+	<open-data type="groupName" open-gid="{{opengid}}"></open-data>
+</view>

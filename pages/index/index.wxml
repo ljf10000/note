@@ -1,0 +1,22 @@
+<!--index.wxml-->
+<view class="container">
+    <view class="user">
+		<view id="user-uid">
+			<text>{{"uid="+user.uid}}</text>
+		</view>
+		<view id="user-session">
+			<text>{{"session="+user.session}}</text>
+		</view>
+		<view id="user-nn">
+			<text>{{"nn="+user.nn}}</text>
+		</view>
+    </view>
+
+    <view class="share">
+		<button type="defaule" open-type="share" bindtap="clickShare">Share</button>
+    </view>
+
+    <view class="usermotto">
+        <text class="user-motto">{{motto}}</text>
+    </view>
+</view>
