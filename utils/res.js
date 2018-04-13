@@ -1,9 +1,11 @@
 // res.js
 
+const lang = 0;
+
 function Get(app, id) {
 	let obj = $res[id];
 
-	return obj ? obj[app.lang] : "";
+	return obj ? obj[lang] : "";
 }
 
 function join(app, ...keys) {
@@ -17,7 +19,7 @@ function join(app, ...keys) {
 		return name;
 	}
 
-	let split = (0==app.lang)?"":" ";
+	let split = (0==lang)?"":" ";
 	for (let i=1; i<count; i++) {
 		name += split + Get(app, keys[i]);
 	}

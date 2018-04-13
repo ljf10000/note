@@ -4,7 +4,7 @@ const db = require('utils/db.js').db;
 const mp = require('utils/mp.js').mp;
 const mq = require('utils/mq.js').mq;
 
-function app_load(app, options) {
+function load(app, options) {
 	let names = [
 		"group",
 		"guide",
@@ -28,7 +28,7 @@ function app_load(app, options) {
 	});
 }
 
-function app_show(app, options) {
+function show(app, options) {
 	app.options = options;
 	app.login.shareTicket = options.shareTicket;
 
@@ -37,18 +37,19 @@ function app_show(app, options) {
 
 App({
 	onLaunch: function (options) {
-		app_load(this);
+		load(this, options);
 	},
 
 	onShow: function (options) {
-		app_show(this, options);
+		show(this, options);
 	},
 
-	lang: 0,
 	user: {},
 	groups: {},
+	userInfo: {},
+
 	login: {},
-	pages: {},
 	options: {},
+
 	mq: new mq(),
 });
