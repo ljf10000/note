@@ -103,7 +103,7 @@ const gw = {
 	randLogin: {
 		request: (param = { jscode }) =>
 			$gw.request(helper.bkdr(param.jscode), $domain.path.randLogin, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "randLogin";
 			let user = app.user;
 
@@ -112,14 +112,14 @@ const gw = {
 			$gw.checkUser(name, obj);
 
 			db.user.vcopy(user, obj.user);
-			com.start_post(app);
+			com.start_post(app, opt);
 		},
 	},
 
 	randLoginG: {
 		request: (param = { jscode, gsecret }) =>
 			$gw.request(helper.bkdr(param.jscode), $domain.path.randLoginG, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "randLoginG";
 			let user = app.user;
 
@@ -129,7 +129,7 @@ const gw = {
 
 			db.user.vcopy(user, obj.user);
 
-			com.start_post(app, {
+			com.start_post(app, opt, {
 				opengid: obj.opengid,
 				gid: obj.gid,
 			});
@@ -139,7 +139,7 @@ const gw = {
 	userLogin: {
 		request: (param = { uid, jscode }) =>
 			$gw.request(param.uid, $domain.path.userLogin, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "userLogin";
 			let user = app.user;
 
@@ -148,14 +148,14 @@ const gw = {
 			$gw.checkUser(name, obj);
 
 			db.user.vcopy(user, obj.user);
-			com.start_post(app);
+			com.start_post(app, opt);
 		},
 	},
 
 	userLoginG: {
 		request: (param = { uid, jscode, gsecret }) =>
 			$gw.request(param.uid, $domain.path.userLoginG, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "userLoginG";
 			let user = app.user;
 
@@ -165,7 +165,7 @@ const gw = {
 
 			db.user.vcopy(user, obj.user);
 
-			com.start_post(app, {
+			com.start_post(app, opt, {
 				opengid: obj.opengid,
 				gid: obj.gid,
 			});
@@ -175,14 +175,14 @@ const gw = {
 	userG: {
 		request: (param = { uid, session, gsecret }) =>
 			$gw.request(param.uid, $domain.path.userG, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "userG";
 
 			$gw.logHandle(name, obj);
 			// maybe exist gid
 			$gw.check(name, obj, "opengid");
 
-			com.start_post(app, {
+			com.start_post(app, opt, {
 				opengid: obj.opengid,
 				gid: obj.gid,
 			});
@@ -192,7 +192,7 @@ const gw = {
 	userCheckin: {
 		request: (param = { uid, session, opengid, role, name, nick, students }) =>
 			$gw.request(param.uid, $domain.path.userCheckin, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "userCheckin";
 
 			$gw.logHandle(name, obj);
@@ -203,7 +203,7 @@ const gw = {
 	groupCheckin: {
 		request: (param = { uid, session, gid, role, name, nick, students }) =>
 			$gw.request(param.uid, $domain.path.groupCheckin, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "groupCheckin";
 
 			$gw.logHandle(name, obj);
@@ -214,7 +214,7 @@ const gw = {
 	groupGet: {
 		request: (param = { uid, session, gid }) =>
 			$gw.request(param.uid, $domain.path.groupGet, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "groupGet";
 
 			$gw.logHandle(name, obj);
@@ -225,7 +225,7 @@ const gw = {
 	groupSync: {
 		request: (param = { uid, session, gid, ver }) =>
 			$gw.request(param.uid, $domain.path.groupSync, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "groupSync";
 
 			$gw.logHandle(name, obj);
@@ -236,7 +236,7 @@ const gw = {
 	groupNewAdviser: {
 		request: (param = { uid, session, gid, adviser }) =>
 			$gw.request(param.uid, $domain.path.groupNewAdviser, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "groupNewAdviser";
 
 			$gw.logHandle(name, obj);
@@ -247,7 +247,7 @@ const gw = {
 	groupDel: {
 		request: (param = { uid, session, gid }) =>
 			$gw.request(param.uid, $domain.path.groupDel, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "groupDel";
 
 			$gw.logHandle(name, obj);
@@ -258,7 +258,7 @@ const gw = {
 	groupDelUser: {
 		request: (param = { uid, session, gid, user }) =>
 			$gw.request(param.uid, $domain.path.groupDelUser, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "groupDelUser";
 
 			$gw.logHandle(name, obj);
@@ -269,7 +269,7 @@ const gw = {
 	groupDelStudent: {
 		request: (param = { uid, session, gid, student }) =>
 			$gw.request(param.uid, $domain.path.groupDelStudent, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "groupDelStudent";
 
 			$gw.logHandle(name, obj);
@@ -280,7 +280,7 @@ const gw = {
 	payPre: {
 		request: (param = { uid, session, gid, money, time, lease }) =>
 			$gw.request(param.uid, $domain.path.payPre, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "payPre";
 
 			$gw.logHandle(name, obj);
@@ -291,7 +291,7 @@ const gw = {
 	topicNew: {
 		request: (param = { uid, session, gid, type, topic }) =>
 			$gw.request(param.uid, $domain.path.topicNew, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "topicNew";
 
 			$gw.logHandle(name, obj);
@@ -302,7 +302,7 @@ const gw = {
 	topicAct: {
 		request: (param = { uid, session, gid, tid, action }) =>
 			$gw.request(param.uid, $domain.path.topicAct, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "topicAct";
 
 			$gw.logHandle(name, obj);
@@ -313,7 +313,7 @@ const gw = {
 	topicGet: {
 		request: (param = { uid, session, gid, tid }) =>
 			$gw.request(param.uid, $domain.path.topicGet, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "topicGet";
 
 			$gw.logHandle(name, obj);
@@ -324,7 +324,7 @@ const gw = {
 	topicGetOpen: {
 		request: (param = { uid, session, gid }) =>
 			$gw.request(param.uid, $domain.path.topicGetOpen, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "topicGetOpen";
 
 			$gw.logHandle(name, obj);
@@ -335,7 +335,7 @@ const gw = {
 	topicGetClosed: {
 		request: (param = { uid, session, gid }) =>
 			$gw.request(param.uid, $domain.path.topicGetClosed, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "topicGetClosed";
 
 			$gw.logHandle(name, obj);
@@ -346,7 +346,7 @@ const gw = {
 	topicClose: {
 		request: (param = { uid, session, gid, tid }) =>
 			$gw.request(param.gid, $domain.path.topicClosed, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "topicClose";
 
 			$gw.logHandle(name, obj);
@@ -357,7 +357,7 @@ const gw = {
 	topicDel: {
 		request: (param = { uid, session, gid, tid }) =>
 			$gw.request(param.gid, $domain.path.topicDel, param),
-		handle: (app, obj) => {
+		handle: (app, opt, obj) => {
 			let name = "topicDel";
 
 			$gw.logHandle(name, obj);

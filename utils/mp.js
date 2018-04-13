@@ -6,127 +6,148 @@ const api = require('api.js').api;
 const gw = require('gw.js').gw;
 
 const $mp = {
-	login_fail: (app, msg, e) => {
+	login_fail: (app, opt, e) => {
+		let msg = res.mpLoginFail(app);
+
 		api.hideLoadingEx();
 
-		console.log(`${msg} failed: ${JSON.stringify(e)}`);
+		console.error(`${msg}: ${JSON.stringify(e)}`);
 
-		// todo: notify user mp-login failed
+		api.showModal(res.app(app), msg);
 	},
 
-	login_fail_wx: (app, e) => {
+	login_fail_wx: (app, opt, e) => {
+		let msg = res.wxLoginFail(app);
+
 		api.hideLoadingEx();
 
-		console.error(`wx login failed: ${JSON.stringify(e)}`);
+		console.error(`${msg}: ${JSON.stringify(e)}`);
 
-		// todo: notify user wx-login failed
+		api.showModal(res.app(app), msg);
 	},
 
-	start: (app, gsecret) => {
+	start: (app, opt) => {
 		if (0 == app.user.uid) {
-			return $mp.start_login(app, gsecret);
+			return $mp.start_login(app, opt);
 		} else {
 			return api.checkSession().then(
-				v => $mp.start_normal(app, gsecret, v),
-				e => $mp.start_login(app, gsecret)
+				v => $mp.start_normal(app, opt),
+				e => $mp.start_login(app, opt)
 			);
 		}
 	},
 
-	start_normal: (app, gsecret, v) => {
-		if (gsecret) {
-			return mp.userG(app, gsecret);
+	start_normal: (app, opt) => {
+		if (opt.gsecret) {
+			return mp.userG(app, opt);
 		} else {
 			console.log(`start normal`);
 
-			com.start_post(app);
+			com.start_post(app, opt);
 		}
 	},
 
-	start_login: (app, gsecret) => {
+	start_login: (app, opt) => {
 		api.showLoadingEx(res.wxLogin(app));
 
 		return api.login().then(
-			v => $mp.login(app, v.code, gsecret),
-			e => $mp.login_fail_wx(app, e)
+			v => {
+				opt.jscode = v.code;
+
+				return $mp.login(app, opt);
+			},
+			e => $mp.login_fail_wx(app, opt, e)
 		);
 	},
 
-	login: (app, jscode, gsecret) => {
+	login: (app, opt) => {
 		api.showLoadingEx(res.mpLogin(app));
 
 		if (app.user.uid) {
-			if (gsecret) {
-				return mp.userLoginG(app, jscode, gsecret);
+			if (opt.gsecret) {
+				return mp.userLoginG(app, opt);
 			} else {
-				return mp.userLogin(app, jscode);
+				return mp.userLogin(app, opt);
 			}
 		} else {
 			if (gsecret) {
-				return mp.randLoginG(app, jscode, gsecret);
+				return mp.randLoginG(app, opt);
 			} else {
-				return mp.randLogin(app, jscode);
+				return mp.randLogin(app, opt);
 			}
 		}
 	},
 
-	loginBy: (app, method, param) => {
-		let msg = `${res.mpLogin(app)} ${method}`;
+	loginBy: (app, opt, method, param) => {
+		opt.param = param;
+		opt.method = method;
 
+		let msg = `${res.mpLogin(app)} ${method}`;
 		api.showLoadingEx(msg);
 
 		msg = `start ${msg} with`;
-
 		if (param.uid) {
 			msg = `${msg} uid:${param.uid}`;
 		}
-
 		if (param.jscode) {
 			msg = `${msg} jscode:${param.jscode}`;
 		}
-
 		if (param.gsecret) {
 			msg = `${msg} gsecret:${JSON.stringify(param.gsecret)}`;
 		}
-
 		console.log(msg);
 
 		let obj = gw[method];
-
 		return obj.request(param).then(
-			v => obj.handle(app, v.data),
-			e => $mp.login_fail(app, msg, e)
+			v => obj.handle(app, opt, v.data),
+			e => $mp.login_fail(app, opt, e)
 		);
 	},
 };
 
 const mp = {
-	start: (app, options) => {
-		let shareTicket = options.shareTicket;
+	start: (app, opt) => {
+		let shareTicket = opt.shareTicket;
 
 		if (shareTicket) {
 			console.log(`mp start with shareTicket:${shareTicket}`);
 
 			api.getShareInfo(shareTicket).then(v => {
-				let iv = v.iv;
-				let encryptedData = v.encryptedData;
+				console.log(`mp getShareInfo: shareTicket:${shareTicket} ==> iv:${v.iv} encryptedData:${v.encryptedData}`);
 
-				console.log(`mp getShareInfo: shareTicket:${shareTicket} ==> encryptedData:${encryptedData} iv:${iv}`);
+				opt.gsecret = {
+					iv: v.iv,
+					encryptedData: v.encryptedData,
+				}
 
-				$mp.start(app, { encryptedData, iv });
+				$mp.start(app, opt);
 			})
 		} else {
 			console.log(`mp start normal`);
 
-			$mp.start(app);
+			$mp.start(app, opt);
 		}
 	},
 
-	userG: (app, gsecret) => $mp.loginBy(app, "userG", { uid: app.user.uid, session: app.user.session, gsecret }),
-	userLoginG: (app, jscode, gsecret) => $mp.loginBy(app, "userLoginG", { uid: app.user.uid, jscode, gsecret }),
-	randLoginG: (app, jscode, gsecret) => $mp.loginBy(app, "randLoginG", { jscode, gsecret }),
-	userLogin: (app, jscode) => $mp.loginBy(app, "userLogin", { uid: app.user.uid, jscode }),
-	randLogin: (app, jscode) => $mp.loginBy(app, "randLogin", { jscode }),
+	userG: (app, opt) => $mp.loginBy(app, opt, "userG", {
+		uid: app.user.uid,
+		session: app.user.session,
+		gsecret: opt.gsecret,
+	}),
+	userLoginG: (app, opt) => $mp.loginBy(app, opt, "userLoginG", {
+		uid: app.user.uid,
+		jscode: opt.jscode,
+		gsecret: opt.gsecret,
+	}),
+	randLoginG: (app, opt) => $mp.loginBy(app, opt, "randLoginG", {
+		jscode: opt.jscode,
+		gsecret: opt.gsecret,
+	}),
+	userLogin: (app, opt) => $mp.loginBy(app, opt, "userLogin", {
+		uid: app.user.uid,
+		jscode: opt.jscode,
+	}),
+	randLogin: (app, opt) => $mp.loginBy(app, opt, "randLogin", { jscode: opt.jscode }),
 };
 
 module.exports = {

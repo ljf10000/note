@@ -5,16 +5,16 @@ const db = require('db.js').db;
 const api = require('api.js').api;
 
 const com = {
-	start_post: (app, param = {}) => {
+	start_post: (app, opt, group = {}) => {
 		db.user.save(app.user);
 
 		api.hideLoadingEx();
 
-		if (param.opengid) {
-			let url = `/pages/guide/guide?opengid=${param.opengid}`;
+		if (group.opengid) {
+			let url = `/pages/guide/guide?opengid=${group.opengid}`;
 
-			if (param.gid) {
-				url = `${url}?gid=${param.gid}`;
+			if (group.gid) {
+				url = `${url}?gid=${group.gid}`;
 			}
 
 			console.log(`start over redirectTo ${url}`);
