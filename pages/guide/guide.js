@@ -5,6 +5,18 @@ const app = getApp();
 
 const db = require('../../utils/db.js').db;
 
+
+function page_load(page, options) {
+	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
+
+	let opengid = options.opengid;
+	if (opengid) {
+		page.setData({ opengid });
+
+		console.log(`${m_name} set data:${opengid}`);
+	}
+}
+
 Page({
 	name: m_name,
 	/**
@@ -18,37 +30,6 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad: function (options) {
-		console.log(`${m_name} onload options:${JSON.stringify(options)}`);
-
-		let opengid = options.opengid;
-		if (opengid) {
-			this.setData({opengid});
-
-			console.log(`${m_name} set data:${opengid}`);
-		}
-	},
-
-	onReady: function () {
-
-	},
-
-	onShow: function () {
-
-	},
-
-	onHide: function () {
-
-	},
-
-	onUnload: function () {
-
-	},
-
-	onPullDownRefresh: function () {
-
-	},
-
-	onReachBottom: function () {
-
+		page_load(this, options);
 	},
 })

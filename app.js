@@ -4,7 +4,7 @@ const db = require('utils/db.js').db;
 const mp = require('utils/mp.js').mp;
 const mq = require('utils/mq.js').mq;
 
-function app_init(app, options) {
+function app_load(app, options) {
 	console.log(`app launch options=${JSON.stringify(options)}`);
 
 	[
@@ -25,23 +25,20 @@ function app_init(app, options) {
 	});
 }
 
+function app_show(app, options) {
+	app.options = options;
+	app.login.shareTicket = options.shareTicket;
+
+	console.log(`app show options=${JSON.stringify(options)}`);
+}
+
 App({
 	onLaunch: function (options) {
-		app_init(this);
-
+		app_load(this);
 	},
+
 	onShow: function (options) {
-		this.login.shareTicket = options.shareTicket;
-
-		console.log(`app show options=${JSON.stringify(options)}`);
-	},
-
-	onHide: function () {
-		console.log("hide")
-	},
-
-	onError: function (msg) {
-		console.log(msg)
+		app_show(this, options);
 	},
 
 	lang: 0,
@@ -49,5 +46,6 @@ App({
 	groups: {},
 	login: {},
 	pages: {},
+	options: {},
 	mq: new mq(),
 });
