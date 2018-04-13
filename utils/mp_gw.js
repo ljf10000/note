@@ -1,10 +1,10 @@
-// com.js
+// mp_gw.js
 // common of mp & gw
 
 const db = require('db.js').db;
 const api = require('api.js').api;
 
-const com = {
+const mp_gw = {
 	start_post: (app, group = {}) => {
 		db.user.save(app.user);
 
@@ -26,5 +26,5 @@ const com = {
 };
 
 module.exports = {
-	com: com,
+	mp_gw: mp_gw,
 };

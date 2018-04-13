@@ -5,7 +5,6 @@ const app = getApp();
 
 const db = require('../../utils/db.js').db;
 
-
 function page_load(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 

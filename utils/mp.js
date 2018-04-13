@@ -1,6 +1,6 @@
 // mp.js
 
-const com = require('com.js').com;
+const mp_gw = require('mp_gw.js').mp_gw;
 const res = require('res.js').res;
 const api = require('api.js').api;
 const gw = require('gw.js').gw;
@@ -43,7 +43,7 @@ const $mp = {
 		} else {
 			console.log(`start normal`);
 
-			com.start_post(app);
+			mp_gw.start_post(app);
 		}
 	},
 

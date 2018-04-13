@@ -1,7 +1,7 @@
 // gw.js
 
 const helper = require('helper.js').helper;
-const com = require('com.js').com;
+const mp_gw = require('mp_gw.js').mp_gw;
 const api = require('api.js').api;
 const db = require('db.js').db;
 
@@ -112,7 +112,7 @@ const gw = {
 			$gw.checkUser(name, obj);
 
 			db.user.vcopy(user, obj.user);
-			com.start_post(app);
+			mp_gw.start_post(app);
 		},
 	},
 
@@ -129,7 +129,7 @@ const gw = {
 
 			db.user.vcopy(user, obj.user);
 
-			com.start_post(app, {
+			mp_gw.start_post(app, {
 				opengid: obj.opengid,
 				gid: obj.gid,
 			});
@@ -148,7 +148,7 @@ const gw = {
 			$gw.checkUser(name, obj);
 
 			db.user.vcopy(user, obj.user);
-			com.start_post(app);
+			mp_gw.start_post(app);
 		},
 	},
 
@@ -165,7 +165,7 @@ const gw = {
 
 			db.user.vcopy(user, obj.user);
 
-			com.start_post(app, {
+			mp_gw.start_post(app, {
 				opengid: obj.opengid,
 				gid: obj.gid,
 			});
@@ -182,7 +182,7 @@ const gw = {
 			// maybe exist gid
 			$gw.check(name, obj, "opengid");
 
-			com.start_post(app, {
+			mp_gw.start_post(app, {
 				opengid: obj.opengid,
 				gid: obj.gid,
 			});
