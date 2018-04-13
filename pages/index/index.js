@@ -3,11 +3,8 @@
 const m_name = "index";
 const app = getApp();
 
-const m_db = require('../../utils/db.js');
-const db = m_db.db;
-
-const m_mp = require('../../utils/mp.js');
-const mp = m_mp.mp;
+const db = require('../../utils/db.js').db;
+const mp = require('../../utils/mp.js').mp;
 
 Page({
 	name: m_name,

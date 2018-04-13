@@ -13,8 +13,7 @@ class topic {
 		obj.tail = undefined;
 	}
 
-	constructor(tpid) {
-		this.tpid = tpid;
+	constructor() {
 		this.q = new Map();
 
 		tp_init(this);
@@ -61,10 +60,14 @@ class topic {
 class mq {
 	constructor() {
 		this.box = {};
+
+		console.log(`new mq`);
 	}
 
 	clear() {
 		this.box = {};
+
+		console.log(`clear mq`);
 	}
 
 	clearTopic(tpid) {
@@ -72,18 +75,24 @@ class mq {
 
 		if (tp) {
 			tp.clear();
+
+			console.log(`clear topic ${tpid}`);
 		}
 	}
 
 	addTopic(tpid) {
 		if (!this.box[tpid]) {
-			this.box[tpid] = new topic(tpid);
+			this.box[tpid] = new topic();
+
+			console.log(`new topic: ${tpid}`);
 		}
 	}
 
 	delTopic(tpid) {
 		if (this.box[tpid]) {
 			delete this.box[tpid];
+
+			console.log(`delete topic ${tpid}`);
 		}
 	}
 
@@ -92,13 +101,18 @@ class mq {
 		
 		if (tp) {
 			tp.sendmsg(sender, msg);
+
+			console.log(`${sender}==>${recver} msg:${JSON.stringify(msg)}`);
 		}
 	}
 
 	recvmsg(tpid) {
 		let tp = this.box[tpid];
+		let {sender, msg} = tp ? tp.recvmsg() : {};
 
-		return tp ? tp.recvmsg() : {};
+		console.log(`${tpid} recv msg:${JSON.stringify(msg)} sender:${sender}`);
+
+		return {sender, msg};
 	}
 }
 

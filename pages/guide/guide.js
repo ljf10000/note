@@ -3,8 +3,7 @@
 const m_name = "guide";
 const app = getApp();
 
-const m_db = require('../../utils/db.js');
-const db = m_db.db;
+const db = require('../../utils/db.js').db;
 
 Page({
 	name: m_name,
