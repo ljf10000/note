@@ -1,7 +1,7 @@
 // gw.js
 
 const helper = require('helper.js').helper;
-const mp_gw = require('mp_gw.js').mp_gw;
+const mp_gw = require('common/mp_gw.js').mp_gw;
 const api = require('api.js').api;
 const db = require('db.js').db;
 

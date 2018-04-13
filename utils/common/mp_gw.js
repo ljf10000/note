@@ -1,5 +1,4 @@
-// mp_gw.js
-// common of mp & gw
+// common/mp_gw.js
 
 const db = require('db.js').db;
 const api = require('api.js').api;
