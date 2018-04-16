@@ -81,7 +81,7 @@ const $gw = {
 	check: (name, obj, ...fields) => {
 		let checker = $gw.checker(name, obj);
 
-		fields.map(v=>checker.exist(v));
+		fields.map(v => checker.exist(v));
 
 		return obj;
 	},
@@ -99,8 +99,10 @@ const $gw = {
 
 		return api.request({ url, method, data });
 	},
-	
-	fail: (app, act, e) => {
+
+	fail: (obj, act, e) => {
+		// obj is app or page
+		let app = obj.userInfo ? obj : getApp();
 		let msg = res[act](app);
 
 		api.hideLoadingEx();
@@ -109,7 +111,7 @@ const $gw = {
 
 		api.showModal(res.app(app), msg);
 	},
-	login_fail: (app, e) => $gw.fail(app, "mpLoginFail", e),
+	login_fail: (obj, e) => $gw.fail(obj, "mpLoginFail", e),
 };
 
 const gw = {
@@ -210,193 +212,214 @@ const gw = {
 	userCheckin: {
 		request: (param = { uid, session, opengid, role, name, nick, students }) =>
 			$gw.request(param.uid, $domain.path.userCheckin, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "userCheckin";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
-		fail: (app, e) => $gw.fail(app, "mpUserCheckinFail", e),
+		fail: (page, e) => $gw.fail(page, "mpUserCheckinFail", e),
 	},
 
 	groupCheckin: {
 		request: (param = { uid, session, gid, role, name, nick, students }) =>
 			$gw.request(param.uid, $domain.path.groupCheckin, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "groupCheckin";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
-		fail: (app, e) => $gw.fail(app, "mpGroupCheckinFail", e),
+		fail: (page, e) => $gw.fail(page, "mpGroupCheckinFail", e),
 	},
 
 	groupGet: {
 		request: (param = { uid, session, gid }) =>
 			$gw.request(param.uid, $domain.path.groupGet, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "groupGet";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
-		fail: (app, e) => $gw.fail(app, "mpGroupGetFail", e),
+		fail: (page, e) => $gw.fail(page, "mpGroupGetFail", e),
 	},
 
 	groupSync: {
 		request: (param = { uid, session, gid, ver }) =>
 			$gw.request(param.uid, $domain.path.groupSync, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "groupSync";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (app, e) => $gw.fail(app, "mpGroupSyncFail", e),
+		fail: (page, e) => $gw.fail(page, "mpGroupSyncFail", e),
 	},
 
 	groupNewAdviser: {
 		request: (param = { uid, session, gid, adviser }) =>
 			$gw.request(param.uid, $domain.path.groupNewAdviser, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "groupNewAdviser";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
-		fail: (app, e) => $gw.fail(app, "mpGroupNewAdviserFail", e),
+		fail: (page, e) => $gw.fail(page, "mpGroupNewAdviserFail", e),
 	},
 
 	groupDel: {
 		request: (param = { uid, session, gid }) =>
 			$gw.request(param.uid, $domain.path.groupDel, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "groupDel";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (app, e) => $gw.fail(app, "mpGroupDelFail", e),
+		fail: (page, e) => $gw.fail(page, "mpGroupDelFail", e),
 	},
 
 	groupDelUser: {
 		request: (param = { uid, session, gid, user }) =>
 			$gw.request(param.uid, $domain.path.groupDelUser, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "groupDelUser";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (app, e) => $gw.fail(app, "mpGroupDelUserFail", e),
+		fail: (page, e) => $gw.fail(page, "mpGroupDelUserFail", e),
 	},
 
 	groupDelStudent: {
 		request: (param = { uid, session, gid, student }) =>
 			$gw.request(param.uid, $domain.path.groupDelStudent, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "groupDelStudent";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (app, e) => $gw.fail(app, "mpGroupDelStudentFail", e),
+		fail: (page, e) => $gw.fail(page, "mpGroupDelStudentFail", e),
 	},
 
 	payPre: {
 		request: (param = { uid, session, gid, money, time, lease }) =>
 			$gw.request(param.uid, $domain.path.payPre, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "payPre";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "pay");
 		},
-		fail: (app, e) => $gw.fail(app, "mpPayPreFail", e),
+		fail: (page, e) => $gw.fail(page, "mpPayPreFail", e),
 	},
 
 	topicNew: {
 		request: (param = { uid, session, gid, type, topic }) =>
 			$gw.request(param.uid, $domain.path.topicNew, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "topicNew";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
-		fail: (app, e) => $gw.fail(app, "mpTopicNewFail", e),
+		fail: (page, e) => $gw.fail(page, "mpTopicNewFail", e),
 	},
 
 	topicAct: {
 		request: (param = { uid, session, gid, tid, action }) =>
 			$gw.request(param.uid, $domain.path.topicAct, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "topicAct";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
-		fail: (app, e) => $gw.fail(app, "mpTopicActFail", e),
+		fail: (page, e) => $gw.fail(page, "mpTopicActFail", e),
 	},
 
 	topicGet: {
 		request: (param = { uid, session, gid, tid }) =>
 			$gw.request(param.uid, $domain.path.topicGet, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "topicGet";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
-		fail: (app, e) => $gw.fail(app, "mpTopicGetFail", e),
+		fail: (page, e) => $gw.fail(page, "mpTopicGetFail", e),
 	},
 
 	topicGetOpen: {
 		request: (param = { uid, session, gid }) =>
 			$gw.request(param.uid, $domain.path.topicGetOpen, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "topicGetOpen";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "summary");
 		},
-		fail: (app, e) => $gw.fail(app, "mpTopicGetOpenFail", e),
+		fail: (page, e) => $gw.fail(page, "mpTopicGetOpenFail", e),
 	},
 
 	topicGetClosed: {
 		request: (param = { uid, session, gid }) =>
 			$gw.request(param.uid, $domain.path.topicGetClosed, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "topicGetClosed";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "summary");
 		},
-		fail: (app, e) => $gw.fail(app, "mpTopicGetClosedFail", e),
+		fail: (page, e) => $gw.fail(page, "mpTopicGetClosedFail", e),
 	},
 
 	topicClose: {
 		request: (param = { uid, session, gid, tid }) =>
 			$gw.request(param.gid, $domain.path.topicClosed, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "topicClose";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
-		fail: (app, e) => $gw.fail(app, "mpTopicCloseFail", e),
+		fail: (page, e) => $gw.fail(page, "mpTopicCloseFail", e),
 	},
 
 	topicDel: {
 		request: (param = { uid, session, gid, tid }) =>
 			$gw.request(param.gid, $domain.path.topicDel, param),
-		success: (app, obj) => {
+		success: (page, obj) => {
 			let name = "topicDel";
 
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (app, e) => $gw.fail(app, "mpTopicDelFail", e),
+		fail: (page, e) => $gw.fail(page, "mpTopicDelFail", e),
+	},
+
+	sex: {
+		unknow: 0,
+		man: 1,
+		woman: 2,
+		end: 3,
+	},
+
+	role: {
+		invalid: 0,
+		adviser: 1,
+		teacher: 2,
+		patriarch: 3,
+		end: 4,
+	},
+
+	topic: {
+		vote: 0,
+		notice: 1,
+		end: 2,
 	},
 };
 
