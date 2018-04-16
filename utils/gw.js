@@ -96,8 +96,9 @@ const $gw = {
 
 		return api.request({ url, method, data });
 	},
-	login_fail: (app, e) => {
-		let msg = res.mpLoginFail(app);
+	login_fail: (app, e) => $gw.fail(app, "mpLoginFail", e),
+	fail: (app, act, e) => {
+		let msg = res[act](app);
 
 		api.hideLoadingEx();
 
@@ -211,6 +212,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
+		fail: (app, e) => $gw.fail(app, "mpUserCheckinFail", e),
 	},
 
 	groupCheckin: {
@@ -222,6 +224,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
+		fail: (app, e) => $gw.fail(app, "mpGroupCheckinFail", e),
 	},
 
 	groupGet: {
@@ -233,6 +236,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
+		fail: (app, e) => $gw.fail(app, "mpGroupGetFail", e),
 	},
 
 	groupSync: {
@@ -244,6 +248,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
+		fail: (app, e) => $gw.fail(app, "mpGroupSyncFail", e),
 	},
 
 	groupNewAdviser: {
@@ -255,6 +260,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
+		fail: (app, e) => $gw.fail(app, "mpGroupNewAdviserFail", e),
 	},
 
 	groupDel: {
@@ -266,6 +272,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
+		fail: (app, e) => $gw.fail(app, "mpGroupDelFail", e),
 	},
 
 	groupDelUser: {
@@ -277,6 +284,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
+		fail: (app, e) => $gw.fail(app, "mpGroupDelUserFail", e),
 	},
 
 	groupDelStudent: {
@@ -288,6 +296,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
+		fail: (app, e) => $gw.fail(app, "mpGroupDelStudentFail", e),
 	},
 
 	payPre: {
@@ -299,6 +308,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "pay");
 		},
+		fail: (app, e) => $gw.fail(app, "mpPayPreFail", e),
 	},
 
 	topicNew: {
@@ -310,6 +320,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
+		fail: (app, e) => $gw.fail(app, "mpTopicNewFail", e),
 	},
 
 	topicAct: {
@@ -321,6 +332,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
+		fail: (app, e) => $gw.fail(app, "mpTopicActFail", e),
 	},
 
 	topicGet: {
@@ -332,6 +344,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
+		fail: (app, e) => $gw.fail(app, "mpTopicGetFail", e),
 	},
 
 	topicGetOpen: {
@@ -343,6 +356,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "summary");
 		},
+		fail: (app, e) => $gw.fail(app, "mpTopicGetOpenFail", e),
 	},
 
 	topicGetClosed: {
@@ -354,6 +368,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "summary");
 		},
+		fail: (app, e) => $gw.fail(app, "mpTopicGetClosedFail", e),
 	},
 
 	topicClose: {
@@ -365,6 +380,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
+		fail: (app, e) => $gw.fail(app, "mpTopicCloseFail", e),
 	},
 
 	topicDel: {
@@ -376,6 +392,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
+		fail: (app, e) => $gw.fail(app, "mpTopicDelFail", e),
 	},
 };
 
