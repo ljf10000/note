@@ -6,16 +6,6 @@ const api = require('api.js').api;
 const gw = require('gw.js').gw;
 
 const $mp = {
-	login_fail: (app, e) => {
-		let msg = res.mpLoginFail(app);
-
-		api.hideLoadingEx();
-
-		console.error(`${msg}: ${JSON.stringify(e)}`);
-
-		api.showModal(res.app(app), msg);
-	},
-
 	login_fail_wx: (app,  e) => {
 		let msg = res.wxLoginFail(app);
 
@@ -97,10 +87,15 @@ const $mp = {
 		}
 		console.log(msg);
 
+		return $mp.callBy(app, method, param);
+	},
+
+	callBy: (app, method, param) => {
 		let obj = gw[method];
+
 		return obj.request(param).then(
-			v => obj.handle(app,  v.data),
-			e => $mp.login_fail(app,  e)
+			v => obj.success(app, v.data),
+			e => obj.fail(app, e)
 		);
 	},
 };

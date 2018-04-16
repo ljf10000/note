@@ -50,10 +50,6 @@ Page({
 		page_load(this, options);
 	},
 
-	clickShare: function (ev) {
-		console.log(`share with ${this.route}`);
-	},
-
 	bindRoleChange: function (ev) {
 		let oldRoleIndex = this.data.role.indexs[0];
 		let newRoleIndex = ev.detail.value[0] * 1;

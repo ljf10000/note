@@ -23,6 +23,10 @@ Page({
 		load(this, options);
 	},
 
+	clickShare: function (ev) {
+		console.log(`share with ${this.route}`);
+	},
+
 	onShareAppMessage: function (options) {
 		return pg.share(this, options);
 	},
