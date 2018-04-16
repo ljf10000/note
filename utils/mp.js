@@ -72,7 +72,9 @@ const $mp = {
 		app.login.param = param;
 		app.login.method = method;
 
-		let msg = `${res.mpLogin(app)} ${method}`;
+		let msg = res.Join(app, "login");
+		
+		msg = `${msg} ${method}`;
 		api.showLoadingEx(msg);
 
 		msg = `start ${msg} with`;
@@ -109,8 +111,8 @@ const $mp = {
 		param.uid = user.uid;
 		param.session = user.session;
 	},
-	isPage: (obj) => !obj.userInfo,
-	isApp: (obj) => !$mp.isPage(obj),
+	isApp: (obj) => true === obj.__i_m_app__,
+	isPage: (obj) => !$mp.isApp(obj),
 };
 
 const mp = {
@@ -163,49 +165,46 @@ const mp = {
 	groupCheckin: (page, param = { gid, role, name, nick, students }) =>
 		$mp.callBy(page, "groupCheckin", param),
 
-	groupGet: (page, param = { gid }) => 
+	groupGet: (page, param = { gid }) =>
 		$mp.callBy(page, "groupGet", param),
 
-	groupSync: (page, param = { gid, ver }) => 
+	groupSync: (page, param = { gid, ver }) =>
 		$mp.callBy(page, "groupSync", param),
 
-	groupNewAdviser: (page, param = { gid, adviser }) => 
+	groupNewAdviser: (page, param = { gid, adviser }) =>
 		$mp.callBy(page, "groupNewAdviser", param),
 
-	groupDel: (page, param = { gid }) => {
-		$mp.initUserParam(page, param);
+	groupDel: (page, param = { gid }) =>
+		$mp.callBy(page, "groupDel", param),
 
-		return $mp.callBy(page, "groupDel", param);
-	},
-
-	groupDelUser: (page, param = { gid, user }) => 
+	groupDelUser: (page, param = { gid, user }) =>
 		$mp.callBy(page, "groupDelUser", param),
 
-	groupDelStudent: (page, param = { gid, student }) => 
+	groupDelStudent: (page, param = { gid, student }) =>
 		$mp.callBy(page, "groupDelStudent", param),
 
-	payPre: (page, param = { gid, money, time, lease }) => 
+	payPre: (page, param = { gid, money, time, lease }) =>
 		$mp.callBy(page, "payPre", param),
 
-	topicNew: (page, param = { gid, type, topic }) => 
+	topicNew: (page, param = { gid, type, topic }) =>
 		$mp.callBy(page, "topicNew", param),
 
-	topicAct: (page, param = { gid, tid, action }) => 
+	topicAct: (page, param = { gid, tid, action }) =>
 		$mp.callBy(page, "topicAct", param),
 
-	topicGet: (page, param = { gid, tid }) => 
+	topicGet: (page, param = { gid, tid }) =>
 		$mp.callBy(page, "topicGet", param),
 
-	topicGetOpen: (page, param = { gid }) => 
+	topicGetOpen: (page, param = { gid }) =>
 		$mp.callBy(page, "topicGetOpen", param),
 
-	topicGetClosed: (page, param = { gid }) => 
+	topicGetClosed: (page, param = { gid }) =>
 		$mp.callBy(page, "topicGetClosed", param),
 
-	topicClose: (page, param = { gid, tid }) => 
+	topicClose: (page, param = { gid, tid }) =>
 		$mp.callBy(page, "topicClose", param),
 
-	topicDel: (page, param = { gid, tid }) => 
+	topicDel: (page, param = { gid, tid }) =>
 		$mp.callBy(page, "topicDel", param),
 };
 

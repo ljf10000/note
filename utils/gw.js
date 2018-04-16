@@ -100,10 +100,10 @@ const $gw = {
 		return api.request({ url, method, data });
 	},
 
-	fail: (obj, act, e) => {
+	fail: (obj, e, ...keys) => {
 		// obj is app or page
 		let app = obj.userInfo ? obj : getApp();
-		let msg = res[act](app);
+		let msg = res.Join(app, "mp", ...keys, "fail");
 
 		api.hideLoadingEx();
 
@@ -111,7 +111,7 @@ const $gw = {
 
 		api.showModal(res.app(app), msg);
 	},
-	login_fail: (obj, e) => $gw.fail(obj, "mpLoginFail", e),
+	login_fail: (obj, e) => $gw.fail(obj, e, "login"),
 };
 
 const gw = {
@@ -216,9 +216,9 @@ const gw = {
 			let name = "userCheckin";
 
 			$gw.success(name, obj);
-			$gw.check(name, obj, "group");
+			$gw.check(name, obj, "gid");
 		},
-		fail: (page, e) => $gw.fail(page, "mpUserCheckinFail", e),
+		fail: (page, e) => $gw.fail(page, e, "user", "checkin"),
 	},
 
 	groupCheckin: {
@@ -228,9 +228,9 @@ const gw = {
 			let name = "groupCheckin";
 
 			$gw.success(name, obj);
-			$gw.check(name, obj, "group");
+			$gw.check(name, obj, "gid");
 		},
-		fail: (page, e) => $gw.fail(page, "mpGroupCheckinFail", e),
+		fail: (page, e) => $gw.fail(page, e, "group", "checkin"),
 	},
 
 	groupGet: {
@@ -242,7 +242,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
-		fail: (page, e) => $gw.fail(page, "mpGroupGetFail", e),
+		fail: (page, e) => $gw.fail(page, e, "group", "get"),
 	},
 
 	groupSync: {
@@ -254,7 +254,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (page, e) => $gw.fail(page, "mpGroupSyncFail", e),
+		fail: (page, e) => $gw.fail(page, e, "group", "sync"),
 	},
 
 	groupNewAdviser: {
@@ -266,7 +266,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 		},
-		fail: (page, e) => $gw.fail(page, "mpGroupNewAdviserFail", e),
+		fail: (page, e) => $gw.fail(page, e, "group", "new", "adviser"),
 	},
 
 	groupDel: {
@@ -278,7 +278,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (page, e) => $gw.fail(page, "mpGroupDelFail", e),
+		fail: (page, e) => $gw.fail(page, e, "group", "del"),
 	},
 
 	groupDelUser: {
@@ -290,7 +290,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (page, e) => $gw.fail(page, "mpGroupDelUserFail", e),
+		fail: (page, e) => $gw.fail(page, e, "group", "del", "user"),
 	},
 
 	groupDelStudent: {
@@ -302,7 +302,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (page, e) => $gw.fail(page, "mpGroupDelStudentFail", e),
+		fail: (page, e) => $gw.fail(page, e, "group", "del", "student"),
 	},
 
 	payPre: {
@@ -314,7 +314,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "pay");
 		},
-		fail: (page, e) => $gw.fail(page, "mpPayPreFail", e),
+		fail: (page, e) => $gw.fail(page, e, "group", "pre", "pay"),
 	},
 
 	topicNew: {
@@ -326,7 +326,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
-		fail: (page, e) => $gw.fail(page, "mpTopicNewFail", e),
+		fail: (page, e) => $gw.fail(page, e, "topic", "new"),
 	},
 
 	topicAct: {
@@ -338,7 +338,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
-		fail: (page, e) => $gw.fail(page, "mpTopicActFail", e),
+		fail: (page, e) => $gw.fail(page, e, "topic", "act"),
 	},
 
 	topicGet: {
@@ -350,7 +350,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
-		fail: (page, e) => $gw.fail(page, "mpTopicGetFail", e),
+		fail: (page, e) => $gw.fail(page, e, "topic", "get"),
 	},
 
 	topicGetOpen: {
@@ -362,7 +362,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "summary");
 		},
-		fail: (page, e) => $gw.fail(page, "mpTopicGetOpenFail", e),
+		fail: (page, e) => $gw.fail(page, e, "topic", "get", "open"),
 	},
 
 	topicGetClosed: {
@@ -374,7 +374,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "summary");
 		},
-		fail: (page, e) => $gw.fail(page, "mpTopicGetClosedFail", e),
+		fail: (page, e) => $gw.fail(page, e, "topic", "get", "closed"),
 	},
 
 	topicClose: {
@@ -386,7 +386,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
-		fail: (page, e) => $gw.fail(page, "mpTopicCloseFail", e),
+		fail: (page, e) => $gw.fail(page, e, "topic",  "close"),
 	},
 
 	topicDel: {
@@ -398,7 +398,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj);
 		},
-		fail: (page, e) => $gw.fail(page, "mpTopicDelFail", e),
+		fail: (page, e) => $gw.fail(page, e, "topic", "del"),
 	},
 
 	sex: {

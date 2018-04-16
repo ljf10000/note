@@ -58,4 +58,5 @@ App({
 	options: {},
 
 	mq: new mq(),
+	__i_m_app__: true,
 });
