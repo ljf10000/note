@@ -16,6 +16,7 @@ const $domain = {
 		userLoginG: "/user/login/gsecret",
 		userG: "/user/gsecret",
 		userCheckin: "/user/checkin",
+
 		groupCheckin: "/group/checkin",
 		groupGet: "/group/get",
 		groupSync: "/group/sync",
@@ -23,7 +24,9 @@ const $domain = {
 		groupDel: "/group/del",
 		groupDelUser: "/group/del_user",
 		groupDelStudent: "/group/del_student",
+
 		payPre: "/group/pay/pre",
+
 		topicNew: "/group/topic/new",
 		topicAct: "/group/topic/act",
 		topicGetOpen: "/group/topic/get/open",
@@ -96,7 +99,7 @@ const $gw = {
 
 		return api.request({ url, method, data });
 	},
-	login_fail: (app, e) => $gw.fail(app, "mpLoginFail", e),
+	
 	fail: (app, act, e) => {
 		let msg = res[act](app);
 
@@ -106,6 +109,7 @@ const $gw = {
 
 		api.showModal(res.app(app), msg);
 	},
+	login_fail: (app, e) => $gw.fail(app, "mpLoginFail", e),
 };
 
 const gw = {

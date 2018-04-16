@@ -98,6 +98,13 @@ const $mp = {
 			e => obj.fail(app, e)
 		);
 	},
+
+	initUserParam: (app, param) => {
+		let user = app.user;
+
+		param.uid = user.uid;
+		param.session = user.session;
+	}
 };
 
 const mp = {
@@ -143,6 +150,102 @@ const mp = {
 		session: app.user.session,
 		gsecret: app.login.gsecret,
 	}),
+
+	userCheckin: (app, param = { opengid, role, name, nick, students }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "userCheckin", param);
+	},
+
+	groupCheckin: (app, param = { gid, role, name, nick, students }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "groupCheckin", param);
+	},
+
+	groupGet: (app, param = { gid }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "groupGet", param);
+	},
+
+	groupSync: (app, param = { gid, ver }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "groupSync", param);
+	},
+
+	groupNewAdviser: (app, param = { gid, adviser }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "groupNewAdviser", param);
+	},
+
+	groupDel: (app, param = { gid }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "groupDel", param);
+	},
+
+	groupDelUser: (app, param = { gid, user }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "groupDelUser", param);
+	},
+
+	groupDelStudent: (app, param = { gid, student }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "groupDelStudent", param);
+	},
+
+	payPre: (app, param = { gid, money, time, lease}) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "payPre", param);
+	},
+
+	topicNew: (app, param = { gid, type, topic }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "topicNew", param);
+	},
+
+	topicAct: (app, param = { gid, tid, action  }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "topicAct", param);
+	},
+
+	topicGet: (app, param = { gid, tid }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "topicGet", param);
+	},
+
+	topicGetOpen: (app, param = { gid }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "topicGetOpen", param);
+	},
+
+	topicGetClosed: (app, param = { gid }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "topicGetClosed", param);
+	},
+
+	topicClose: (app, param = { gid, tid }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "topicClose", param);
+	},
+
+	topicDel: (app, param = { gid, tid }) => {
+		$mp.initUserParam(app, param);
+
+		return $mp.callBy(app, "topicDel", param);
+	},
 };
 
 module.exports = {
