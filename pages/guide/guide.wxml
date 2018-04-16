@@ -1,6 +1,32 @@
 <!--pages/guide/guide.wxml-->
-<text>pages/guide/guide.wxml</text>
+<view class="group-name">
+    <open-data type="groupName" open-gid="{{opengid}}"></open-data>
+</view>
 
-<view>
-	<open-data type="groupName" open-gid="{{opengid}}"></open-data>
+<view class="container">
+    <form bindsubmit="checkin">
+        <view class="role">
+            <picker-view name="role" indicator-style="height: 50px;" style="height: 300px;" value="{{role.indexs}}" bindchange="bindRoleChange">
+                <picker-view-column>
+                    <view wx:for="{{role.values}}" wx:key="*this">{{item}}</view>
+                </picker-view-column>
+            </picker-view>
+        </view>
+
+        <view class="teacher" wx:if="{{role.indexs[0]!=role.patriarch}}">
+            i'm alias:
+            <input name="alias" placeholder="alias" bindblur="saveAlias" focus="ture" />
+        </view>
+
+        <view class="patriarch" wx:if="{{role.indexs[0]==role.patriarch}}">
+            i am
+            <view class="students" wx:for="{{students}}" wx:key="name">
+                <input name="name{{index}}" placeholder="{{item.name}}" bindblur="saveStudentName" focus="ture" />
+                <input name="relation{{index}}" placeholder="{{item.relation}}" bindblur="saveStudentRelation" />
+                <button data-id="{{index}}" bindtap="addStudent" wx:if="{{(1+index) == studentCount}}">+</button>
+                <button data-id="{{index}}" bindtap="delStudent" wx:if="{{index>0 && (1+index) == studentCount}}">-</button>
+            </view>
+        </view>
+        <button formType="submit">checkin</button>
+    </form>
 </view>

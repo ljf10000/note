@@ -6,12 +6,13 @@ const api = include("api");
 
 function redirectTo(name, param = {}) {
 	let url = `/pages/${name}/${name}`;
-	let entrys = Object.entrys(param);
-	let count = entrys.length;
+	let keys = Object.keys(param);
+	let count = keys.length;
 
 	for (let i = 0; i < count; i++) {
-		let [k, v] = entrys[i];
-
+		let k = keys[i];
+		let v = param[k];
+		
 		if (0 == i) {
 			url = `${url}?${k}=${v}`;
 		} else {

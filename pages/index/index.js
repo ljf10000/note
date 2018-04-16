@@ -17,7 +17,6 @@ Page({
 	name: m_name,
 	data: {
 		motto: 'Hello SB',
-		user: app.user,
 	},
 
 	onLoad: function (options) {
@@ -26,9 +25,5 @@ Page({
 
 	onShareAppMessage: function (options) {
 		return pg.share(this, options);
-	},
-
-	clickShare: function (ev) {
-		console.log(`share with ${this.route}`);
 	},
 })
