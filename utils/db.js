@@ -4,7 +4,7 @@ const api = require('api.js').api;
 
 const keyprefix = "g-";
 
-function groupkey (gid) {
+function groupkey(gid) {
 	return keyprefix + gid;
 }
 
@@ -16,56 +16,49 @@ function newDeftUser() {
 	return {
 		nn: 4,
 		uid: 0,
-		dirty: false,
 		session: "",
-		gcount: 0,
-		groups: {},
+		byid: {},
+		byname: {},
 	};
 }
 
 const db = {
 	user: {
 		addGroup: (user, gid, opengid) => {
-			let k = groupkey(gid);
-
-			user.groups[k] = opengid;
-			user.gcount++;
-			user.dirty = true;
-
-			return user;
-		},
-		AddGroup: (gid, opengid) => db.user.addGroup(app.user, gid, opengid),
-
-		delGroup: (user, gid) => {
-			let k = groupkey(gid);
-
-			delete user.groups[k];
-			user.gcount--;
-			user.dirty = true;
-
-			return user;
-		},
-		DelGroup: (gid) => db.user.delGroup(app.user, gid),
-
-		getGroup: (user, gid) => {
-			let k = groupkey(gid);
-
-			return user.groups[k];
-		},
-		GetGroup: (gid) => db.user.getGroup(app.user, gid),
-
-		getGroupEx: (user, opengid) => {
-			let entrys = Object.entries(user.groups);
-
-			for (let entry of entrys) {
-				if (entry[1]==opengid) {
-					return gidbykey(entry[0]);
-				}
+			let tmpgid = user.byname[opengid];
+			if (tmpgid) {
+				delete user.byid[tmpgid + ''];
 			}
 
-			return undefined;
+			user.byid[gid + ''] = opengid;
+			user.byname[opengid] = gid;
+
+			return user;
 		},
-		GetGroupEx: (opengid) => db.user.getGroupEx(app.user, opengid),
+
+		delGroup: (user, gid, opengid) => {
+			let k = gid + '';
+			let name = opengid ? opengid : user.byid[k];
+
+			delete user.byid[k];
+			if (name) {
+				delete user.byname[name];
+			}
+
+			return user;
+		},
+
+		getOpenGid: (user, gid) => user.byid[gid + ''],
+
+		getGid: (user, opengid) => user.byname[opengid],
+
+		getGroupCount: (user) => Object.keys(user.byid).length,
+		getGroups: (user) => {
+			Object.keys(user.byid).reduce((pre, cur) => pre.push({
+				gid: cur,
+				opengid: user.byid[cur],
+			}), []);
+		},
 
 		isLocal: (user) => !!user.uid,
 
@@ -74,18 +67,17 @@ const db = {
 			dst.uid = src.uid;
 			dst.session = src.session;
 
-			dst.dirty = true;
-
 			return dst;
 		},
 
 		copy: (dst, src) => {
 			db.user.vcopy(dst, src);
 
-			dst.gcount = src.gcount;
-			dst.groups = {};
+			dst.byid = {};
+			dst.byname = {},
 
-			Object.keys(src).map(k => dst.groups[k] = src.groups[k])
+				Object.keys(src.byid).map(k => dst.byid[k] = src.byid[k]);
+			Object.keys(src.byname).map(k => dst.byname[k] = src.byname[k]);
 
 			return dst;
 		},
@@ -105,24 +97,16 @@ const db = {
 
 			db.user.copy(user, v);
 
-			user.dirty = false;
-
 			return user;
 		},
-		Load: () => db.user.load(app.user),
 
 		save: (user) => {
-			if (user.dirty) {
-				user.dirty = false;
+			api.setStorageSync('user', user);
 
-				api.setStorageSync('user', user);
-
-				console.log(`save user: ${db.user.info(user)}`);
-			}
+			console.log(`save user: ${db.user.info(user)}`);
 
 			return user;
 		},
-		Save: ()=>db.user.save(app.user),
 	},
 
 	group: {
@@ -137,7 +121,6 @@ const db = {
 
 			return v;
 		},
-		Load: (gid) => db.group.load(app.groups, gid),
 
 		save: (groups, gid) => {
 			let k = groupkey(gid);
@@ -149,7 +132,6 @@ const db = {
 
 			return v;
 		},
-		Save: (gid) => db.group.Save(app.groups, gid),
 	},
 
 	page: {

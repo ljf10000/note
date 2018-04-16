@@ -30,7 +30,13 @@ function load(app, options) {
 
 function show(app, options) {
 	app.options = options;
-	app.login.shareTicket = options.shareTicket;
+
+	if (1044 == app.options.scene) {
+		let login = app.login;
+
+		login.shareTicket = options.shareTicket;
+		login.query = options.query;
+	}
 
 	console.log(`app show options=${JSON.stringify(options)}`);
 }

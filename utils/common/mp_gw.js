@@ -4,31 +4,73 @@ const include = (name) => require(`../${name}.js`)[name];
 const db = include("db");
 const api = include("api");
 
-function redirectTo(name, opengid, gid) {
-	let url = `/pages/${name}/${name}?opengid=${opengid}`;
+function redirectTo(name, param = {}) {
+	let url = `/pages/${name}/${name}`;
+	let entrys = Object.entrys(param);
+	let count = entrys.length;
 
-	if (gid) {
-		url = `${url}?gid=${gid}`;
+	for (let i = 0; i < count; i++) {
+		let [k, v] = entrys[i];
+
+		if (0 == i) {
+			url = `${url}?${k}=${v}`;
+		} else {
+			url = `${url}&${k}=${v}`;
+		}
 	}
 
 	console.log(`start over redirectTo ${url}`);
 	api.redirectTo(url);
 }
 
-const mp_gw = {
-	start_post: (app, g = {}) => {
-		db.user.save(app.user);
+function start_post(app, g = {}) {
+	let target = "guide";
 
-		api.hideLoadingEx();
+	db.user.save(app.user);
 
-		if (g.opengid) {
-			let name = g.gid ? "group" : "guide";
+	api.hideLoadingEx();
 
-			redirectTo(name, g.opengid, g.gid);
+	console.log(`start over`);
+
+	if (g.opengid) {
+		if (g.gid) {
+			let gid = db.user.getGid(app.user, g.opengid);
+			if (gid != g.gid) {
+				db.user.addGroup(app.user, g.gid, g.opengid);
+				db.user.save(app.user);
+			}
+
+			redirectTo("group", {
+				opengid: g.opengid,
+				gid: g.gid,
+			});
 		} else {
-			console.log(`start over`);
+			redirectTo("guide", { opengid: g.opengid });
 		}
-	},
+	} else {
+		let groups = db.user.getGroups(app.user);
+		let count = groups ? groups.length : 0;
+
+		switch (count) {
+			case 0:
+				// do nothing
+				break;
+			case 1:
+				redirectTo("group", {
+					opengid: groups[0].opengid,
+					gid: groups[0].gid,
+				});
+
+				break;
+			default:
+				redirectTo("list");
+				break;
+		}
+	}
+}
+
+const mp_gw = {
+	start_post: start_post,
 };
 
 module.exports = {

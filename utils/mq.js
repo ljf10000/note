@@ -70,29 +70,29 @@ class mq {
 		console.log(`clear mq`);
 	}
 
-	clearTopic(tpid) {
-		let tp = this.box[tpid];
+	clearTopic(name) {
+		let tp = this.box[name];
 
 		if (tp) {
 			tp.clear();
 
-			console.log(`clear topic ${tpid}`);
+			console.log(`clear topic ${name}`);
 		}
 	}
 
-	addTopic(tpid) {
-		if (!this.box[tpid]) {
-			this.box[tpid] = new topic();
+	addTopic(name) {
+		if (!this.box[name]) {
+			this.box[name] = new topic();
 
-			console.log(`new topic: ${tpid}`);
+			console.log(`new topic: ${name}`);
 		}
 	}
 
-	delTopic(tpid) {
-		if (this.box[tpid]) {
-			delete this.box[tpid];
+	delTopic(name) {
+		if (this.box[name]) {
+			delete this.box[name];
 
-			console.log(`delete topic ${tpid}`);
+			console.log(`delete topic ${name}`);
 		}
 	}
 
@@ -106,11 +106,11 @@ class mq {
 		}
 	}
 
-	recvmsg(tpid) {
-		let tp = this.box[tpid];
+	recvmsg(recver) {
+		let tp = this.box[recver];
 		let {sender, msg} = tp ? tp.recvmsg() : {};
 
-		console.log(`${tpid} recv msg:${JSON.stringify(msg)} sender:${sender}`);
+		console.log(`${recver} recv msg:${JSON.stringify(msg)} sender:${sender}`);
 
 		return {sender, msg};
 	}

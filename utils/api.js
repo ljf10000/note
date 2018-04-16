@@ -3,11 +3,11 @@ const helper = require('helper.js').helper;
 const deft = require('deft.js').deft;
 
 const api = {
-	sence : {
-		mpFindMaster: 1001, 		// 发现栏小程序主入口
+	sence: {
+		found: 1001, 				// 发现栏小程序主入口
 		topSearch: 1005, 			// 顶部搜索框的搜索结果页
-		mpFindResult: 1006,			// 发现栏小程序主入口搜索框的搜索结果页
-		userChatMpCard: 1007,		// 单人聊天会话中的小程序消息卡片
+		foundSearch: 1006,			// 发现栏小程序主入口搜索框的搜索结果页
+		peerChatMpCard: 1007,		// 单人聊天会话中的小程序消息卡片
 		groupChatMpCard: 1008,		// 群聊会话中的小程序消息卡片
 		/*
 		scanQR: 1011,				// 扫描二维码
@@ -76,7 +76,7 @@ const api = {
 		let obj = {
 			timeStamp,
 			nonceStr,
-			package: prepay_id,
+			package: `prepay_id=${prepay_id}`,
 			signType,
 			paySign,
 		};
@@ -86,7 +86,8 @@ const api = {
 		return helper.promisify(wx.requestPayment, obj);
 	},
 
-	getShareInfo: (shareTicket, timeout = deft.timeout) => helper.promisify(wx.getShareInfo, { shareTicket, timeout }),
+	getShareInfo: (shareTicket, timeout = deft.timeout) =>
+		helper.promisify(wx.getShareInfo, { shareTicket, timeout }),
 
 	showLoadingEx: (title, ms = 2000) => wx.showLoading({
 		title,
@@ -125,7 +126,6 @@ const api = {
 		return helper.promisify(wx.reLaunch, { url: url });
 	},
 };
-
 
 module.exports = {
 	api: api,

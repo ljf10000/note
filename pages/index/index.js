@@ -10,9 +10,7 @@ const app = getApp();
 function load(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 
-	let shareTicket = (1044 == app.options.scene) ? app.login.shareTicket : undefined;
-
-	mp.start(app, shareTicket);
+	mp.start(app, app.login.shareTicket);
 }
 
 Page({
