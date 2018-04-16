@@ -37,7 +37,7 @@ const $mp = {
 		return api.login().then(
 			v => $mp.login(app, v.code),
 			e => {
-				let msg = res.wxLoginFail(app);
+				let msg = res.Join(app, "wx", "login", "fail");
 
 				api.hideLoadingEx();
 
