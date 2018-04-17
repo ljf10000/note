@@ -103,7 +103,7 @@ const $gw = {
 	fail: (obj, e, ...keys) => {
 		// obj is app or page
 		let app = obj.userInfo ? obj : getApp();
-		let msg = res.Join(app, "mp", ...keys, "fail");
+		let msg = res.join(app, "mp", ...keys, "fail");
 
 		api.hideLoadingEx();
 

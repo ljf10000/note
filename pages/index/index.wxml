@@ -4,7 +4,7 @@
         <button type="defaule" open-type="share" bindtap="clickShare">Share</button>
     </view>
 
-    <view class="usermotto">
-        <text class="user-motto">{{motto}}</text>
+    <view class="username">
+        <text class="user-name">{{name}}</text>
     </view>
 </view>

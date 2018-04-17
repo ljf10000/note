@@ -52,7 +52,12 @@ const $res = {
 
 const res = {
 	app: (app) => Get(app, "app"),
-	Join: (app, ...keys) => join(app, ...keys),
+	join: (app, ...keys) => join(app, ...keys),
+	info: (app, desc) => {
+		let keys = desc.split(" ");
+
+		return join(app, ...keys);
+	},
 };
 
 module.exports = {

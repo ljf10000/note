@@ -14,15 +14,16 @@
         </view>
 
         <view class="teacher" wx:if="{{role.indexs[0]!=role.patriarch}}">
-            i'm alias:
-            <input name="alias" placeholder="alias" bindblur="saveAlias" focus="ture" />
+            my name:
+            <input name="name" placeholder="name" />
         </view>
 
         <view class="patriarch" wx:if="{{role.indexs[0]==role.patriarch}}">
             i am
             <view class="students" wx:for="{{students}}" wx:key="name">
-                <input name="name{{index}}" placeholder="{{item.name}}" bindblur="saveStudentName" focus="ture" />
-                <input name="relation{{index}}" placeholder="{{item.relation}}" bindblur="saveStudentRelation" />
+                <input name="name{{index}}" placeholder="{{item.name}}" />
+                <input name="sex{{index}}" placeholder="man/woman" />
+                <input name="relation{{index}}" placeholder="{{item.relation}}" />
                 <button data-id="{{index}}" bindtap="addStudent" wx:if="{{(1+index) == studentCount}}">+</button>
                 <button data-id="{{index}}" bindtap="delStudent" wx:if="{{index>0 && (1+index) == studentCount}}">-</button>
             </view>

@@ -70,6 +70,13 @@ const api = {
 
 	getUserInfo: () => helper.promisify(wx.getUserInfo, {
 		lang: deft.lang.zhCN,
+		timeout: deft.timeout,
+	}),
+
+	getUserInfoEx: (app) => api.getUserInfo().then(v => {
+		Object.assign(app.userInfo, v.userInfo);
+
+		console.log(`getUserInfoEx=${JSON.stringify(app.userInfo)}`);
 	}),
 
 	requestPayment: ({ timeStamp, nonceStr, prepay_id, signType = "MD5", paySign }) => {

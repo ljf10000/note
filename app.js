@@ -1,5 +1,6 @@
 // app.js
 
+const api = require('utils/api.js').api;
 const db = require('utils/db.js').db;
 const mp = require('utils/mp.js').mp;
 const mq = require('utils/mq.js').mq;
@@ -18,6 +19,8 @@ function load(app, options) {
 	console.log(`app launch options=${JSON.stringify(options)}`);
 
 	names.map(v => app.mq.addTopic(v));
+
+	api.getUserInfoEx(app);
 
 	// load user
 	// todo: load group
@@ -52,7 +55,9 @@ App({
 
 	user: {},
 	groups: {},
-	userInfo: {},
+	userInfo: {
+		nickName: "SB",
+	},
 
 	login: {},
 	options: {},

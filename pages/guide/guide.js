@@ -3,6 +3,7 @@ const m_name = "guide";
 const include = (name) => require(`../../utils/${name}.js`)[name];
 
 const pg = include("pg");
+const gw = include("gw");
 const mp = include("mp");
 const api = include("api");
 
@@ -36,14 +37,16 @@ Page({
 			indexs: [0],
 			values: roles,
 		},
-		alias: "",
-		studentCount: 1,
+		name: "",
 		students: [
 			{
 				name: "name0",
+				sex: gw.sex.man,
 				relation: "relation0",
 			},
 		],
+
+		studentCount: 1,
 	},
 
 	onLoad: function (options) {
@@ -61,25 +64,23 @@ Page({
 		});
 	},
 	checkin: function (ev) {
-		console.log(`checkin ${JSON.stringify(ev)}`);
-	},
-	saveAlias: function (ev) {
-		console.log(`saveAlias ${JSON.stringify(ev)}`);
+		let d = this.data;
 
-		this.setData({
-			alias: ev.detail.value,
+		console.log(`checkin ${JSON.stringify(ev)}`);
+
+		mp.userCheckin(this, {
+			opengid: d.opengid,
+			role: d.role,
+			name: d.name,
+			nick: "", // todo: get nick-name
+			students: d.students,
 		});
 	},
-	saveStudentName: function (ev) {
-		console.log(`saveStudentName ${JSON.stringify(ev)}`);
 
-	},
-	saveStudentRelation: function (ev) {
-		console.log(`saveStudentRelation ${JSON.stringify(ev)}`);
-
-	},
 	addStudent: function (ev) {
 		console.log(`addStudent ${JSON.stringify(ev)}`);
+
+		// todo: save current
 
 		let students = this.data.students;
 		let count = students.length;
@@ -92,8 +93,8 @@ Page({
 			},
 			"studentCount": count + 1,
 		});
-
 	},
+
 	delStudent: function (ev) {
 		console.log(`delStudent ${JSON.stringify(ev)}`);
 

@@ -16,11 +16,17 @@ function load(page, options) {
 Page({
 	name: m_name,
 	data: {
-		motto: 'Hello SB',
+		name: `Hello ${app.userInfo.nickName}`,
 	},
 
 	onLoad: function (options) {
 		load(this, options);
+	},
+
+	onShow: function () {
+		this.setData({
+			motto: `Hello ${app.userInfo.nickName}`,
+		});
 	},
 
 	clickShare: function (ev) {

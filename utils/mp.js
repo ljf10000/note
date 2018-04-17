@@ -32,12 +32,12 @@ const $mp = {
 	},
 
 	start_login: (app) => {
-		api.showLoadingEx(res.wxLogin(app));
+		api.showLoadingEx(res.info(app, "wx login"));
 
 		return api.login().then(
 			v => $mp.login(app, v.code),
 			e => {
-				let msg = res.Join(app, "wx", "login", "fail");
+				let msg = res.info(app, "wx login fail");
 
 				api.hideLoadingEx();
 
@@ -51,7 +51,7 @@ const $mp = {
 	login: (app, jscode) => {
 		app.login.jscode = jscode;
 
-		api.showLoadingEx(res.mpLogin(app));
+		api.showLoadingEx(res.info(app, "mp login"));
 
 		if (app.user.uid) {
 			if (app.login.gsecret) {
@@ -60,7 +60,7 @@ const $mp = {
 				return mp.userLogin(app);
 			}
 		} else {
-			if (gsecret) {
+			if (app.login.gsecret) {
 				return mp.randLoginG(app);
 			} else {
 				return mp.randLogin(app);
@@ -72,7 +72,7 @@ const $mp = {
 		app.login.param = param;
 		app.login.method = method;
 
-		let msg = res.Join(app, "login");
+		let msg = res.join(app, "login");
 		
 		msg = `${msg} ${method}`;
 		api.showLoadingEx(msg);
