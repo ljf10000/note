@@ -13,6 +13,25 @@ const helper = {
 		return n >>> 0;
 	},
 
+	url: (name, param = {}) => {
+		let url = `/pages/${name}/${name}`;
+		let keys = Object.keys(param);
+		let count = keys.length;
+
+		for (let i = 0; i < count; i++) {
+			let k = keys[i];
+			let v = param[k];
+
+			if (0 == i) {
+				url = `${url}?${k}=${v}`;
+			} else {
+				url = `${url}&${k}=${v}`;
+			}
+		}
+
+		return url;
+	},
+	
 	promisify: (fn, obj = {}) => new Promise((resolve, reject) => {
 		obj.success = resolve;
 		obj.fail = reject;

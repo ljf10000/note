@@ -4,26 +4,6 @@ const include = (name) => require(`../${name}.js`)[name];
 const db = include("db");
 const api = include("api");
 
-function redirectTo(name, param = {}) {
-	let url = `/pages/${name}/${name}`;
-	let keys = Object.keys(param);
-	let count = keys.length;
-
-	for (let i = 0; i < count; i++) {
-		let k = keys[i];
-		let v = param[k];
-		
-		if (0 == i) {
-			url = `${url}?${k}=${v}`;
-		} else {
-			url = `${url}&${k}=${v}`;
-		}
-	}
-
-	console.log(`start over redirectTo ${url}`);
-	api.redirectTo(url);
-}
-
 function start_post(app, g = {}) {
 	let target = "guide";
 
@@ -41,12 +21,12 @@ function start_post(app, g = {}) {
 				db.user.save(app.user);
 			}
 
-			redirectTo("group", {
+			api.redirectToEx("group", {
 				opengid: g.opengid,
 				gid: g.gid,
 			});
 		} else {
-			redirectTo("guide", { opengid: g.opengid });
+			api.redirectToEx("guide", { opengid: g.opengid });
 		}
 	} else {
 		let groups = db.user.getGroups(app.user);
@@ -57,14 +37,14 @@ function start_post(app, g = {}) {
 				// do nothing
 				break;
 			case 1:
-				redirectTo("group", {
+				api.redirectToEx("group", {
 					opengid: groups[0].opengid,
 					gid: groups[0].gid,
 				});
 
 				break;
 			default:
-				redirectTo("list");
+				api.redirectToEx("list");
 				break;
 		}
 	}

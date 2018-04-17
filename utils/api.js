@@ -108,10 +108,22 @@ const api = {
 		return helper.promisify(wx.navigateTo, { url: url });
 	},
 
+	navigateToEx: (name, param = {}) => {
+		let url = helper.url(name, param);
+
+		return api.navigateTo(url);
+	},
+
 	redirectTo: (url) => {
 		console.log(`redirectTo url:${url}`);
 
 		return helper.promisify(wx.redirectTo, { url: url });
+	},
+
+	redirectToEx: (name, param = {}) => {
+		let url = helper.url(name, param);
+
+		return api.redirectTo(url);
 	},
 
 	switchTab: (url) => {

@@ -217,6 +217,13 @@ const gw = {
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "gid");
+
+			api.redirectToEx("group", {
+				gid: obj.gid,
+				event: "checkin",
+				act: "redirect",
+				src: page.name,
+			});
 		},
 		fail: (page, e) => $gw.fail(page, e, "user", "checkin"),
 	},
@@ -386,7 +393,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "topicx");
 		},
-		fail: (page, e) => $gw.fail(page, e, "topic",  "close"),
+		fail: (page, e) => $gw.fail(page, e, "topic", "close"),
 	},
 
 	topicDel: {
