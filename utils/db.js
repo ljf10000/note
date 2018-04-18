@@ -54,10 +54,14 @@ const db = {
 
 		getGroupCount: (user) => Object.keys(user.byid).length,
 		getGroups: (user) => {
-			Object.keys(user.byid).reduce((pre, cur) => pre.push({
-				gid: cur,
-				opengid: user.byid[cur],
-			}), []);
+			Object.keys(user.byid).reduce((pre, cur) => {
+				pre.push({
+					gid: cur,
+					opengid: user.byid[cur],
+				});
+
+				return pre;
+			}, []);
 		},
 
 		isLocal: (user) => !!user.uid,
@@ -82,8 +86,6 @@ const db = {
 			return dst;
 		},
 
-		info: (user) => `nn=${user.nn} uid=${user.uid} session=${user.session} gcount=${user.gcount}`,
-
 		load: (user) => {
 			let v = api.getStorageSync('user');
 			let mode = "local"
@@ -93,7 +95,7 @@ const db = {
 				mode = "deft";
 			}
 
-			console.log(`load ${mode} user: ${db.user.info(v)}`);
+			console.log(`load ${mode} user: ${JSON.stringify(v)}`);
 
 			db.user.copy(user, v);
 
@@ -103,7 +105,7 @@ const db = {
 		save: (user) => {
 			api.setStorageSync('user', user);
 
-			console.log(`save user: ${db.user.info(user)}`);
+			console.log(`save user: ${JSON.stringify(user)}`);
 
 			return user;
 		},

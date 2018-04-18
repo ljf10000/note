@@ -11,7 +11,7 @@ const $domain = {
 	sub: "note.mp",
 	path: {
 		randLogin: "/rand/login",
-		rangLoginG: "/rand/login/gsecret",
+		randLoginG: "/rand/login/gsecret",
 		userLogin: "/user/login",
 		userLoginG: "/user/login/gsecret",
 		userG: "/user/gsecret",
@@ -140,7 +140,7 @@ const gw = {
 			let user = app.user;
 
 			$gw.success(name, obj);
-			$gw.check(name, obj, "user", "gid", "opengid");
+			$gw.check(name, obj, "user", "opengid");
 			$gw.checkUser(name, obj);
 
 			db.user.vcopy(user, obj.user);
@@ -220,6 +220,7 @@ const gw = {
 
 			api.redirectToEx("group", {
 				gid: obj.gid,
+				opengid: page.data.opengid,
 				event: "checkin",
 				act: "redirect",
 				src: page.name,
@@ -230,7 +231,7 @@ const gw = {
 
 	groupCheckin: {
 		request: (param = { uid, session, gid, role, name, nick, students }) =>
-			$gw.request(param.uid, $domain.path.groupCheckin, param),
+			$gw.request(param.gid, $domain.path.groupCheckin, param),
 		success: (page, obj) => {
 			let name = "groupCheckin";
 
@@ -242,19 +243,22 @@ const gw = {
 
 	groupGet: {
 		request: (param = { uid, session, gid }) =>
-			$gw.request(param.uid, $domain.path.groupGet, param),
+			$gw.request(param.gid, $domain.path.groupGet, param),
 		success: (page, obj) => {
 			let name = "groupGet";
+			let cb = page[name];
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
+
+			cb(obj);
 		},
 		fail: (page, e) => $gw.fail(page, e, "group", "get"),
 	},
 
 	groupSync: {
 		request: (param = { uid, session, gid, ver }) =>
-			$gw.request(param.uid, $domain.path.groupSync, param),
+			$gw.request(param.gid, $domain.path.groupSync, param),
 		success: (page, obj) => {
 			let name = "groupSync";
 
@@ -266,7 +270,7 @@ const gw = {
 
 	groupNewAdviser: {
 		request: (param = { uid, session, gid, adviser }) =>
-			$gw.request(param.uid, $domain.path.groupNewAdviser, param),
+			$gw.request(param.gid, $domain.path.groupNewAdviser, param),
 		success: (page, obj) => {
 			let name = "groupNewAdviser";
 
@@ -278,7 +282,7 @@ const gw = {
 
 	groupDel: {
 		request: (param = { uid, session, gid }) =>
-			$gw.request(param.uid, $domain.path.groupDel, param),
+			$gw.request(param.gid, $domain.path.groupDel, param),
 		success: (page, obj) => {
 			let name = "groupDel";
 
@@ -290,7 +294,7 @@ const gw = {
 
 	groupDelUser: {
 		request: (param = { uid, session, gid, user }) =>
-			$gw.request(param.uid, $domain.path.groupDelUser, param),
+			$gw.request(param.gid, $domain.path.groupDelUser, param),
 		success: (page, obj) => {
 			let name = "groupDelUser";
 
@@ -302,7 +306,7 @@ const gw = {
 
 	groupDelStudent: {
 		request: (param = { uid, session, gid, student }) =>
-			$gw.request(param.uid, $domain.path.groupDelStudent, param),
+			$gw.request(param.gid, $domain.path.groupDelStudent, param),
 		success: (page, obj) => {
 			let name = "groupDelStudent";
 
@@ -314,7 +318,7 @@ const gw = {
 
 	payPre: {
 		request: (param = { uid, session, gid, money, time, lease }) =>
-			$gw.request(param.uid, $domain.path.payPre, param),
+			$gw.request(param.gid, $domain.path.payPre, param),
 		success: (page, obj) => {
 			let name = "payPre";
 
@@ -326,7 +330,7 @@ const gw = {
 
 	topicNew: {
 		request: (param = { uid, session, gid, type, topic }) =>
-			$gw.request(param.uid, $domain.path.topicNew, param),
+			$gw.request(param.gid, $domain.path.topicNew, param),
 		success: (page, obj) => {
 			let name = "topicNew";
 
@@ -338,7 +342,7 @@ const gw = {
 
 	topicAct: {
 		request: (param = { uid, session, gid, tid, action }) =>
-			$gw.request(param.uid, $domain.path.topicAct, param),
+			$gw.request(param.gid, $domain.path.topicAct, param),
 		success: (page, obj) => {
 			let name = "topicAct";
 
@@ -350,7 +354,7 @@ const gw = {
 
 	topicGet: {
 		request: (param = { uid, session, gid, tid }) =>
-			$gw.request(param.uid, $domain.path.topicGet, param),
+			$gw.request(param.gid, $domain.path.topicGet, param),
 		success: (page, obj) => {
 			let name = "topicGet";
 
@@ -362,7 +366,7 @@ const gw = {
 
 	topicGetOpen: {
 		request: (param = { uid, session, gid }) =>
-			$gw.request(param.uid, $domain.path.topicGetOpen, param),
+			$gw.request(param.gid, $domain.path.topicGetOpen, param),
 		success: (page, obj) => {
 			let name = "topicGetOpen";
 
@@ -374,7 +378,7 @@ const gw = {
 
 	topicGetClosed: {
 		request: (param = { uid, session, gid }) =>
-			$gw.request(param.uid, $domain.path.topicGetClosed, param),
+			$gw.request(param.gid, $domain.path.topicGetClosed, param),
 		success: (page, obj) => {
 			let name = "topicGetClosed";
 

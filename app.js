@@ -5,6 +5,22 @@ const db = require('utils/db.js').db;
 const mp = require('utils/mp.js').mp;
 const mq = require('utils/mq.js').mq;
 
+/*
+const updateManager = wx.getUpdateManager();
+
+updateManager.onCheckForUpdate(v => console.log(`hasUpdate=${v.hasUpdate}`))
+
+updateManager.onUpdateReady(function () {
+	console.log(`update ready, apply update`);
+
+	updateManager.applyUpdate();
+})
+
+updateManager.onUpdateFailed(function () {
+	// 新的版本下载失败
+})
+*/
+
 function load(app, options) {
 	let names = [
 		"group",

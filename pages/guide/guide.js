@@ -10,9 +10,10 @@ const api = include("api");
 const app = getApp();
 
 const roles = [
-	"patriarch",
+	"invalid",
 	"adviser",
 	"teacher",
+	"patriarch",
 ];
 
 function page_load(page, options) {
@@ -32,85 +33,36 @@ Page({
 	data: {
 		opengid: "",
 
-		role: {
-			patriarch: 0,
-			indexs: [0],
-			values: roles,
-		},
-		name: "",
-		students: [
-			{
-				name: "name0",
-				sex: gw.sex.man,
-				relation: "relation0",
-			},
-		],
-
-		studentCount: 1,
+		checkin: `{
+	"role": 3,
+	"name": "大明",
+	"students": [
+		{
+			"name": "小明",
+			"sex": 1,
+			"relation": "爸爸"
+		}
+	]
+}`,
 	},
 
 	onLoad: function (options) {
 		page_load(this, options);
 	},
 
-	bindRoleChange: function (ev) {
-		let oldRoleIndex = this.data.role.indexs[0];
-		let newRoleIndex = ev.detail.value[0] * 1;
-
-		console.log(`role change from ${roles[oldRoleIndex]} to ${roles[newRoleIndex]}`);
-
-		this.setData({
-			["role.indexs[0]"]: newRoleIndex,
-		});
-	},
 	checkin: function (ev) {
-		let d = this.data;
-
-		console.log(`checkin ${JSON.stringify(ev)}`);
-
-		mp.userCheckin(this, {
-			opengid: d.opengid,
+		let v = ev.detail.value.checkin;
+		let d = JSON.parse(v);
+		let obj = {
+			opengid: this.data.opengid,
 			role: d.role,
 			name: d.name,
-			nick: "", // todo: get nick-name
 			students: d.students,
-		});
-	},
+			userInfo: app.userInfo,
+		};
 
-	addStudent: function (ev) {
-		console.log(`addStudent ${JSON.stringify(ev)}`);
+		console.log(`checkin ${JSON.stringify(d)}`);
 
-		// todo: save current
-
-		let students = this.data.students;
-		let count = students.length;
-		let current = students[count - 1];
-
-		this.setData({
-			[`students[${count}]`]: {
-				name: "name" + count,
-				relation: "relation" + count,
-			},
-			"studentCount": count + 1,
-		});
-	},
-
-	delStudent: function (ev) {
-		console.log(`delStudent ${JSON.stringify(ev)}`);
-
-		let students = [];
-		for (let obj of this.data.students) {
-			students.push({
-				name: obj.name,
-				relation: obj.relation,
-			})
-		}
-
-		students.pop();
-
-		this.setData({
-			"studentCount": students.length,
-			"students": students,
-		});
+		mp.userCheckin(this, obj);
 	},
 })
