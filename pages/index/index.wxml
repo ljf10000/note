@@ -7,4 +7,8 @@
     <view class="username">
         <text class="user-name">{{name}}</text>
     </view>
+
+    <view class="clear">
+        <button type="defaule" bindtap="clickClear">Clear</button>
+    </view>
 </view>

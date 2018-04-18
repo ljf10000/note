@@ -9,7 +9,9 @@ function Get(app, key) {
 }
 
 function join(app, ...keys) {
-	let count = keys.count;
+	console.log(`res join: ${keys}`);
+
+	let count = keys.length;
 	if (0 == count) {
 		return ""
 	}

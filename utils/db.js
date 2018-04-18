@@ -109,6 +109,8 @@ const db = {
 
 			return user;
 		},
+
+		clear: () => api.removeStorageSync('user'),
 	},
 
 	group: {

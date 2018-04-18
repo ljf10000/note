@@ -4,6 +4,7 @@ const include = (name) => require(`../../utils/${name}.js`)[name];
 
 const pg = include("pg");
 const mp = include("mp");
+const api = include("api");
 
 const app = getApp();
 
@@ -31,6 +32,10 @@ Page({
 
 	clickShare: function (ev) {
 		console.log(`share with ${this.route}`);
+	},
+	
+	clickClear: function(ev) {
+		api.clearStorageSync();
 	},
 
 	onShareAppMessage: function (options) {

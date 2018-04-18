@@ -55,6 +55,8 @@ const api = {
 	clearStorageSync: () => {
 		try {
 			wx.clearStorageSync();
+
+			console.log(`storage clear`);
 		} catch (e) {
 			console.error(`clear storage error:${e}`);
 		}
