@@ -6,8 +6,7 @@
         "pages/list/list",
         "pages/manage/manage",
         "pages/notice/notice",
-        "pages/vote/vote",
-        "pages/member/member"
+        "pages/vote/vote"
     ],
     "window": {
         "backgroundTextStyle": "light",

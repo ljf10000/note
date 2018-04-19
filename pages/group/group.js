@@ -5,6 +5,7 @@ const include = (name) => require(`../../utils/${name}.js`)[name];
 const pg = include("pg");
 const mp = include("mp");
 const db = include("db");
+const api = include("api");
 
 const app = getApp();
 

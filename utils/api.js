@@ -10,8 +10,8 @@ function wxlog(name, param) {
 	}
 }
 
-function promisify(fn, param) {
-	wxlog(fn.name, param);
+function promisify(fn, name, param) {
+	wxlog(name, param);
 
 	return helper.promisify(fn, param);
 }
@@ -92,15 +92,15 @@ const api = {
 		}
 	},
 
-	request: (param = { url, method, data }) => promisify(wx.request, param),
+	request: (param = { url, method, data }) => promisify(wx.request, "request", param),
 
-	login: (timeout = deft.timeout) => promisify(wx.login, { timeout }),
+	login: (timeout = deft.timeout) => promisify(wx.login, "login", { timeout }),
 
-	checkSession: () => promisify(wx.checkSession),
+	checkSession: () => promisify(wx.checkSession, "checkSession"),
 
-	authorize: (scope) => promisify(wx.authorize, { scope }),
+	authorize: (scope) => promisify(wx.authorize, "authorize", { scope }),
 
-	getUserInfo: () => promisify(wx.getUserInfo, {
+	getUserInfo: () => promisify(wx.getUserInfo, "getUserInfo", {
 		lang: deft.lang.zhCN,
 		timeout: deft.timeout,
 	}),
@@ -111,8 +111,8 @@ const api = {
 		console.log(`getUserInfoEx=${JSON.stringify(app.userInfo)}`);
 	}),
 
-	requestPayment: ({ timeStamp, nonceStr, prepay_id, signType = "MD5", paySign })
-		=> helper.promisify(wx.requestPayment, {
+	requestPayment: ({ timeStamp, nonceStr, prepay_id, signType = "MD5", paySign }) =>
+		promisify(wx.requestPayment, "requestPayment", {
 			timeStamp,
 			nonceStr,
 			package: `prepay_id=${prepay_id}`,
@@ -121,10 +121,10 @@ const api = {
 		}),
 
 	getShareInfo: (shareTicket, timeout = deft.timeout) =>
-		promisify(wx.getShareInfo, { shareTicket, timeout }),
+		promisify(wx.getShareInfo, "getShareInfo", { shareTicket, timeout }),
 
 	showLoadingEx: (title, ms = 2000) => {
-		wxlog("showLoading", {title, ms});
+		wxlog("showLoading", { title, ms });
 
 		wx.showLoading({
 			title,
@@ -140,19 +140,19 @@ const api = {
 		// wx.hideLoading();
 	},
 
-	showModal: (title, content) => promisify(wx.showModal, { title, content }),
+	showModal: (title, content) => promisify(wx.showModal, "showModal", { title, content }),
 
-	navigateTo: (url) => promisify(wx.navigateTo, { url }),
+	navigateTo: (url) => promisify(wx.navigateTo, "navigateTo", { url }),
 
 	navigateToEx: (name, param = {}) => api.navigateTo(helper.url(name, param)),
 
-	redirectTo: (url) => promisify(wx.redirectTo, { url }),
+	redirectTo: (url) => promisify(wx.redirectTo, "redirectTo", { url }),
 
 	redirectToEx: (name, param = {}) => api.redirectTo(helper.url(name, param)),
 
-	switchTab: (url) => promisify(wx.switchTab, { url }),
+	switchTab: (url) => promisify(wx.switchTab, "switchTab", { url }),
 
-	reLaunch: (url) => promisify(wx.reLaunch, { url }),
+	reLaunch: (url) => promisify(wx.reLaunch, "reLaunch", { url }),
 };
 
 module.exports = {
