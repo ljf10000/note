@@ -48,18 +48,18 @@ function start_normal(app) {
 }
 
 function start_login(app) {
-	api.showLoadingEx(res.info(app, "wx login"));
+	api.showLoadingEx(res.Transfer( "wx login"));
 
 	return api.login().then(
 		v => login(app, v.code),
 		e => {
-			let msg = res.info(app, "wx login fail");
+			let msg = res.Transfer("wx login fail");
 
 			api.hideLoadingEx();
 
 			console.error(`${msg}: ${JSON.stringify(e)}`);
 
-			api.showModal(res.app(app), msg);
+			api.showModal(res.App(), msg);
 		}
 	);
 }
@@ -67,7 +67,7 @@ function start_login(app) {
 function login(app, jscode) {
 	app.login.jscode = jscode;
 
-	api.showLoadingEx(res.info(app, "mp login"));
+	api.showLoadingEx(res.Transfer("mp login"));
 
 	if (debug || 0 == app.user.uid) {
 		if (app.login.gsecret) {
@@ -88,7 +88,7 @@ function loginBy(app, method, param) {
 	app.login.param = param;
 	app.login.method = method;
 
-	let msg = res.join(app, "login");
+	let msg = res.Word("login");
 
 	msg = `${msg} ${method}`;
 	api.showLoadingEx(msg);
@@ -116,7 +116,11 @@ function callBy(obj, method, param) {
 	}
 
 	return r.request(param).then(
-		v => r.success(obj, v.data),
+		v => {
+			let d = v.data;
+
+			return (!d || d.error) ? r.fail(obj, d) : r.success(obj, d);
+		},
 		e => r.fail(obj, e)
 	);
 }

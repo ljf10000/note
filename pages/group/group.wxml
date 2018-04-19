@@ -4,7 +4,7 @@
         <open-data type="groupName" open-gid="{{group.opengid}}" auto-height="true"></open-data>
     </view>
 
-    <view class="group">
+    <view class="adviser">
         <textarea name="group" value="{{groupstr}}" maxlength="-1" />
     </view>
 </view>

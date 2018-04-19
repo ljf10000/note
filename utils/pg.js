@@ -9,7 +9,7 @@ const pg = {
 		console.log(`share from ${options.from} to ${options.target}`);
 
 		return {
-			title: res.app(app),
+			title: res.App(),
 			path: `/${page.route}?shared=1`,
 			success: v => {
 				let shareTicket = v.shareTickets[0];

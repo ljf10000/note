@@ -2,13 +2,43 @@
 
 const lang = 0;
 
-function Get(app, key) {
-	let obj = $res[key] || $res.unknow;
+const $words = {
+	adviser: ["班主任"],
+	app: ["班级事务小助手", "small assistant in class affairs"],
+	bear1: ["熊大"],
+	bear2: ["熊二"],
+	bear3: ["熊宝宝"],
+	checkin: ["等级"],
+	del: ["删除"],
+	fail: ["失败"],
+	father: ["爸爸"],
+	["get"]: ["获取"],
+	group: ["群组"],
+	login: ["登陆"],
+	mother: ["妈妈"],
+	["new"]: ["创建"],
+	patriarch: ["家长"],
+	panda: ["熊猫"],
+	pay: ["支付"],
+	pre: ["预先"],
+	student: ["学生"],
+	success: ["成功"],
+	sync: ["同步"],
+	teacher: ["老师"],
+	topic: ["主题"],
+	unknow: ["未知"],
+	user: ["用户"],
+	wx: ["微信", "webcat"],
+	mp: ["小程序", "mini program"],
+};
+
+function word(words, key) {
+	let obj = words[key] || words.unknow;
 
 	return obj[lang] || key;
 }
 
-function join(app, ...keys) {
+function join(words, ...keys) {
 	console.log(`res join: ${keys}`);
 
 	let count = keys.length;
@@ -16,50 +46,34 @@ function join(app, ...keys) {
 		return ""
 	}
 
-	let name = Get(app, keys[0]);
+	let name = word(words, keys[0]);
 	if (1 == count) {
 		return name;
 	}
 
 	let split = (0 == lang) ? "" : " ";
 	for (let i = 1; i < count; i++) {
-		name += split + Get(app, keys[i]);
+		name += split + word(words, keys[i]);
 	}
 
-	return name
+	return name;
 }
 
-const $res = {
-	adviser: ["班主任"],
-	app: ["班级事务小助手", "small assistant in class affairs"],
-	checkin: ["等级"],
-	del: ["删除"],
-	fail: ["失败"],
-	["get"]: ["获取"],
-	group: ["群组"],
-	login: ["登陆"],
-	["new"]: ["创建"],
-	pay: ["支付"],
-	pre: ["预先"],
-	student: ["学生"],
-	success: ["成功"],
-	sync: ["同步"],
-	topic: ["主题"],
-	unknow: ["未知"],
-	user: ["用户"],
+function transfer(words, sentence) {
+	let keys = sentence.split(" ");
 
-	wx: ["微信", "webcat"],
-	mp: ["小程序", "mini program"],
-};
+	return join(words, ...keys);
+}
 
 const res = {
-	app: (app) => Get(app, "app"),
-	join: (app, ...keys) => join(app, ...keys),
-	info: (app, desc) => {
-		let keys = desc.split(" ");
+	word: word,
+	join: join,
+	transfer: transfer,
 
-		return join(app, ...keys);
-	},
+	App: () => word($words, "app"),
+	Word: (key) => word($words, key),
+	Join: (...keys) => join($words, ...keys),
+	Transfer: (sentence) => transfer($words, sentence),
 };
 
 module.exports = {

@@ -29,7 +29,6 @@ Page({
 	name: m_name,
 	data: {
 		group: {},
-		groupstr: "",
 	},
 
 	onLoad: function (options) {
@@ -39,7 +38,6 @@ Page({
 	groupGet: function(group) {
 		this.setData({
 			group: group,
-			groupstr: JSON.stringify(group),
 		});
 	},
 })

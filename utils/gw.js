@@ -103,13 +103,13 @@ const $gw = {
 	fail: (obj, e, ...keys) => {
 		// obj is app or page
 		let app = obj.userInfo ? obj : getApp();
-		let msg = res.join(app, "mp", ...keys, "fail");
+		let msg = res.Join("mp", ...keys, "fail");
 
 		api.hideLoadingEx();
 
 		console.error(`${msg}: ${JSON.stringify(e)}`);
 
-		api.showModal(res.app(app), msg);
+		api.showModal(res.App(), msg);
 	},
 	login_fail: (obj, e) => $gw.fail(obj, e, "login"),
 };
@@ -252,7 +252,7 @@ const gw = {
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
 
-			db.group.save(app.groups, obj.gid, obj);
+			db.group.save(app.groups, obj.gid, obj.group);
 
 			cb(obj);
 		},

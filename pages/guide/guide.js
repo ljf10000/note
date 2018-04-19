@@ -6,14 +6,10 @@ const pg = include("pg");
 const gw = include("gw");
 const mp = include("mp");
 const api = include("api");
+const res = include("res");
+const com = include("com");
 
 const app = getApp();
-
-const roles = [
-	{ k: 1, v: "adviser" },
-	{ k: 2, v: "teacher" },
-	{ k: 3, v: "patriarch", checked: true },
-];
 
 function newStudent(k, name, relation) {
 	return {
@@ -70,10 +66,18 @@ function saveStudent(page, ev) {
 }
 
 function checkin(page, ev) {
+	const words = {
+		needName: ["请填写名字"],
+		needStudentName: ["请填写学生名字"],
+		needStudentRelation: ["请填写学生关系"],
+		needStudentNameRelation: ["请填写学生姓名和关系"],
+	};
+	const _ = (key) => res.word(words, key);
+
 	let d = page.data;
 
 	if (!d.name) {
-		api.showModal("", "请填写名字");
+		api.showModal("", _("needName"));
 		return 0;
 	}
 
@@ -87,12 +91,12 @@ function checkin(page, ev) {
 		}
 		
 		if (!student.name.v) {
-			api.showModal("", "请填写学生名字");
+			api.showModal("", _("needStudentName"));
 			return 0;
 		}
 
 		if (!student.relation.v) {
-			api.showModal("", "请填写学生关系");
+			api.showModal("", _("needStudentRelation"));
 			return 0;
 		}
 
@@ -104,7 +108,7 @@ function checkin(page, ev) {
 	}
 
 	if (0 == students.length) {
-		api.showModal("", "请填写学生姓名和关系");
+		api.showModal("", _("needStudentNameRelation"));
 		return 0;
 	}
 
@@ -121,18 +125,20 @@ function checkin(page, ev) {
 	mp.userCheckin(page, obj);
 }
 
+const mother = res.Word("mother");
+
 Page({
 	name: m_name,
 
 	data: {
 		opengid: "",
 
-		roles: roles,
+		roles: com.roles(app),
 		students: [
-			newStudent(0, "熊大", "妈妈"),
-			newStudent(1, "熊二", "妈妈"),
-			newStudent(2, "熊宝宝", "妈妈"),
-			newStudent(3, "熊猫", "妈妈"),
+			newStudent(0, res.Word("bear1"), mother),
+			newStudent(1, res.Word("bear2"), mother),
+			newStudent(2, res.Word("bear3"), mother),
+			newStudent(3, res.Word("panda"), mother),
 		],
 		role: 3,
 		name: "",
