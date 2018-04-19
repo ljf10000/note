@@ -1,15 +1,13 @@
 // pages/guide/guide.js
 const m_name = "guide";
-const $ = (name) => require(`../../utils/${name}.js`)[name];
+const app = getApp();
 
+const $ = (name) => require(`../../utils/${name}.js`)[name];
 const pg = $("pg");
 const gw = $("gw");
 const mp = $("mp");
 const api = $("api");
 const res = $("res");
-const com = $("com");
-
-const app = getApp();
 
 function newStudent(k, name, relation) {
 	return {
@@ -133,7 +131,11 @@ Page({
 	data: {
 		opengid: "",
 
-		roles: com.roles(app),
+		roles: [
+			{ k: 1, v: res.Word("adviser") },
+			{ k: 2, v: res.Word("teacher") },
+			{ k: 3, v: res.Word("patriarch"), checked: true },
+		],
 		students: [
 			newStudent(0, res.Word("bear1"), mother),
 			newStudent(1, res.Word("bear2"), mother),

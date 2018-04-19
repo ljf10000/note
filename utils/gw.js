@@ -89,7 +89,9 @@ const $gw = {
 	checkUser: (name, obj) =>
 		$gw.check(name, obj.user, "uid", "session", "nn"),
 
-	success: (name, obj) => console.log(`${name} recv obj=${JSON.stringify(obj)}`),
+	success: (name, obj) => {
+		// do nothing
+	},
 
 	request: (xid, path, data) => {
 		let url = $domain.url(xid, path);
@@ -102,12 +104,9 @@ const $gw = {
 
 	fail: (obj, e, ...keys) => {
 		// obj is app or page
-		let app = obj.userInfo ? obj : getApp();
 		let msg = res.Join("mp", ...keys, "fail");
 
 		api.hideLoadingEx();
-
-		console.error(`${msg}: ${JSON.stringify(e)}`);
 
 		api.showModal(res.APP, msg);
 	},
@@ -247,12 +246,9 @@ const gw = {
 		success: (page, obj) => {
 			let name = "groupGet";
 			let cb = page[name];
-			let app = getApp();
-
+			
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
-
-			db.group.save(app.groups, obj.gid, obj.group);
 
 			cb(obj);
 		},

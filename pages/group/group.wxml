@@ -5,6 +5,31 @@
     </view>
 
     <view class="adviser">
-        <textarea name="group" value="{{groupstr}}" maxlength="-1" />
+        {{adviser.label}}：{{adviser.name}}
+    </view>
+
+    <view class="teacher">
+        {{teacher.label}}：
+        <view class="entry" wx:for="{{teacher.all}}" wx:key="idx">
+			{{item.name}}
+        </view>
+    </view>
+
+    <view class="patriarch">
+        {{patriarch.label}}：
+        <view class="entry" wx:for="{{patriarch.all}}" wx:key="idx">
+			{{item.name}}
+        </view>
+    </view>
+
+    <view class="student">
+        {{student.label}}：
+        <view class="entry" wx:for="{{student.all}}" wx:key="idx">
+			{{item.name}}
+        </view>
+    </view>
+
+    <view class="group">
+        {{groupstr}}：
     </view>
 </view>

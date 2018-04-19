@@ -1,11 +1,10 @@
 // pages/list/list.js
 const m_name = "list";
-const $ = (name) => require(`../../utils/${name}.js`)[name];
+const app = getApp();
 
+const $ = (name) => require(`../../utils/${name}.js`)[name];
 const pg = $("pg");
 const mp = $("mp");
-
-const app = getApp();
 
 function load(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);

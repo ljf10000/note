@@ -119,9 +119,15 @@ function callBy(obj, method, param) {
 		v => {
 			let d = v.data;
 
+			console.log(`${method} recv obj: ${JSON.stringify(d)}`);
+
 			return (!d || d.error) ? r.fail(obj, d) : r.success(obj, d);
 		},
-		e => r.fail(obj, e)
+		e => {
+			console.log(`${method} recv error: ${JSON.stringify(d)}`);
+
+			return r.fail(obj, e);
+		}
 	);
 }
 
