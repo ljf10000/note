@@ -1,15 +1,16 @@
 // pg.js
-const app = getApp();
+const ___ = (name) => require(`${name}.js`)[name];
+const res = ___('res');
+const mp = ___('mp');
 
-const res = require('res.js').res;
-const mp = require('mp.js').mp;
+const app = getApp();
 
 const pg = {
 	share: (page, options) => {
 		console.log(`share from ${options.from} to ${options.target}`);
 
 		return {
-			title: res.App(),
+			title: res.APP,
 			path: `/${page.route}?shared=1`,
 			success: v => {
 				let shareTicket = v.shareTickets[0];

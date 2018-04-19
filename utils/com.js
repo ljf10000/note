@@ -1,5 +1,6 @@
 // com.js
-const res = require('res.js').res;
+const ___ = (name) => require(`${name}.js`)[name];
+const res = ___('res');
 
 const com = {
 	roles: () => ([

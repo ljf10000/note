@@ -1,6 +1,6 @@
 // res.js
 
-const lang = 0;
+let lang = 0;
 
 const $words = {
 	adviser: ["班主任"],
@@ -65,12 +65,15 @@ function transfer(words, sentence) {
 	return join(words, ...keys);
 }
 
+const APP = word($words, "app");
+
 const res = {
 	word: word,
 	join: join,
 	transfer: transfer,
 
-	App: () => word($words, "app"),
+	APP: APP,
+
 	Word: (key) => word($words, key),
 	Join: (...keys) => join($words, ...keys),
 	Transfer: (sentence) => transfer($words, sentence),

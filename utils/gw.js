@@ -1,10 +1,10 @@
 // gw.js
-
-const helper = require('helper.js').helper;
+const ___ = (name) => require(`${name}.js`)[name];
 const mp_gw = require('common/mp_gw.js').mp_gw;
-const api = require('api.js').api;
-const res = require('res.js').res;
-const db = require('db.js').db;
+const helper = ___("helper");
+const api = ___("api");
+const res = ___("res");
+const db = ___("db");
 
 const $domain = {
 	master: "lambda-lab.cn",
@@ -109,7 +109,7 @@ const $gw = {
 
 		console.error(`${msg}: ${JSON.stringify(e)}`);
 
-		api.showModal(res.App(), msg);
+		api.showModal(res.APP, msg);
 	},
 	login_fail: (obj, e) => $gw.fail(obj, e, "login"),
 };

@@ -1,9 +1,9 @@
 // pages/notice/notice.js
 const m_name = "notice";
-const include = (name) => require(`../../utils/${name}.js`)[name];
+const ___ = (name) => require(`../../utils/${name}.js`)[name];
 
-const pg = include("pg");
-const mp = include("mp");
+const pg = ___("pg");
+const mp = ___("mp");
 
 const app = getApp();
 

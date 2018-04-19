@@ -1,10 +1,10 @@
 // pages/index/index.js
 const m_name = "index";
-const include = (name) => require(`../../utils/${name}.js`)[name];
+const ___ = (name) => require(`../../utils/${name}.js`)[name];
 
-const pg = include("pg");
-const mp = include("mp");
-const api = include("api");
+const pg = ___("pg");
+const mp = ___("mp");
+const api = ___("api");
 
 const app = getApp();
 

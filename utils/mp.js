@@ -1,9 +1,9 @@
 // mp.js
-
+const ___ = (name) => require(`${name}.js`)[name];
 const mp_gw = require('common/mp_gw.js').mp_gw;
-const res = require('res.js').res;
-const api = require('api.js').api;
-const gw = require('gw.js').gw;
+const res = ___('res');
+const api = ___('api');
+const gw = ___('gw');
 
 function isApp(obj) {
 	return true === obj.__i_m_app__;
@@ -59,7 +59,7 @@ function start_login(app) {
 
 			console.error(`${msg}: ${JSON.stringify(e)}`);
 
-			api.showModal(res.App(), msg);
+			api.showModal(res.APP, msg);
 		}
 	);
 }
