@@ -1,10 +1,10 @@
 // gw.js
-const ___ = (name) => require(`${name}.js`)[name];
+const $ = (name) => require(`${name}.js`)[name];
 const mp_gw = require('common/mp_gw.js').mp_gw;
-const helper = ___("helper");
-const api = ___("api");
-const res = ___("res");
-const db = ___("db");
+const helper = $("helper");
+const api = $("api");
+const res = $("res");
+const db = $("db");
 
 const $domain = {
 	master: "lambda-lab.cn",

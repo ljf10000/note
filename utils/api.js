@@ -1,7 +1,7 @@
 // api.js
-const ___ = (name) => require(`${name}.js`)[name];
-const helper = ___('helper');
-const deft = ___('deft');
+const $ = (name) => require(`${name}.js`)[name];
+const helper = $('helper');
+const deft = $('deft');
 
 function wxlog(name, param) {
 	if (param) {

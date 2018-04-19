@@ -1,9 +1,9 @@
 // pages/manage/manage.js
 const m_name = "manage";
-const ___ = (name) => require(`../../utils/${name}.js`)[name];
+const $ = (name) => require(`../../utils/${name}.js`)[name];
 
-const pg = ___("pg");
-const mp = ___("mp");
+const pg = $("pg");
+const mp = $("mp");
 
 const app = getApp();
 

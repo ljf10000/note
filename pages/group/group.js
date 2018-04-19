@@ -1,11 +1,11 @@
 // pages/group/group.js
 const m_name = "group";
-const ___ = (name) => require(`../../utils/${name}.js`)[name];
+const $ = (name) => require(`../../utils/${name}.js`)[name];
 
-const pg = ___("pg");
-const mp = ___("mp");
-const db = ___("db");
-const api = ___("api");
+const pg = $("pg");
+const mp = $("mp");
+const db = $("db");
+const api = $("api");
 
 const app = getApp();
 

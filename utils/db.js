@@ -1,6 +1,6 @@
 // db.js
-const ___ = (name) => require(`${name}.js`)[name];
-const api = ___('api');
+const $ = (name) => require(`${name}.js`)[name];
+const api = $('api');
 
 const keyprefix = "g-";
 

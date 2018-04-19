@@ -1,7 +1,7 @@
 // pg.js
-const ___ = (name) => require(`${name}.js`)[name];
-const res = ___('res');
-const mp = ___('mp');
+const $ = (name) => require(`${name}.js`)[name];
+const res = $('res');
+const mp = $('mp');
 
 const app = getApp();
 

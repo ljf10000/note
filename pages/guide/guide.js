@@ -1,13 +1,13 @@
 // pages/guide/guide.js
 const m_name = "guide";
-const ___ = (name) => require(`../../utils/${name}.js`)[name];
+const $ = (name) => require(`../../utils/${name}.js`)[name];
 
-const pg = ___("pg");
-const gw = ___("gw");
-const mp = ___("mp");
-const api = ___("api");
-const res = ___("res");
-const com = ___("com");
+const pg = $("pg");
+const gw = $("gw");
+const mp = $("mp");
+const api = $("api");
+const res = $("res");
+const com = $("com");
 
 const app = getApp();
 
