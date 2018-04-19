@@ -29,11 +29,15 @@ Page({
 		});
 	},
 
-	clickShare: function (ev) {
+	evShare: function (ev) {
 		console.log(`share with ${this.route}`);
 	},
-	
-	clickClear: function(ev) {
+
+	evGroup: function (ev) {
+		api.navigateToEx("group");
+	},
+
+	evClear: function (ev) {
 		api.clearStorageSync();
 	},
 

@@ -4,7 +4,6 @@
         "pages/group/group",
         "pages/guide/guide",
         "pages/list/list",
-        "pages/manage/manage",
         "pages/notice/notice",
         "pages/vote/vote"
     ],

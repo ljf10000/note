@@ -27,7 +27,6 @@ function load(app, options) {
 		"guide",
 		"index",
 		"list",
-		"manage",
 		"notice",
 		"vote",
 	];

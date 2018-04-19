@@ -106,13 +106,44 @@ Page({
 				// {idx: idx, name: name},
 			],
 		},
+		/** 
+		* 页面配置 
+		*/
+		winWidth: 0,
+		winHeight: 0,
+		currentTab: 0,
 	},
 
 	onLoad: function (options) {
 		load(this, options);
+
+		let info = api.getSystemInfoSync();
+
+		this.setData({
+			winWidth: info.windowWidth,
+			winHeight: info.windowHeight,
+		});
 	},
 
 	groupGet: function (obj) {
 		return groupGet(this, obj);
+	},
+
+	bindChange: function (e) {
+		this.setData({
+			currentTab: e.detail.current,
+		});
+	},
+
+	swichTab: function (e) {
+		let current = e.target.dataset.current;
+
+		if (this.data.currentTab == current) {
+			return false;
+		} else {
+			this.setData({
+				currentTab: current,
+			})
+		}
 	},
 })

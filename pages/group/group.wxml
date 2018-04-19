@@ -1,31 +1,53 @@
 <!--pages/group/group.wxml-->
 <view class="container">
-    <view class="group-name">
-        <open-data type="groupName" open-gid="{{group.opengid}}" auto-height="true"></open-data>
+    <view class="swiper-tab">
+        <view class="swiper-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichTab">投票</view>
+        <view class="swiper-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichTab">通知</view>
+        <view class="swiper-tab-list {{currentTab==2 ? 'on' : ''}}" data-current="2" bindtap="swichTab">班级成员</view>
     </view>
 
-    <view class="adviser">
-        {{adviser.label}}：{{adviser.name}}
-    </view>
+    <swiper current="{{currentTab}}" class="swiper-box" duration="300" style="height:{{winHeight - 31}}px" bindchange="bindChange">
+        <swiper-item>
+            <view>
+				投票信息
+			</view>
+        </swiper-item>
 
-    <view class="teacher">
-        {{teacher.label}}：
-        <view class="entry" wx:for="{{teacher.all}}" wx:key="idx">
-			{{item.name}}
-        </view>
-    </view>
+        <swiper-item>
+            <view>
+				通知信息
+			</view>
+        </swiper-item>
 
-    <view class="patriarch">
-        {{patriarch.label}}：
-        <view class="entry" wx:for="{{patriarch.all}}" wx:key="idx">
-			{{item.name}}
-        </view>
-    </view>
+        <swiper-item>
+            <view class="group-name">
+                <open-data type="groupName" open-gid="{{group.opengid}}" auto-height="true"></open-data>
+            </view>
 
-    <view class="student">
-        {{student.label}}：
-        <view class="entry" wx:for="{{student.all}}" wx:key="idx">
-			{{item.name}}
-        </view>
-    </view>
+            <view class="adviser">
+                {{adviser.label}}：{{adviser.name}}
+            </view>
+
+            <view class="teacher">
+                {{teacher.label}}：
+                <view class="entry" wx:for="{{teacher.all}}" wx:key="idx">
+                    {{item.name}}
+                </view>
+            </view>
+
+            <view class="patriarch">
+                {{patriarch.label}}：
+                <view class="entry" wx:for="{{patriarch.all}}" wx:key="idx">
+                    {{item.name}}
+                </view>
+            </view>
+
+            <view class="student">
+                {{student.label}}：
+                <view class="entry" wx:for="{{student.all}}" wx:key="idx">
+                    {{item.name}}
+                </view>
+            </view>
+        </swiper-item>
+    </swiper>
 </view>

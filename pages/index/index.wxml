@@ -1,14 +1,12 @@
 <!--index.wxml-->
 <view class="container">
-    <view class="share">
-        <button type="defaule" open-type="share" bindtap="clickShare">Share</button>
-    </view>
-
     <view class="username">
         <text class="user-name">{{name}}</text>
     </view>
 
-    <view class="clear">
-        <button type="defaule" bindtap="clickClear">Clear</button>
+    <view class="buttonTab">
+        <button type="defaule" open-type="share" bindtap="evShare">邀请</button>
+        <button type="defaule" bindtap="evGroup">班级</button>
+        <button type="defaule" bindtap="evClear">修复</button>
     </view>
 </view>

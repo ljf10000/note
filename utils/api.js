@@ -39,6 +39,22 @@ const api = {
 
 	alert: (content) => api.showModal({ title: "alert", content }),
 
+	getSystemInfoSync: () => {
+		let action = "wx: get system info";
+
+		try {
+			let v = wx.getSystemInfoSync();
+
+			console.log(`${action} v:${JSON.stringify(v)}`);
+
+			return v;
+		} catch (e) {
+			console.error(`${action} error:${e}`);
+
+			return {};
+		}
+	},
+	
 	getStorageSync: (k) => {
 		let action = "wx: get storage";
 
