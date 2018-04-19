@@ -28,8 +28,4 @@
 			{{item.name}}
         </view>
     </view>
-
-    <view class="group">
-        {{groupstr}}：
-    </view>
 </view>

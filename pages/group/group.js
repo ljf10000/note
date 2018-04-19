@@ -78,7 +78,6 @@ function groupGet(page, obj) {
 		"teacher.all": teachers,
 		"patriarch.all": patriarchs,
 		"student.all": students,
-		groupstr: JSON.stringify(group),
 	});
 }
 
@@ -107,16 +106,13 @@ Page({
 				// {idx: idx, name: name},
 			],
 		},
-
-		group: {},
-		groupstr:"",
 	},
 
 	onLoad: function (options) {
 		load(this, options);
 	},
 
-	groupGet: function (group) {
-		return groupGet(this, group);
+	groupGet: function (obj) {
+		return groupGet(this, obj);
 	},
 })
