@@ -1,12 +1,13 @@
 {
     "pages": [
         "pages/index/index",
-		"pages/group/group",
+        "pages/group/group",
         "pages/guide/guide",
         "pages/list/list",
-		"pages/manage/manage",
-		"pages/notice/notice",
-        "pages/vote/vote"
+        "pages/manage/manage",
+        "pages/notice/notice",
+        "pages/vote/vote",
+        "pages/member/member"
     ],
     "window": {
         "backgroundTextStyle": "light",

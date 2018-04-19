@@ -31,7 +31,7 @@ const helper = {
 
 		return url;
 	},
-	
+
 	promisify: (fn, obj = {}) => new Promise((resolve, reject) => {
 		obj.success = resolve;
 		obj.fail = reject;

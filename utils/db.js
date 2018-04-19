@@ -64,8 +64,6 @@ const db = {
 			}, []);
 		},
 
-		isLocal: (user) => !!user.uid,
-
 		vcopy: (dst, src) => {
 			dst.nn = src.nn;
 			dst.uid = src.uid;
@@ -87,10 +85,14 @@ const db = {
 		},
 
 		load: (user) => {
+			if (user && user.uid) {
+				return user;
+			}
+
 			let v = api.getStorageSync('user');
 			let mode = "local"
 
-			if (!db.user.isLocal(v)) {
+			if (!v) {
 				v = newDeftUser();
 				mode = "deft";
 			}
@@ -116,6 +118,10 @@ const db = {
 	group: {
 		load: (groups, gid) => {
 			let k = groupkey(gid);
+			if (groups && groups[k]) {
+				return groups[k];
+			}
+
 			let v = api.getStorageSync(k);
 			if (v) {
 				groups[k] = v;
@@ -126,11 +132,12 @@ const db = {
 			return v;
 		},
 
-		save: (groups, gid) => {
+		save: (groups, gid, v) => {
 			let k = groupkey(gid);
-			let v = groups[k];
 
 			if (v) {
+				groups[k] = v;
+
 				api.setStorageSync(k, v);
 			}
 

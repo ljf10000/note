@@ -247,9 +247,12 @@ const gw = {
 		success: (page, obj) => {
 			let name = "groupGet";
 			let cb = page[name];
+			let app = getApp();
 
 			$gw.success(name, obj);
 			$gw.check(name, obj, "group");
+
+			db.group.save(app.groups, obj.gid, obj);
 
 			cb(obj);
 		},

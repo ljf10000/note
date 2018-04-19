@@ -2,6 +2,20 @@
 const helper = require('helper.js').helper;
 const deft = require('deft.js').deft;
 
+function wxlog(name, param) {
+	if (param) {
+		console.log(`wx: ${name} ${JSON.stringify(param)}`);
+	} else {
+		console.log(`wx: ${name}`);
+	}
+}
+
+function promisify(fn, param) {
+	wxlog(fn.name, param);
+
+	return helper.promisify(fn, param);
+}
+
 const api = {
 	sence: {
 		found: 1001, 				// 发现栏小程序主入口
@@ -25,52 +39,68 @@ const api = {
 	alert: (content) => api.showModal({ title: "alert", content }),
 
 	getStorageSync: (k) => {
+		let action = "wx: get storage";
+
 		try {
-			return wx.getStorageSync(k);
+			let v = wx.getStorageSync(k);
+
+			console.log(`${action} k:${k} v:${JSON.stringify(v)}`);
+
+			return v;
 		} catch (e) {
-			console.error(`get storage k:${k} error:${e}`);
+			console.error(`${action} k:${k} error:${e}`);
 
 			return {};
 		}
 	},
 
 	setStorageSync: (k, v) => {
+		let action = "wx: set storage";
+
 		try {
 			wx.setStorageSync(k, v);
+
+			console.log(`${action} k:${k} v:${JSON.stringify(v)}`);
 		} catch (e) {
-			console.error(`set storage k:${k} v:${JSON.stringify(v)} error:${e}`);
+			console.error(`${action} k:${k} v:${JSON.stringify(v)} error:${e}`);
 		}
 
 		return v;
 	},
 
 	removeStorageSync: (k) => {
+		let action = "wx: remove storage";
+
 		try {
 			wx.removeStorageSync(k);
+
+			console.log(`${action} k:${k}`);
 		} catch (e) {
-			console.error(`remove storage k:${k} error:${e}`);
+			console.error(`${action} k:${k} error:${e}`);
 		}
 	},
 
 	clearStorageSync: () => {
+		let action = "wx: clear storage";
+
 		try {
 			wx.clearStorageSync();
 
-			console.log(`storage clear`);
+			console.log(action);
 		} catch (e) {
-			console.error(`clear storage error:${e}`);
+			console.error(`${action} error:${e}`);
 		}
 	},
 
-	request: (param = { url, method, data }) => helper.promisify(wx.request, param),
+	request: (param = { url, method, data }) => promisify(wx.request, param),
 
-	login: () => helper.promisify(wx.login, { timeout: deft.timeout }),
+	login: (timeout = deft.timeout) => promisify(wx.login, { timeout }),
 
-	checkSession: () => helper.promisify(wx.checkSession),
+	checkSession: () => promisify(wx.checkSession),
 
-	authorize: (scope) => helper.promisify(wx.authorize, { scope }),
+	authorize: (scope) => promisify(wx.authorize, { scope }),
 
-	getUserInfo: () => helper.promisify(wx.getUserInfo, {
+	getUserInfo: () => promisify(wx.getUserInfo, {
 		lang: deft.lang.zhCN,
 		timeout: deft.timeout,
 	}),
@@ -81,71 +111,48 @@ const api = {
 		console.log(`getUserInfoEx=${JSON.stringify(app.userInfo)}`);
 	}),
 
-	requestPayment: ({ timeStamp, nonceStr, prepay_id, signType = "MD5", paySign }) => {
-		let obj = {
+	requestPayment: ({ timeStamp, nonceStr, prepay_id, signType = "MD5", paySign })
+		=> helper.promisify(wx.requestPayment, {
 			timeStamp,
 			nonceStr,
 			package: `prepay_id=${prepay_id}`,
 			signType,
 			paySign,
-		};
-
-		console.log(`requestPayment data:${JSON.stringify(obj)}`);
-
-		return helper.promisify(wx.requestPayment, obj);
-	},
+		}),
 
 	getShareInfo: (shareTicket, timeout = deft.timeout) =>
-		helper.promisify(wx.getShareInfo, { shareTicket, timeout }),
+		promisify(wx.getShareInfo, { shareTicket, timeout }),
 
-	showLoadingEx: (title, ms = 2000) => wx.showLoading({
-		title,
-		mask: true,
-		success: v => setTimeout(() => wx.hideLoading(), ms),
-		fail: e => wx.hideLoading(),
-	}),
+	showLoadingEx: (title, ms = 2000) => {
+		wxlog("showLoading", {title, ms});
+
+		wx.showLoading({
+			title,
+			mask: true,
+			success: v => setTimeout(() => wx.hideLoading(), ms),
+			fail: e => wx.hideLoading(),
+		})
+	},
 
 	hideLoadingEx: () => {
+		wxlog("hideLoading");
+
 		// wx.hideLoading();
 	},
 
-	showModal: (title, content) => helper.promisify(wx.showModal, { title, content }),
+	showModal: (title, content) => promisify(wx.showModal, { title, content }),
 
-	navigateTo: (url) => {
-		console.log(`navigateTo url:${url}`);
+	navigateTo: (url) => promisify(wx.navigateTo, { url }),
 
-		return helper.promisify(wx.navigateTo, { url: url });
-	},
+	navigateToEx: (name, param = {}) => api.navigateTo(helper.url(name, param)),
 
-	navigateToEx: (name, param = {}) => {
-		let url = helper.url(name, param);
+	redirectTo: (url) => promisify(wx.redirectTo, { url }),
 
-		return api.navigateTo(url);
-	},
+	redirectToEx: (name, param = {}) => api.redirectTo(helper.url(name, param)),
 
-	redirectTo: (url) => {
-		console.log(`redirectTo url:${url}`);
+	switchTab: (url) => promisify(wx.switchTab, { url }),
 
-		return helper.promisify(wx.redirectTo, { url: url });
-	},
-
-	redirectToEx: (name, param = {}) => {
-		let url = helper.url(name, param);
-
-		return api.redirectTo(url);
-	},
-
-	switchTab: (url) => {
-		console.log(`switchTab url:${url}`);
-
-		return helper.promisify(wx.switchTab, { url: url });
-	},
-
-	reLaunch: (url) => {
-		console.log(`reLaunch url:${url}`);
-
-		return helper.promisify(wx.reLaunch, { url: url });
-	},
+	reLaunch: (url) => promisify(wx.reLaunch, { url }),
 };
 
 module.exports = {
