@@ -21,12 +21,12 @@ function start_post(app, g = {}) {
 				db.user.save(app.user);
 			}
 
-			api.redirectToEx("group", {
+			api.navigateToEx("group", {
 				opengid: g.opengid,
 				gid: g.gid,
 			});
 		} else {
-			api.redirectToEx("checkin", { opengid: g.opengid });
+			api.navigateToEx("checkin", { opengid: g.opengid });
 		}
 	} else {
 		let groups = db.user.getGroups(app.user);
@@ -37,14 +37,15 @@ function start_post(app, g = {}) {
 				// do nothing
 				break;
 			case 1:
-				api.redirectToEx("group", {
+				api.navigateToEx("group", {
 					opengid: groups[0].opengid,
 					gid: groups[0].gid,
 				});
 
 				break;
 			default:
-				api.redirectToEx("me");
+				// todo: to me ???
+				api.navigateToEx("me");
 				break;
 		}
 	}

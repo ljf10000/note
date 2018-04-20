@@ -14,6 +14,10 @@ Page({
 
 	onLoad: function (options) {
 		console.log(`${m_name} onload options:${JSON.stringify(options)}`);
+
+		wx.showShareMenu({
+			withShareTicket: true,
+		});
 	},
 
 	onShow: function () {

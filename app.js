@@ -37,9 +37,6 @@ function load(app, options) {
 	pages.map(v => app.mq.addTopic(v));
 
 	api.getUserInfoEx(app);
-	wx.showShareMenu({
-		withShareTicket: true
-	});
 
 	db.user.load(app.user);
 	Object.values(app.user.byname).map(gid => {
