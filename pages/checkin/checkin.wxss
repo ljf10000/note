@@ -1,5 +1,3 @@
-/* pages/guide/guide.wxss */
-
 .group-name {
     display: flex;
     justify-content: center;

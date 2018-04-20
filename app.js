@@ -21,28 +21,29 @@ updateManager.onUpdateFailed(function () {
 })
 */
 
-function load(app, options) {
-	let names = [
-		"group",
-		"guide",
-		"index",
-		"list",
-		"notice",
-		"vote",
-	];
+const pages = [
+	"index",
+	"group",
+	"guide",
+	"checkin",
+	"list",
+	"notice",
+	"vote",
+];
 
+function load(app, options) {
 	console.log(`app launch options=${JSON.stringify(options)}`);
 
-	names.map(v => app.mq.addTopic(v));
+	pages.map(v => app.mq.addTopic(v));
 
 	api.getUserInfoEx(app);
-
-	// load user
-	// todo: load group
-	db.user.load(app.user);
-
 	wx.showShareMenu({
 		withShareTicket: true
+	});
+
+	db.user.load(app.user);
+	Object.values(app.user.byname).map(gid => {
+		db.group.load(app.groups, gid);
 	});
 }
 

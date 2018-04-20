@@ -1,12 +1,9 @@
-<!--index.wxml-->
-<view class="container">
-    <view class="username">
-        <text class="user-name">{{name}}</text>
-    </view>
-
-    <view class="buttonTab">
-        <button type="defaule" open-type="share" bindtap="evShare">邀请</button>
-        <button type="defaule" bindtap="evGroup">班级</button>
-        <button type="defaule" bindtap="evClear">修复</button>
+<view class="page">
+    <view class="container">
+        <view class="container__image">
+            <image src="../../image/girl.jpg"/>
+        </view>
+        <view class="container__title">班级事务小助手</view>
+        <view class="container__info">高效处理班级事务</view>
     </view>
 </view>

@@ -1,9 +1,7 @@
-// pages/index/index.js
 const m_name = "index";
 const app = getApp();
 
 const $ = (name) => require(`../../utils/${name}.js`)[name];
-const pg = $("pg");
 const mp = $("mp");
 const api = $("api");
 
@@ -11,37 +9,29 @@ function load(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 
 	mp.start(app, app.login.shareTicket);
+
+	let id = setInterval(() => {
+		let time = page.data.time;
+
+		page.setData({
+			time: time - 1,
+		});
+
+		if (time == 0) {
+			api.redirectToEx("me");
+
+			clearInterval(id);
+		}
+	}, 1000);
 }
 
 Page({
 	name: m_name,
 	data: {
-		name: `Hello ${app.userInfo.nickName}`,
+		time: 3,
 	},
 
 	onLoad: function (options) {
 		load(this, options);
-	},
-
-	onShow: function () {
-		this.setData({
-			motto: `Hello ${app.userInfo.nickName}`,
-		});
-	},
-
-	evShare: function (ev) {
-		console.log(`share with ${this.route}`);
-	},
-
-	evGroup: function (ev) {
-		api.navigateToEx("group");
-	},
-
-	evClear: function (ev) {
-		api.clearStorageSync();
-	},
-
-	onShareAppMessage: function (options) {
-		return pg.share(this, options);
 	},
 })

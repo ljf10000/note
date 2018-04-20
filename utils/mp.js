@@ -48,7 +48,7 @@ function start_normal(app) {
 }
 
 function start_login(app) {
-	api.showLoadingEx(res.Transfer( "wx login"));
+	// api.showLoadingEx(res.Transfer( "wx login"));
 
 	return api.login().then(
 		v => login(app, v.code),
@@ -67,7 +67,7 @@ function start_login(app) {
 function login(app, jscode) {
 	app.login.jscode = jscode;
 
-	api.showLoadingEx(res.Transfer("mp login"));
+	// api.showLoadingEx(res.Transfer("mp login"));
 
 	if (debug || 0 == app.user.uid) {
 		if (app.login.gsecret) {
@@ -91,7 +91,7 @@ function loginBy(app, method, param) {
 	let msg = res.Word("login");
 
 	msg = `${msg} ${method}`;
-	api.showLoadingEx(msg);
+	// api.showLoadingEx(msg);
 
 	msg = `start ${msg} with`;
 	if (param.uid) {

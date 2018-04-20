@@ -169,6 +169,8 @@ const api = {
 
 	switchTab: (url) => promisify(wx.switchTab, "switchTab", { url }),
 
+	switchTabEx: (name) => api.switchTab(helper.url(name)),
+
 	reLaunch: (url) => promisify(wx.reLaunch, "reLaunch", { url }),
 };
 

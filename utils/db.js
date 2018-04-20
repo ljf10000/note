@@ -144,31 +144,6 @@ const db = {
 			return v;
 		},
 	},
-
-	page: {
-		create: (pages, page) => {
-			pages[page.route] = page;
-			pages["current"] = page;
-		},
-		destroy: (pages, page) => {
-			let current = getCurrentPages()[0].route;
-			let path = page.route;
-
-			delete pages[path];
-
-			if (path == current) {
-				// current have deleted
-				pages["current"] = getCurrentPages()[0];
-			}
-		},
-		destroyBy: (pages, path) => {
-			let page = pages[path];
-
-			if (page) {
-				db.page.destroy(pages, page);
-			}
-		},
-	},
 };
 
 module.exports = {

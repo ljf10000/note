@@ -26,7 +26,7 @@ function start_post(app, g = {}) {
 				gid: g.gid,
 			});
 		} else {
-			api.redirectToEx("guide", { opengid: g.opengid });
+			api.redirectToEx("checkin", { opengid: g.opengid });
 		}
 	} else {
 		let groups = db.user.getGroups(app.user);
@@ -44,7 +44,7 @@ function start_post(app, g = {}) {
 
 				break;
 			default:
-				api.redirectToEx("list");
+				api.redirectToEx("me");
 				break;
 		}
 	}

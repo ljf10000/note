@@ -1,7 +1,41 @@
-/**index.wxss**/
+body, page {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
 
-.buttonTab {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.container {
+    width: 408rpx;
+    height: 92rpx;
+    margin: auto;
+    margin-top: 280rpx;
+    text-align: center;
+}
+
+.container__title {
+    margin: auto;
+    font-size: 80rpx;
+    letter-spacing: 8rpx;
+    color: #14b392;
+}
+
+.container__info {
+    font-size: 40rpx;
+    font-weight: 100;
+    color: gray;
+}
+
+.container__image {
+    /* align-items: center; */
+    margin: auto;
+    /* margin-top: 256rpx; */
+    width: 160rpx;
+    height: 160rpx;
+}
+
+.container__image image {
+    width: 100%;
+    height: 100%;
 }

@@ -18,14 +18,16 @@ const helper = {
 		let keys = Object.keys(param);
 		let count = keys.length;
 
-		for (let i = 0; i < count; i++) {
-			let k = keys[i];
-			let v = param[k];
+		if (count) {
+			for (let i = 0; i < count; i++) {
+				let k = keys[i];
+				let v = param[k];
 
-			if (0 == i) {
-				url = `${url}?${k}=${v}`;
-			} else {
-				url = `${url}&${k}=${v}`;
+				if (0 == i) {
+					url = `${url}?${k}=${v}`;
+				} else {
+					url = `${url}&${k}=${v}`;
+				}
 			}
 		}
 

@@ -1,4 +1,3 @@
-// pages/guide/guide.js
 const m_name = "guide";
 const app = getApp();
 
