@@ -1,9 +1,9 @@
 // mp.js
 const $ = (name) => require(`${name}.js`)[name];
-const mp_gw = require('common/mp_gw.js').mp_gw;
-const res = $('res');
-const api = $('api');
-const gw = $('gw');
+const mp_gw = require("common/mp_gw.js").mp_gw;
+const res = $("res");
+const api = $("api");
+const gw = $("gw");
 
 function isApp(obj) {
 	return true === obj.__i_m_app__;

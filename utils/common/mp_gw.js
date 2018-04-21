@@ -1,8 +1,6 @@
-// common/mp_gw.js
-const include = (name) => require(`../${name}.js`)[name];
-
-const db = include("db");
-const api = include("api");
+const $ = (name) => require(`../${name}.js`)[name];
+const db = $("db");
+const api = $("api");
 
 function start_post(app, g = {}) {
 	let target = "guide";

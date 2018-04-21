@@ -17,6 +17,7 @@ const $words = {
 	login: ["登陆"],
 	mother: ["妈妈"],
 	["new"]: ["创建"],
+	notice: ["通知"],
 	patriarch: ["家长"],
 	panda: ["熊猫"],
 	pay: ["支付"],
@@ -28,6 +29,7 @@ const $words = {
 	topic: ["主题"],
 	unknow: ["未知"],
 	user: ["用户"],
+	vote: ["投票"],
 	wx: ["微信", "webcat"],
 	mp: ["小程序", "mini program"],
 };

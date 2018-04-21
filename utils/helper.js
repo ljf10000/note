@@ -40,6 +40,48 @@ const helper = {
 
 		fn(obj);
 	}),
+
+	timeFormat: (split, ...list) => {
+		let [head, ...tail] = list;
+		let init = (head < 10) ? ("0" + head) : ("" + head);
+
+		return tail.reduce((pre, v) => {
+			let pad = (v < 10) ? "0" : "";
+
+			return `${pre}${split}${pad}${v}`;
+		}, init);
+	},
+
+	dateString: (date, split = "") => {
+		date = date || new Date();
+
+		return helper.timeFormat(split, date.getFullYear(), 1 + date.getMonth(), date.getDay());
+	},
+
+	timeString: (date, split = "") => {
+		date = date || new Date();
+
+		return helper.timeFormat(split, date.getHours(), date.getMinutes(), date.getSeconds());
+	},
+
+	fullTimeString: (date, splits) => {
+		let sdate = helper.dateString(date, splits[0]);
+		let stime = helper.timeString(date, splits[2]);
+
+		return `${sdate}${splits[1]}${stime}`;
+	},
+
+	stdTimeString: (date) => helper.fullTimeString(date, ["-", " ", ":"]),
+	simTimeString: (date) => helper.fullTimeString(date, ["", "", ""]),
+
+	addDay: (date, after) => {
+		date = date || new Date();
+		date = new Date(date.getFullYear(), date.getMonth(), date.getDay());
+
+		let unix = date.getTime() / 1000 + (1 + after) * 3600 * 24 - 1;
+
+		return new Date(1000 * unix);
+	}
 };
 
 /*

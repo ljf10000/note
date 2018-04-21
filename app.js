@@ -1,9 +1,10 @@
 // app.js
-
-const api = require('utils/api.js').api;
-const db = require('utils/db.js').db;
-const mp = require('utils/mp.js').mp;
-const mq = require('utils/mq.js').mq;
+const $ = (name) => require(`utils/${name}.js`)[name];
+const helper = $("helper");
+const api = $("api");
+const db = $("db");
+const mp = $("mp");
+const mq = $("mq");
 
 /*
 const updateManager = wx.getUpdateManager();
@@ -33,6 +34,8 @@ const pages = [
 
 function load(app, options) {
 	console.log(`app launch options=${JSON.stringify(options)}`);
+
+	console.log(`now=${helper.simTimeString()}/${helper.stdTimeString()}`);
 
 	pages.map(v => app.mq.addTopic(v));
 
