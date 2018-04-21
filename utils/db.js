@@ -2,14 +2,14 @@
 const $ = (name) => require(`${name}.js`)[name];
 const api = $("api");
 
-const keyprefix = "g-";
+const groupKeyPrefix = "g-";
 
 function groupkey(gid) {
-	return keyprefix + gid;
+	return groupKeyPrefix + gid;
 }
 
 function gidbykey(key) {
-	return key.substr(keyprefix.length);
+	return key.substr(groupKeyPrefix.length);
 }
 
 function newDeftUser() {

@@ -3,8 +3,11 @@
 let lang = 0;
 
 const $words = {
-	adviser: ["班主任"],
 	app: ["班级事务小助手", "small assistant in class affairs"],
+	wx: ["微信", "webcat"],
+	mp: ["小程序", "mini program"],
+	
+	adviser: ["班主任"],
 	bear1: ["熊大"],
 	bear2: ["熊二"],
 	bear3: ["熊宝宝"],
@@ -30,8 +33,6 @@ const $words = {
 	unknow: ["未知"],
 	user: ["用户"],
 	vote: ["投票"],
-	wx: ["微信", "webcat"],
-	mp: ["小程序", "mini program"],
 };
 
 function word(words, key) {
