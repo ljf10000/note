@@ -2,14 +2,14 @@
 const $ = (name) => require(`${name}.js`)[name];
 const api = $("api");
 
-const groupKeyPrefix = "g-";
+const gidPrefix = "gid-";
 
-function groupkey(gid) {
-	return groupKeyPrefix + gid;
+function gidkey(gid) {
+	return gidPrefix + gid;
 }
 
 function gidbykey(key) {
-	return key.substr(groupKeyPrefix.length);
+	return key.substr(gidPrefix.length);
 }
 
 function newDeftUser() {
@@ -27,17 +27,17 @@ const db = {
 		addGroup: (user, gid, opengid) => {
 			let tmpgid = user.byname[opengid];
 			if (tmpgid) {
-				delete user.byid[tmpgid + ''];
+				delete user.byid[tmpgid + ""];
 			}
 
-			user.byid[gid + ''] = opengid;
+			user.byid[gid + ""] = opengid;
 			user.byname[opengid] = gid;
 
 			return user;
 		},
 
 		delGroup: (user, gid, opengid) => {
-			let k = gid + '';
+			let k = gid + "";
 			let name = opengid ? opengid : user.byid[k];
 
 			delete user.byid[k];
@@ -48,7 +48,7 @@ const db = {
 			return user;
 		},
 
-		getOpenGid: (user, gid) => user.byid[gid + ''],
+		getOpenGid: (user, gid) => user.byid[gid + ""],
 
 		getGid: (user, opengid) => user.byname[opengid],
 
@@ -89,7 +89,7 @@ const db = {
 				return user;
 			}
 
-			let v = api.getStorageSync('user');
+			let v = api.getStorageSync("user");
 			let mode = "local"
 
 			if (!v) {
@@ -105,19 +105,19 @@ const db = {
 		},
 
 		save: (user) => {
-			api.setStorageSync('user', user);
+			api.setStorageSync("user", user);
 
 			console.log(`save user: ${JSON.stringify(user)}`);
 
 			return user;
 		},
 
-		clear: () => api.removeStorageSync('user'),
+		clear: () => api.removeStorageSync("user"),
 	},
 
 	group: {
 		load: (groups, gid) => {
-			let k = groupkey(gid);
+			let k = gidkey(gid);
 			if (groups && groups[k]) {
 				return groups[k];
 			}
@@ -133,7 +133,7 @@ const db = {
 		},
 
 		save: (groups, gid, v) => {
-			let k = groupkey(gid);
+			let k = gidkey(gid);
 
 			if (v) {
 				groups[k] = v;
