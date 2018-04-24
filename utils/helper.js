@@ -98,23 +98,6 @@ const fsm = {
 };
 */
 
-const topic = {
-	state: {
-		open: 0,
-		closed: 1,
-		all: 2,
-		end: 3
-	},
-	type: {
-		vote: 0,
-		notice: 1,
-		end: 2
-	},
-	makeTid: (type, tpid) => ((type >>> 0) << 24) | (tpid >>> 0),
-	getTpid: tid => (tid >>> 0) & 0x00ffffff,
-	getType: tid => ((tid >>> 0) & 0xff000000) >> 24,
-};
-
 /*
 const typedef = {
 	user: {
