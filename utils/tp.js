@@ -116,21 +116,6 @@ function getGwTopic(topic) {
 	return obj;
 }
 
-function getTopic(type, gwTopic) {
-	let obj = topicHeader(gwTopic);
-
-	obj.type = type;
-
-	switch (type) {
-		case $type.vote.v:
-			obj.options = $vote.getOptions(gwTopic.body);
-		default:
-			obj.options = [];
-	}
-
-	return obj;
-}
-
 function getTopicx(gwTopicx) {
 	let type = getType(gwTopicx.tid);
 	let obj = getTopic(type, gwTopicx);
@@ -171,6 +156,21 @@ function getTopicx(gwTopicx) {
 			});
 		})
 	})
+
+	return obj;
+}
+
+function getTopic(type, gwTopic) {
+	let obj = topicHeader(gwTopic);
+
+	obj.type = type;
+
+	switch (type) {
+		case $type.vote.v:
+			obj.options = $vote.getOptions(gwTopic.body);
+		default:
+			obj.options = [];
+	}
 
 	return obj;
 }
@@ -255,6 +255,9 @@ const tp = {
 	getGwAction,
 
 	newTopic,
+	getTopic,
+	getTopicx,
+
 	addOption,
 	delOption,
 	addOptItem,
