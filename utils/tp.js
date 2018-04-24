@@ -36,8 +36,8 @@ const $vote = {
 
 			// 选项索引 0,1,2,3......
 			// 将选择的选项索引作为字符串 push 到 selection 中
-			opt.items.map((v, i) => {
-				if (v.checked) {
+			opt.items.map((item, i) => {
+				if (item.checked) {
 					selection += i + "";
 				}
 			})
@@ -104,37 +104,37 @@ function getGwAction(topic) {
 }
 
 function getGwTopic(topic) {
-	let obj = topicHeader(topic);
+	let gwTopic = topicHeader(topic);
 
 	switch (topic.type) {
 		case $type.vote.v:
-			obj.body = $vote.getBody(topic.options);
+			gwTopic.body = $vote.getBody(topic.options);
 		default:
-			obj.body = "";
+			gwTopic.body = "";
 	}
 
-	return obj;
+	return gwTopic;
 }
 
 function getTopicx(gwTopicx) {
 	let type = getType(gwTopicx.tid);
-	let obj = getTopic(type, gwTopicx);
-	let count = obj.options.length;
+	let topic = getTopic(type, gwTopicx);
+	let count = topic.options.length;
 
-	obj.tpid = getTpid(gwTopicx.tid);
-	obj.users = {};
+	topic.tpid = getTpid(gwTopicx.tid);
+	topic.users = {};
 
 	gwTopicx.actions.map(uaction => {
 		// userAction = {uid, time, action}
 		let ukey = uaction.uid + "";
-		let users = obj.users[ukey] || {};
+		let users = topic.users[ukey] || {};
 		let uoptions = users.options || new Array(count).fill({});
 
 		users.uid = uaction.uid;
 		users.time = uaction.time;
 
 		uaction.action.map((uselection, i) => {
-			let selection = uoptions[i].selection || new Array(obj.options.items.length).fill(false);
+			let selection = uoptions[i].selection || new Array(topic.options.items.length).fill(false);
 
 			for (let idx of uselection) {
 				selection[idx * 1] = true;
@@ -144,35 +144,35 @@ function getTopicx(gwTopicx) {
 		});
 
 		users.options = uoptions;
-		obj.users[ukey] = users;
+		topic.users[ukey] = users;
 	});
 
-	Object.keys(obj.users).map(uid => {
-		let user = obj.users[uid];
+	Object.keys(topic.users).map(uid => {
+		let user = topic.users[uid];
 
 		user.options.map((option, i) => {
 			option.selection.map((selected, j) => {
-				obj.options[i].items[j].checked++;
+				topic.options[i].items[j].checked++;
 			});
 		})
 	})
 
-	return obj;
+	return topic;
 }
 
 function getTopic(type, gwTopic) {
-	let obj = topicHeader(gwTopic);
+	let topic = topicHeader(gwTopic);
 
-	obj.type = type;
+	topic.type = type;
 
 	switch (type) {
 		case $type.vote.v:
-			obj.options = $vote.getOptions(gwTopic.body);
+			topic.options = $vote.getOptions(gwTopic.body);
 		default:
-			obj.options = [];
+			topic.options = [];
 	}
 
-	return obj;
+	return topic;
 }
 
 function newTopic(uid, param = { title, content, after: 3 }, type = $type.vote) {
@@ -208,15 +208,15 @@ function delElement(obj, key, idx) {
 }
 
 function addOption(topic, title, multi = false) {
-	let obj = {
+	let opt = {
 		multi,
 		title,
 		items: [],
 	};
 
-	topic.body.push(obj);
+	topic.options.push(opt);
 
-	return obj;
+	return opt;
 }
 
 function delOption(topic, idx) {
