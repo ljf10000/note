@@ -11,129 +11,245 @@ const $type = {
 		v: 1,
 		name: res.Word("notice"),
 	},
+
+	byid: [$type.vote, $type.notice],
+	getbyid: (id) => $type.byid(id) || $type.vote,
 };
 
 const $state = {
 	open: {
 		v: 0,
+		name: res.Word("ing"),
 	},
 	closed: {
 		v: 1,
+		name: res.Word("closed"),
 	},
+
+	byid: [$state.open, $state.closed],
+	getbyid: (id) => $state.byid(id) || $state.closed,
 };
 
-const makeTid = (type, tpid) => ((type >>> 0) << 24) | (tpid >>> 0);
-const getTpid = tid => (tid >>> 0) & 0x00ffffff;
-const getType = tid => ((tid >>> 0) & 0xff000000) >> 24;
+const $tid = {
+	make: (type, tpid) => ((type >>> 0) << 24) | (tpid >>> 0),
+	tpid: (tid) => (tid >>> 0) & 0x00ffffff,
+	type: (tid) => ((tid >>> 0) & 0xff000000) >> 24,
+};
+
+const VoteOpt = {
+	multi: false,	// bool
+	title: "",		// string
+	// gw: GwVoteOptItem array
+	// mp: MpVoteOptItem array
+	items: [],		// array
+};
+
+const MpVoteOptItem = {
+	content: "",	// string
+	checked: false,	// bool, just for checkin
+	selected: 0,	// int, just for show
+	precent: 0,		// double, just for show
+};
+const GwVoteOptItem = MpVoteOptItem.content; // string
+
+const GwTopic = {
+	creater: 0,		// UID
+	create: "",		// TimeString
+	deadline: "",	// TimeString
+	state: 0,		// state
+	title: "",		// string
+	content: "",	// string
+
+	// vote: VoteOpt array, length==MpTopic.options.length
+	// notice: ""
+	body: [],
+};
+
+const MpTopic = {
+	creater: 0,		// UID
+	create: "",		// TimeString
+	deadline: "",	// TimeString
+	state: {
+		v: 0,		// state value
+		name: "",	// state show
+	},
+	title: "",		// string
+	content: "",	// string
+
+	// vote: VoteOpt array, length==MpTopic.options.length
+	// notice: []
+	options: [],
+};
+
+const GwTopicx = {
+	tid: 0, 		// TID
+	topic: GwTopic,
+	actions: [],	// Array GwAction
+};
+
+const MpTopicx = {
+	type: 0,		// topic type
+	tpid: 0,		// topic id
+	topic: MpTopic,	// topic
+	// k: uid
+	// v: ???
+	users: {},		// user's selection
+};
+
+const GwAction = {
+	uid: 0,		// UID
+	time: "",	// TimeString
+
+	// vote: GwVoteAction array, length==MpTopic.options.length
+	// notice: bool
+	action: [],
+};
+const GwVoteAction = ""; // string, option item index selected
 
 const $vote = {
-	// get action from topic
-	getAction: (options) => {
-		let action = [];
+	getGwSelection: (opt) => {
+		let selection = "";
 
-		options.map(opt => {
-			let selection = "";
-
-			// 选项索引 0,1,2,3......
-			// 将选择的选项索引作为字符串 push 到 selection 中
-			opt.items.map((item, i) => {
-				if (item.checked) {
-					selection += i + "";
-				}
-			})
-
-			action.push(selection);
+		// 选项索引 0,1,2,3......
+		// 将选择的选项索引作为字符串 push 到 selection 中，表明用户的选择
+		opt.items.map((item, idx) => {
+			if (item.checked) {
+				selection += idx + "";
+			}
 		});
 
-		return action;
+		return selection;
 	},
-	getBody: (options) => {
-		let body = [];
 
-		options.map(opt => {
+	// mp topic ==> gw topic action
+	makeGwAction: (mpTopic) => {
+		let a = [];
+
+		mpTopic.options.map(opt => a.push($vote.getGwSelection(opt)));
+
+		return a;
+	},
+
+	// mp topic ==> gw topic body
+	makeGwBody: (mpTopic) => {
+		let a = [];
+
+		mpTopic.options.map(opt => {
 			let items = [];
 
-			opt.items.map(v => {
-				items.push(v.content);
-			})
+			opt.items.map(item => items.push(item.content));
 
-			body.push(items);
-		})
-
-		return body;
-	},
-	getOptions: (body) => {
-		let options = [];
-
-		body.map(items => {
-			let opt = {
-				items: [],
-			};
-
-			items.map(v => {
-				opt.items.push({
-					content: v,
-					checked: 0,
-				});
+			a.push({
+				multi: opt.multi,
+				title: opt.title,
+				items,
 			});
+		});
 
-			options.push(opt);
-		})
+		return a;
+	},
 
-		return options;
+	// gw topic ==> mp topic options
+	makeMpOptions: (gwTopic) => {
+		let a = [];
+
+		gwTopic.body.map(opt => {
+			let items = [];
+
+			opt.items.map(content => items.push({
+				content,
+				checked: false,
+				selected: 0,
+			}));
+
+			a.push({
+				multi: opt.multi,
+				title: opt.title,
+				items,
+			});
+		});
+
+		return a;
 	},
 };
 
-function topicHeader(topic) {
-	return {
-		creater: topic.creater,
-		create: topic.create,
-		deadline: topic.deadline,
-		title: topic.title,
-		content: topic.content,
+const $notice = {
+	makeGwAction: (topic) => (true),
+	makeGwBody: (topic) => (""),
+	makeMpOptions: (gwTopic) => ([]),
+};
+
+function $vt(type) {
+	switch (type) {
+		case $type.vote.v:
+			return $vote;
+		default:
+			return $notice;
+	}
+}
+
+function makeGwAction(mpTopic) {
+	return $vt(mpTopic.type).makeGwAction(mpTopic);
+}
+
+function makeGwBody(mpTopic) {
+	return $vt(mpTopic.type).makeGwBody(mpTopic);
+}
+
+function makeMpOptions(type, gwTopic) {
+	return $vt(type).makeMpOptions(gwTopic);
+}
+
+function setTopic(dst, src) {
+	dst.creater = src.creater;
+	dst.create = src.create;
+	dst.deadline = src.deadline;
+	dst.title = src.title;
+	dst.content = src.content;
+
+	return dst;
+}
+
+function makeGwTopic(mpTopic) {
+	let gwTopic = {
+		state: mpTopic.state.v,
+		body: makeGwBody(mpTopic),
 	};
+
+	return setTopic(gwTopic, mpTopic);
 }
 
-function getGwAction(topic) {
-	switch (topic.type) {
-		case $type.vote.v:
-			return $vote.getAction(topic.options);
-		default:
-			return "";
-	}
+function makeMpTopic(type, gwTopic) {
+	let state = gwTopic.state;
+	let mpTopic = {
+		type,
+		state: {
+			v: state,
+			name: $state.getbyid(state).name,
+		},
+		options: makeMpOptions(type, gwTopic),
+	};
+
+	return setTopic(mpTopic, gwTopic);
 }
 
-function getGwTopic(topic) {
-	let gwTopic = topicHeader(topic);
+function makeMpTopicx(gwTopicx) {
+	let type = $tid.type(gwTopicx.tid);
+	let topic = makeMpTopic(type, gwTopicx);
 
-	switch (topic.type) {
-		case $type.vote.v:
-			gwTopic.body = $vote.getBody(topic.options);
-		default:
-			gwTopic.body = "";
-	}
-
-	return gwTopic;
-}
-
-function getTopicx(gwTopicx) {
-	let type = getType(gwTopicx.tid);
-	let topic = getTopic(type, gwTopicx);
-	let count = topic.options.length;
-
-	topic.tpid = getTpid(gwTopicx.tid);
+	topic.tpid = $tid.tpid(gwTopicx.tid);
 	topic.users = {};
 
-	gwTopicx.actions.map(uaction => {
-		// userAction = {uid, time, action}
-		let ukey = uaction.uid + "";
+	gwTopicx.actions.map(gwAction => {
+		// gwAction = {uid, time, action}
+		let ukey = gwAction.uid + "";
 		let users = topic.users[ukey] || {};
-		let uoptions = users.options || new Array(count).fill({});
+		let uoptions = users.options || new Array(topic.options.length).fill({});
 
-		users.uid = uaction.uid;
-		users.time = uaction.time;
+		users.uid = gwAction.uid;
+		users.time = gwAction.time;
 
-		uaction.action.map((uselection, i) => {
+		gwAction.action.map((uselection, i) => {
 			let selection = uoptions[i].selection || new Array(topic.options.items.length).fill(false);
 
 			for (let idx of uselection) {
@@ -160,22 +276,7 @@ function getTopicx(gwTopicx) {
 	return topic;
 }
 
-function getTopic(type, gwTopic) {
-	let topic = topicHeader(gwTopic);
-
-	topic.type = type;
-
-	switch (type) {
-		case $type.vote.v:
-			topic.options = $vote.getOptions(gwTopic.body);
-		default:
-			topic.options = [];
-	}
-
-	return topic;
-}
-
-function newTopic(uid, param = { title, content, after: 3 }, type = $type.vote) {
+function newMpTopic(uid, param = { title, content, after: 3 }, type = $type.vote.v) {
 	let now = new Date();
 	let deadline = helper.addDay(now, param.after);
 
@@ -191,23 +292,21 @@ function newTopic(uid, param = { title, content, after: 3 }, type = $type.vote) 
 }
 
 function delElement(obj, key, idx) {
-	let array = obj[key];
-	if (idx < 0 | idx >= array.length) {
-		throw `delete element with count ${array.length} by index[${idx}]`;
+	let old = obj[key];
+	if (idx < 0 | idx >= old.length) {
+		throw `delete element with count ${old.length} by index[${idx}]`;
 	}
 
-	let newArray = [];
+	let a = [];
 
-	array.map((v, i) => {
-		if (i != idx) {
-			newArray.push(v);
-		}
-	})
+	old.map((v, i) => i == idx || a.push(v))
 
-	obj[key] = newArray;
+	obj[key] = a;
+
+	return a;
 }
 
-function addOption(topic, title, multi = false) {
+function addOpt(topic, title, multi = false) {
 	let opt = {
 		multi,
 		title,
@@ -219,47 +318,41 @@ function addOption(topic, title, multi = false) {
 	return opt;
 }
 
-function delOption(topic, idx) {
-	delElement(topic, "options", idx);
+function delOpt(topic, idx) {
+	return delElement(topic, "options", idx);
 }
 
 function addOptItem(opt, content) {
-	let obj = {
+	let item = {
 		content,
 		checked: false,
 	};
 
-	opt.items.push(obj);
+	opt.items.push(item);
 
-	return obj;
+	return item;
 }
 
 function delOptItem(opt, idx) {
-	delElement(opt, "items", idx);
-}
-
-function updateOptItem(opt, idx, checked = true) {
-	opt.items[idx].checked = checked;
+	return delElement(opt, "items", idx);
 }
 
 const tp = {
 	type: $type,
 	state: $state,
+	tid: $tid,
 
-	makeTid: makeTid,
-	getTpid: getTpid,
-	getType: getType,
+	makeGwTopic,
+	makeGwTopicx,
+	makeGwAction,
+	makeGwBody,
 
-	getGwTopic,
-	getGwTopicx,
-	getGwAction,
+	makeMpTopic,
+	makeMpTopicx,
 
-	newTopic,
-	getTopic,
-	getTopicx,
-
-	addOption,
-	delOption,
+	newMpTopic,
+	addOpt,
+	delOpt,
 	addOptItem,
 	delOptItem,
 };
