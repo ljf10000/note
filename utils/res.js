@@ -8,32 +8,46 @@ const $words = {
 	mp: ["小程序", "mini program"],
 	
 	adviser: ["班主任"],
+
 	bear1: ["熊大"],
 	bear2: ["熊二"],
 	bear3: ["熊宝宝"],
+
 	checkin: ["等级"],
 	closed: ["已关闭"],
+
 	del: ["删除"],
+
 	fail: ["失败"],
 	father: ["爸爸"],
+
 	["get"]: ["获取"],
 	group: ["群组"],
+
 	ing: ["进行中"],
+
 	login: ["登陆"],
+
 	mother: ["妈妈"],
+
 	["new"]: ["创建"],
 	notice: ["通知"],
+
 	patriarch: ["家长"],
 	panda: ["熊猫"],
 	pay: ["支付"],
 	pre: ["预先"],
+
 	student: ["学生"],
 	success: ["成功"],
 	sync: ["同步"],
+
 	teacher: ["老师"],
 	topic: ["主题"],
+
 	unknow: ["未知"],
 	user: ["用户"],
+	
 	vote: ["投票"],
 };
 
