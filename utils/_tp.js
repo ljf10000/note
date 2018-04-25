@@ -156,10 +156,10 @@ function makeMpTopic(type, gwTopic, makeMpOptions) {
 		options: makeMpOptions(type, gwTopic),
 	};
 
-	return tp.setTopic(mpTopic, gwTopic);
+	return setTopic(mpTopic, gwTopic);
 }
 
-const tp = {
+const _tp = {
 	type: {
 		vote: $vote,
 		notice: $notice,
@@ -193,5 +193,5 @@ const tp = {
 };
 
 module.exports = {
-	tp: tp,
+	_tp: _tp,
 };

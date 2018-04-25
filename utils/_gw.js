@@ -1,4 +1,4 @@
-const $ = (name) => require(`../${name}.js`)[name];
+const $ = (name) => require(`${name}.js`)[name];
 const db = $("db");
 const api = $("api");
 
@@ -49,10 +49,10 @@ function start_post(app, g = {}) {
 	}
 }
 
-const mp_gw = {
+const _gw = {
 	start_post: start_post,
 };
 
 module.exports = {
-	mp_gw: mp_gw,
+	_gw: _gw,
 };

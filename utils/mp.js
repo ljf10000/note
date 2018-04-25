@@ -1,6 +1,6 @@
 // mp.js
 const $ = (name) => require(`${name}.js`)[name];
-const mp_gw = require("common/mp_gw.js").mp_gw;
+const _gw = $("_gw");
 const res = $("res");
 const api = $("api");
 const gw = $("gw");
@@ -43,7 +43,7 @@ function start_normal(app) {
 	} else {
 		console.log(`start normal`);
 
-		mp_gw.start_post(app);
+		_gw.start_post(app);
 	}
 }
 

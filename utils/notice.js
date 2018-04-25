@@ -1,18 +1,18 @@
 const $ = (name) => require(`${name}.js`)[name];
 const helper = $("helper");
 const res = $("res");
-const tp = $("tp");
+const _tp = $("_tp");
 
 function Subject(title) {
 	return {title};
 }
 
 function GwTopic() {
-	return tp.GwTopic("");
+	return _tp.GwTopic("");
 }
 
 function GwAction() {
-	return tp.GwAction(false);
+	return _tp.GwAction(false);
 }
 
 function body$subjects(objs) {
@@ -49,11 +49,11 @@ function makeMpSubjects(gwTopic) {
 }
 
 function makeGwTopic(mpTopic) {
-	return tp.makeGwTopic(mpTopic, makeGwBody);
+	return _tp.makeGwTopic(mpTopic, makeGwBody);
 }
 
 function makeMpTopic(type, gwTopic) {
-	return tp.makeMpTopic(type, gwTopic, makeMpOptions);
+	return _tp.makeMpTopic(type, gwTopic, makeMpOptions);
 }
 
 function makeMpTopicx(gwTopicx) {
@@ -91,7 +91,7 @@ function makeMpTopicx(gwTopicx) {
 	});
 
 	return {
-		tpid: $tid.tpid(gwTopicx.tid),
+		_tpid: $tid._tpid(gwTopicx.tid),
 		topic: mpTopic,
 		type,
 		users,
@@ -142,7 +142,7 @@ function delOptItem(opt, idx) {
 	return delElement(opt, "items", idx);
 }
 
-const tp = {
+const _tp = {
 	type: $type,
 	state: $state,
 	tid: $tid,
@@ -163,5 +163,5 @@ const tp = {
 };
 
 module.exports = {
-	tp: tp,
+	_tp: _tp,
 };

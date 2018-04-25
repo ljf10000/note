@@ -1,7 +1,7 @@
 const $ = (name) => require(`${name}.js`)[name];
 const helper = $("helper");
 const res = $("res");
-const tp = $("tp");
+const _tp = $("_tp");
 
 function GwOption(content = "") {
 	return { content };
@@ -23,11 +23,11 @@ function Subject(title, multi = false) {
 }
 
 function GwTopic() {
-	return tp.GwTopic([]);
+	return _tp.GwTopic([]);
 }
 
 function GwAction() {
-	return tp.GwAction([]);
+	return _tp.GwAction([]);
 }
 
 const $vote = {
@@ -103,15 +103,15 @@ function makeMpSubjects(gwTopic) {
 }
 
 function makeGwTopic(mpTopic) {
-	return tp.makeGwTopic(mpTopic, makeGwBody);
+	return _tp.makeGwTopic(mpTopic, makeGwBody);
 }
 
 function makeMpTopic(type, gwTopic) {
-	return tp.makeMpTopic(type, gwTopic, makeMpOptions);
+	return _tp.makeMpTopic(type, gwTopic, makeMpOptions);
 }
 
 function makeMpTopicx(gwTopicx) {
-	let type = $tid.type(gwTopicx.tid);
+	let type = _tp.tid.type(gwTopicx.tid);
 	let mpTopic = makeMpTopic(type, gwTopicx.topic);
 	let users = {};
 
