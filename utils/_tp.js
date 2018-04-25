@@ -159,6 +159,26 @@ function makeMpTopic(type, gwTopic, makeMpOptions) {
 	return setTopic(mpTopic, gwTopic);
 }
 
+function newMpTopic(uid, param = { title, content, after: 3 }, type = $type.vote.v) {
+	let now = new Date();
+	let deadline = helper.addDay(now, param.after);
+
+	return {
+		type,
+		creater: uid,
+		create: helper.simTimeString(now),
+		deadline: helper.simTimeString(deadline),
+		title: param.title,
+		content: param.content,
+		subjects: [],
+	};
+}
+
+
+function delSubject(topic, idx) {
+	return delElement(topic, "subjects", idx);
+}
+
 const _tp = {
 	type: {
 		vote: $vote,
@@ -187,9 +207,12 @@ const _tp = {
 	MpTopic,
 	MpTopicx,
 
-	delElement,
 	setTopic,
 	makeGwTopic,
+	newMpTopic,
+
+	delElement,
+	delSubject,
 };
 
 module.exports = {

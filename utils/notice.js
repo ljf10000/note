@@ -98,51 +98,7 @@ function makeMpTopicx(gwTopicx) {
 	};
 }
 
-function newMpTopic(uid, param = { title, content, after: 3 }, type = $type.vote.v) {
-	let now = new Date();
-	let deadline = helper.addDay(now, param.after);
-
-	return {
-		type,
-		creater: uid,
-		create: helper.simTimeString(now),
-		deadline: helper.simTimeString(deadline),
-		title: param.title,
-		content: param.content,
-		options: [],
-	};
-}
-
-function addOpt(topic, title, multi = false) {
-	let opt = VoteOpt(title, multi);
-
-	opt.title = title;
-	opt.multi = multi;
-
-	topic.options.push(opt);
-
-	return opt;
-}
-
-function delOpt(topic, idx) {
-	return delElement(topic, "options", idx);
-}
-
-function addOptItem(opt, content) {
-	let item = MpVoteOptItem(content);
-
-	item.content = content;
-
-	opt.items.push(item);
-
-	return item;
-}
-
-function delOptItem(opt, idx) {
-	return delElement(opt, "items", idx);
-}
-
-const _tp = {
+const notice = {
 	type: $type,
 	state: $state,
 	tid: $tid,
@@ -156,12 +112,10 @@ const _tp = {
 	makeMpTopicx,
 
 	newMpTopic,
-	addOpt,
-	delOpt,
-	addOptItem,
-	delOptItem,
+	addSubject: (mpTopic, title) => mpTopic.subjects.push(Subject(title)),
+	delSubject: (mpTopic, idx) => _tp.delElement(mpTopic, "subjects", idx),
 };
 
 module.exports = {
-	_tp: _tp,
+	notice: notice,
 };

@@ -152,50 +152,6 @@ function makeMpTopicx(gwTopicx) {
 	};
 }
 
-function newMpTopic(uid, param = { title, content, after: 3 }, type = $type.vote.v) {
-	let now = new Date();
-	let deadline = helper.addDay(now, param.after);
-
-	return {
-		type,
-		creater: uid,
-		create: helper.simTimeString(now),
-		deadline: helper.simTimeString(deadline),
-		title: param.title,
-		content: param.content,
-		options: [],
-	};
-}
-
-function addOpt(topic, title, multi = false) {
-	let subject = Subject(title, multi);
-
-	subject.title = title;
-	subject.multi = multi;
-
-	topic.options.push(subject);
-
-	return subject;
-}
-
-function delOpt(topic, idx) {
-	return delElement(topic, "options", idx);
-}
-
-function addOptItem(opt, content) {
-	let item = MpVoteOptItem(content);
-
-	item.content = content;
-
-	opt.items.push(item);
-
-	return item;
-}
-
-function delOptItem(opt, idx) {
-	return delElement(opt, "items", idx);
-}
-
 const vote = {
 	type: $type,
 	state: $state,
@@ -210,10 +166,11 @@ const vote = {
 	makeMpTopicx,
 
 	newMpTopic,
-	addOpt,
-	delOpt,
-	addOptItem,
-	delOptItem,
+	addSubject: (mpTopic, title, multi = false) => mpTopic.subjects.push(Subject(title, multi)),
+	delSubject: (mpTopic, idx) => _tp.delElement(mpTopic, "subjects", idx),
+	
+	addOption: (subject, content) => subject.options.push(MpOption(content)),
+	delOption: (subject, idx) => _tp.delElement(subject, "options", idx),
 };
 
 module.exports = {
