@@ -36,81 +36,114 @@ const $tid = {
 	type: (tid) => ((tid >>> 0) & 0xff000000) >> 24,
 };
 
-const VoteOpt = {
-	multi: false,	// bool
-	title: "",		// string
-	// gw: GwVoteOptItem array
-	// mp: MpVoteOptItem array
-	items: [],		// array
-	selection: "",	//
-};
+function delElement(obj, key, idx) {
+	let old = obj[key];
+	if (idx < 0 | idx >= old.length) {
+		throw `delete element with count ${old.length} by index[${idx}]`;
+	}
 
-const MpVoteOptItem = {
-	content: "",	// string
-	checked: false,	// bool, just for checkin
-	selected: 0,	// int, just for show
-	precent: 0,		// double, just for show
-};
-const GwVoteOptItem = MpVoteOptItem.content; // string
+	let a = [];
 
-const GwTopic = {
-	creater: 0,		// UID
-	create: "",		// TimeString
-	deadline: "",	// TimeString
-	state: 0,		// state
-	title: "",		// string
-	content: "",	// string
+	old.map((v, i) => i == idx || a.push(v))
 
-	// vote: VoteOpt array, length==MpTopic.options.length
-	// notice: ""
-	body: [],
-};
+	obj[key] = a;
 
-const MpTopic = {
-	creater: 0,		// UID
-	create: "",		// TimeString
-	deadline: "",	// TimeString
-	state: {
-		v: 0,		// state value
-		name: "",	// state show
-	},
-	title: "",		// string
-	content: "",	// string
+	return a;
+}
 
-	// vote: VoteOpt array, length==MpTopic.options.length
-	// notice: []
-	options: [],
-};
+function VoteOpt() {
+	return {
+		multi: false,	// bool
+		title: "",		// string
+		// gw: GwVoteOptItem array
+		//     GwVoteOptItem as MpVoteOptItem.content
+		// mp: MpVoteOptItem array
+		items: [],		// array
+		selection: "",	//
+	};
+}
+const GwVoteOptItem = "";
 
-const GwTopicx = {
-	tid: 0, 		// TID
-	topic: GwTopic,
-	actions: [],	// Array GwAction
-};
+function MpVoteOptItem() {
+	return {
+		content: "",	// string
+		checked: false,	// bool, just for checkin
+		selected: 0,	// int, just for show
+		precent: 0,		// double, just for show
+	};
+}
 
-const MpTopicx = {
-	type: 0,		// topic type
-	tpid: 0,		// topic id
-	topic: MpTopic,	// topic
-	// k: uid
-	// v: UserTopic
-	users: {},		// user's selection
-};
+function GwTopic() {
+	return {
+		creater: 0,		// UID
+		create: "",		// TimeString
+		deadline: "",	// TimeString
+		state: 0,		// state
+		title: "",		// string
+		content: "",	// string
 
-const UserTopic = {
-	uid: 0,			// UID
-	time: "",		// TimeString
-	topic: MpTopic,
-};
+		// vote: VoteOpt array, length==MpTopic.options.length
+		// notice: ""
+		body: [],
+	};
+}
 
-const GwAction = {
-	uid: 0,		// UID
-	time: "",	// TimeString
+function MpTopic() {
+	return {
+		creater: 0,		// UID
+		create: "",		// TimeString
+		deadline: "",	// TimeString
+		state: {
+			v: 0,		// state value
+			name: "",	// state show
+		},
+		title: "",		// string
+		content: "",	// string
 
-	// vote: GwVoteAction array, length==MpTopic.options.length
-	// notice: bool
-	action: [],
-};
+		// vote: VoteOpt array, length==MpTopic.options.length
+		// notice: []
+		options: [],
+	};
+}
+
+function GwTopicx() {
+	return {
+		tid: 0, 		// TID
+		topic: GwTopic,
+		actions: [],	// Array GwAction
+	};
+}
+
+function MpTopicx(mpTopic) {
+	return {
+		type: 0,		// topic type
+		tpid: 0,		// topic id
+		topic: mpTopic,	// topic
+		// k: uid
+		// v: UserTopic
+		users: {},		// user's selection
+	};
+}
+
+function UserTopic(mpTopic) {
+	return {
+		uid: 0,			// UID
+		time: "",		// TimeString
+		topic: mpTopic,
+	};
+}
+
+function GwAction() {
+	return {
+		uid: 0,		// UID
+		time: "",	// TimeString
+
+		// vote: GwVoteAction array, length==MpTopic.options.length
+		// notice: bool
+		action: [],
+	};
+}
+
 const GwVoteAction = ""; // string, option item index selected
 
 function makeMpTopicx(gwTopicx) {
@@ -321,27 +354,11 @@ function newMpTopic(uid, param = { title, content, after: 3 }, type = $type.vote
 	};
 }
 
-function delElement(obj, key, idx) {
-	let old = obj[key];
-	if (idx < 0 | idx >= old.length) {
-		throw `delete element with count ${old.length} by index[${idx}]`;
-	}
-
-	let a = [];
-
-	old.map((v, i) => i == idx || a.push(v))
-
-	obj[key] = a;
-
-	return a;
-}
-
 function addOpt(topic, title, multi = false) {
-	let opt = {
-		multi,
-		title,
-		items: [],
-	};
+	let opt = VoteOpt();
+
+	opt.title = title;
+	opt.multi = multi;
 
 	topic.options.push(opt);
 
@@ -353,10 +370,9 @@ function delOpt(topic, idx) {
 }
 
 function addOptItem(opt, content) {
-	let item = {
-		content,
-		checked: false,
-	};
+	let item = MpVoteOptItem();
+
+	item.content = content;
 
 	opt.items.push(item);
 
