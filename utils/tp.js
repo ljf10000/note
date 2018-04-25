@@ -51,10 +51,10 @@ function delElement(obj, key, idx) {
 	return a;
 }
 
-function VoteOpt() {
+function VoteOpt(title, multi = false) {
 	return {
-		multi: false,	// bool
-		title: "",		// string
+		multi,
+		title,			// string
 		// gw: GwVoteOptItem array
 		//     GwVoteOptItem as MpVoteOptItem.content
 		// mp: MpVoteOptItem array
@@ -64,7 +64,7 @@ function VoteOpt() {
 }
 const GwVoteOptItem = "";
 
-function MpVoteOptItem() {
+function MpVoteOptItem(content = "") {
 	return {
 		content: "",	// string
 		checked: false,	// bool, just for checkin
@@ -106,10 +106,10 @@ function MpTopic() {
 	};
 }
 
-function GwTopicx() {
+function GwTopicx(tid, gwTopic) {
 	return {
-		tid: 0, 		// TID
-		topic: GwTopic,
+		tid, 			// TID
+		topic: gwTopic,
 		actions: [],	// Array GwAction
 	};
 }
@@ -355,7 +355,7 @@ function newMpTopic(uid, param = { title, content, after: 3 }, type = $type.vote
 }
 
 function addOpt(topic, title, multi = false) {
-	let opt = VoteOpt();
+	let opt = VoteOpt(title, multi);
 
 	opt.title = title;
 	opt.multi = multi;
@@ -370,7 +370,7 @@ function delOpt(topic, idx) {
 }
 
 function addOptItem(opt, content) {
-	let item = MpVoteOptItem();
+	let item = MpVoteOptItem(content);
 
 	item.content = content;
 
