@@ -81,7 +81,11 @@ const helper = {
 		let unix = date.getTime() / 1000 + (1 + after) * 3600 * 24 - 1;
 
 		return new Date(1000 * unix);
-	}
+	},
+
+	stdNowString: () => helper.stdTimeString(new Date()),
+	simNowString: () => helper.simTimeString(new Date()),
+	addNowDay: (after) => helper.addDay(new Date(), after),
 };
 
 /*
