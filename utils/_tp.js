@@ -145,7 +145,7 @@ function makeGwTopic(mpTopic, makeGwBody) {
 	return setTopic(gwTopic, mpTopic);
 }
 
-function makeMpTopic(type, gwTopic, makeMpOptions) {
+function makeMpTopic(type, gwTopic, makeMpSubjects) {
 	let state = gwTopic.state;
 	let mpTopic = {
 		type,
@@ -153,7 +153,7 @@ function makeMpTopic(type, gwTopic, makeMpOptions) {
 			v: state,
 			name: getStateByID(state).name,
 		},
-		options: makeMpOptions(type, gwTopic),
+		subjects: makeMpSubjects(type, gwTopic),
 	};
 
 	return setTopic(mpTopic, gwTopic);

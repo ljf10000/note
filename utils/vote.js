@@ -44,7 +44,7 @@ const $vote = {
 	},
 };
 
-function $makeSelection(subject) {
+function makeSelection(subject) {
 	let s = "";
 
 	// 选项索引 0,1,2,3......
@@ -56,14 +56,6 @@ function $makeSelection(subject) {
 	});
 
 	return s;
-}
-
-function makeGwAction(mpTopic) {
-	let a = [];
-
-	mpTopic.subjects.map(sub => a.push($makeSelection(sub)));
-
-	return a;
 }
 
 function makeGwBody(mpTopic) {
@@ -100,14 +92,6 @@ function makeMpSubjects(gwTopic) {
 	});
 
 	return a;
-}
-
-function makeGwTopic(mpTopic) {
-	return _tp.makeGwTopic(mpTopic, makeGwBody);
-}
-
-function makeMpTopic(type, gwTopic) {
-	return _tp.makeMpTopic(type, gwTopic, makeMpOptions);
 }
 
 function makeMpTopicx(gwTopicx) {
@@ -157,19 +141,37 @@ const vote = {
 	state: $state,
 	tid: $tid,
 
-	makeGwTopic,
+	makeGwTopic: (mpTopic) => _tp.makeGwTopic(mpTopic, makeGwBody),
 	makeGwTopicx,
-	makeGwAction,
+	makeGwAction: (mpTopic) => {
+		let a = [];
+
+		mpTopic.subjects.map(sub => a.push(makeSelection(sub)));
+
+		return a;
+	},
 	makeGwBody,
 
-	makeMpTopic,
+	makeMpTopic: (type, gwTopic) => _tp.makeMpTopic(type, gwTopic, makeMpSubjects),
 	makeMpTopicx,
 
-	newMpTopic,
-	addSubject: (mpTopic, title, multi = false) => mpTopic.subjects.push(Subject(title, multi)),
+	newMpTopic: _tp.newMpTopic,
+	addSubject: (mpTopic, title, multi = false) => {
+		let sub = Subject(title, multi);
+
+		mpTopic.subjects.push(sub);
+
+		return sub;
+	},
 	delSubject: (mpTopic, idx) => _tp.delElement(mpTopic, "subjects", idx),
-	
-	addOption: (subject, content) => subject.options.push(MpOption(content)),
+
+	addOption: (subject, content) => {
+		let opt = MpOption(content);
+
+		subject.options.push(opt);
+
+		return opt;
+	},
 	delOption: (subject, idx) => _tp.delElement(subject, "options", idx),
 };
 

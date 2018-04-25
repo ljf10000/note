@@ -4,7 +4,7 @@ const res = $("res");
 const _tp = $("_tp");
 
 function Subject(title) {
-	return {title};
+	return { title };
 }
 
 function GwTopic() {
@@ -36,25 +36,6 @@ const $notice = {
 	},
 };
 
-function makeGwAction(mpTopic) {
-	return true;
-}
-
-function makeGwBody(mpTopic) {
-	return body$subjects(mpTopic.subjects);
-}
-
-function makeMpSubjects(gwTopic) {
-	return body$subjects(gwTopic.body);
-}
-
-function makeGwTopic(mpTopic) {
-	return _tp.makeGwTopic(mpTopic, makeGwBody);
-}
-
-function makeMpTopic(type, gwTopic) {
-	return _tp.makeMpTopic(type, gwTopic, makeMpOptions);
-}
 
 function makeMpTopicx(gwTopicx) {
 	let type = $tid.type(gwTopicx.tid);
@@ -98,20 +79,24 @@ function makeMpTopicx(gwTopicx) {
 	};
 }
 
+function makeMpSubjects(gwTopic) {
+	return body$subjects(gwTopic.body);
+}
+
 const notice = {
 	type: $type,
 	state: $state,
 	tid: $tid,
 
-	makeGwTopic,
+	makeGwTopic: (mpTopic) => _tp.makeGwTopic(mpTopic, makeGwBody),
 	makeGwTopicx,
-	makeGwAction,
-	makeGwBody,
+	makeGwAction: (mpTopic) => true,
+	makeGwBody: (mpTopic) => body$subjects(mpTopic.subjects),
 
-	makeMpTopic,
+	makeMpTopic: (type, gwTopic) => _tp.makeMpTopic(type, gwTopic, makeMpSubjects),
 	makeMpTopicx,
 
-	newMpTopic,
+	newMpTopic: _tp.newMpTopic,
 	addSubject: (mpTopic, title) => mpTopic.subjects.push(Subject(title)),
 	delSubject: (mpTopic, idx) => _tp.delElement(mpTopic, "subjects", idx),
 };
