@@ -42,6 +42,7 @@ const VoteOpt = {
 	// gw: GwVoteOptItem array
 	// mp: MpVoteOptItem array
 	items: [],		// array
+	selection: "",	//
 };
 
 const MpVoteOptItem = {
@@ -92,8 +93,14 @@ const MpTopicx = {
 	tpid: 0,		// topic id
 	topic: MpTopic,	// topic
 	// k: uid
-	// v: ???
+	// v: UserTopic
 	users: {},		// user's selection
+};
+
+const UserTopic = {
+	uid: 0,			// UID
+	time: "",		// TimeString
+	topic: MpTopic,
 };
 
 const GwAction = {
@@ -105,6 +112,71 @@ const GwAction = {
 	action: [],
 };
 const GwVoteAction = ""; // string, option item index selected
+
+function makeMpTopicx(gwTopicx) {
+	let type = $tid.type(gwTopicx.tid);
+	let mpTopic = makeMpTopic(type, gwTopicx.topic);
+	let users = {};
+
+	gwTopicx.actions.map(gwAction => {
+		// gwAction as GwAction
+		let ukey = gwAction.uid + "";
+		let user = users[ukey] || {};
+		let topic = user.topic || {};
+		let options = topic.options || new Array(mpTopic.options.length);
+
+		user.uid = gwAction.uid;
+		user.time = gwAction.time;
+
+		gwAction.action.map((selection, iOpt) => {
+			let mpOpt = mpTopic.options[iOpt];
+
+			let opt = options[iOpt] || {
+				multi: mpOpt.multi,
+				title: mpOpt.title,
+				selection,
+			};
+			let items = opt.items || new Array(mpOpt.items.length);
+
+			for (let iItem of selection) {
+				let item = items[iItem] || {
+					content: "",	// string
+					checked: false,	// bool, just for checkin
+					selected: 0,	// int, just for show
+					precent: 0,		// double, just for show
+				};
+
+				item.checked = true;
+
+				items[i] = item;
+			}
+
+			opt.items = items;
+			options[i] = opt;
+		});
+
+		topic.options = options;
+		user.topic = topic;
+		users[ukey] = user;
+	});
+
+	Object.keys(users).map(uid => {
+		let user = users[uid];
+
+		user.options.map((option, i) => {
+			option.selection.map((selected, j) => {
+				topic.options[i].items[j].checked++;
+			});
+		})
+	})
+
+	return {
+		tpid: $tid.tpid(gwTopicx.tid),
+		topic: mpTopic,
+		type,
+		users,
+	};
+}
 
 const $vote = {
 	getGwSelection: (opt) => {
@@ -233,48 +305,6 @@ function makeMpTopic(type, gwTopic) {
 	return setTopic(mpTopic, gwTopic);
 }
 
-function makeMpTopicx(gwTopicx) {
-	let type = $tid.type(gwTopicx.tid);
-	let topic = makeMpTopic(type, gwTopicx);
-
-	topic.tpid = $tid.tpid(gwTopicx.tid);
-	topic.users = {};
-
-	gwTopicx.actions.map(gwAction => {
-		// gwAction = {uid, time, action}
-		let ukey = gwAction.uid + "";
-		let users = topic.users[ukey] || {};
-		let uoptions = users.options || new Array(topic.options.length).fill({});
-
-		users.uid = gwAction.uid;
-		users.time = gwAction.time;
-
-		gwAction.action.map((uselection, i) => {
-			let selection = uoptions[i].selection || new Array(topic.options.items.length).fill(false);
-
-			for (let idx of uselection) {
-				selection[idx * 1] = true;
-			}
-
-			uoptions[i].selection = selection;
-		});
-
-		users.options = uoptions;
-		topic.users[ukey] = users;
-	});
-
-	Object.keys(topic.users).map(uid => {
-		let user = topic.users[uid];
-
-		user.options.map((option, i) => {
-			option.selection.map((selected, j) => {
-				topic.options[i].items[j].checked++;
-			});
-		})
-	})
-
-	return topic;
-}
 
 function newMpTopic(uid, param = { title, content, after: 3 }, type = $type.vote.v) {
 	let now = new Date();
