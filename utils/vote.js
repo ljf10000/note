@@ -25,6 +25,13 @@ function MpTopic() {
 	return tp.MpTopic(tp.type.vote.v, { options: [] });
 }
 
+/*
+type GwTopicAction struct {
+	Uid    uint32      `json:"uid"`
+	Time   string      `json:"time"`
+	Action interface{} `json:"action"`
+}
+*/
 function MpUser(uid, selection, time = helper.simNowString()) {
 	return {
 		uid,			// UID
@@ -47,8 +54,16 @@ function makeGwAction(mpTopic) {
 	return selection;
 }
 
+function makeBody(topic, Option) {
+	let options = [];
+
+	topic.body.options.map(opt => options.push(Option(opt.content)));
+
+	return { options };
+}
+
 function makeMpTopic(gwTopic) {
-	return tp.makeMpTopic(tp.type.vote.v, gwTopic, topic => makeBody(topic, MpOption));
+	return tp.makeMpTopic(tp.type.vote.v, gwTopic, gwTopic => makeBody(gwTopic, MpOption));
 }
 
 function makeMpTopicx(gwTopicx) {
@@ -57,13 +72,6 @@ function makeMpTopicx(gwTopicx) {
 	let users = {};
 
 	// all user's action ==> users
-	/*
-	type GwTopicAction struct {
-		Uid    uint32      `json:"uid"`
-		Time   string      `json:"time"`
-		Action interface{} `json:"action"`
-	}
-	*/
 	gwTopicx.actions.map(gwAction => {
 		users[gwAction.uid + ""] = MpUser(gwAction.uid, gwAction.action, gwAction.time);
 	});
@@ -73,26 +81,18 @@ function makeMpTopicx(gwTopicx) {
 		let options = mpTopic.body.options;
 
 		for (let idx of selection) {
-			options[idx*1].selected++;
+			options[idx * 1].selected++;
 		}
 	});
 
 	return tp.MpTopicx(tpid, mpTopic, users);
 }
 
-function makeBody(topic, Option) {
-	let options = [];
-
-	topic.body.options.map(opt => options.push(Option(opt.content)));
-
-	return { options };
-}
-
 const vote = {
 	makeGwAction,
 	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, topic => makeBody(topic, GwOption)),
 
-	makeMpTopic: (gwTopic) => tp.makeMpTopic(tp.type.vote.v, gwTopic, topic => makeBody(topic, MpOption)),
+	makeMpTopic,
 	makeMpTopicx,
 
 	newMpTopic: () => tp.newMpTopic(MpTopic),

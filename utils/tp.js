@@ -114,15 +114,16 @@ function makeGwTopic(mpTopic, makeGwBody) {
 	return copyTopic(gwTopic, mpTopic);
 }
 
-function makeMpTopic(type, gwTopic, makeMpSubjects) {
+function makeMpTopic(type, gwTopic, makeMpBody) {
 	let state = gwTopic.state;
+	
 	let mpTopic = {
 		type,
 		state: {
 			v: state,
 			name: getStateByID(state).name,
 		},
-		subjects: makeMpSubjects(type, gwTopic),
+		body: makeMpBody(gwTopic),
 	};
 
 	return copyTopic(mpTopic, gwTopic);

@@ -6,82 +6,60 @@ const tp = $("tp");
 const app = getApp();
 
 function GwTopic() {
-	return tp.GwTopic("");
+	return tp.GwTopic({ ack: 0 });
 }
 
 function MpTopic() {
-	return tp.MpTopic(tp.type.notice.v, "");
+	return tp.MpTopic(tp.type.notice.v, { ack: 0 });
 }
 
-function GwAction() {
-	return tp.GwAction(false);
+/*
+type GwTopicAction struct {
+	Uid    uint32      `json:"uid"`
+	Time   string      `json:"time"`
+	Action interface{} `json:"action"`
+}
+*/
+function MpUser(uid, time = helper.simNowString()) {
+	return {
+		uid,			// UID
+		time,			// TimeString
+		ack: true,		// bool
+	};
 }
 
-function makeGwBody(mpTopic) {
-	return "";
+function makeBody(topic) {
+	return { ack: 0 };
 }
 
-function makeMpBody(gwTopic) {
-	return "";
+function makeMpTopic(gwTopic) {
+	return tp.makeMpTopic(tp.type.notice.v, gwTopic, makeBody);
 }
 
 function makeMpTopicx(gwTopicx) {
-	let type = $tid.type(gwTopicx.tid);
-	let mpTopic = makeMpTopic(type, gwTopicx.topic);
+	let tpid = tp.tid.tpid(gwTopicx.tid);
+	let mpTopic = makeMpTopic(gwTopicx.topic);
 	let users = {};
 
+	// all user's action ==> users
 	gwTopicx.actions.map(gwAction => {
-		let topic = makeMpTopic(type, gwTopicx.topic);
-		let user = {
-			uid: gwAction.uid,
-			time: gwAction.time,
-			topic,
-		};
-
-		gwAction.action.map((selection, iOpt) => {
-			let opt = topic.options[iOpt];
-			let items = opt.items;
-
-			for (let idx of selection) {
-				items[idx].selected++;
-			}
-			opt.selection = selection;
-		});
-
-		users[gwAction.uid + ""] = user;
+		users[gwAction.uid + ""] = MpUser(gwAction.uid, gwAction.action, gwAction.time);
 	});
 
-	Object.keys(users).map(ukey => {
-		users[ukey].topic.options.map((opt, i) => {
-			opt.items.map((item, j) => {
-				mpTopic.options[i].items[j].selected++;
-			});
-		});
-	});
+	Object.keys(users).map(uid => mpTopic.body.ack++);
 
-	return {
-		tpid: $tid.tpid(gwTopicx.tid),
-		topic: mpTopic,
-		type,
-		users,
-	};
+	return tp.MpTopicx(tpid, mpTopic, users);
 }
 
 const notice = {
 	// one acknowlage per notice
 	makeGwAction: (mpTopic) => true,
-	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, () => ""),
+	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, makeBody),
 
-	makeMpTopic: (gwTopic) => tp.makeMpTopic(tp.type.notice.v, gwTopic, () => ""),
+	makeMpTopic,
 	makeMpTopicx,
 
-	newMpTopic: (title, content, after = 3) => {
-		let mpTopic = tp.newMpTopic(tp.type.notice.v, title, content, after);
-
-		mpTopic.body = "";
-
-		return mpTopic;
-	},
+	newMpTopic: () => tp.newMpTopic(MpTopic),
 };
 
 module.exports = {
