@@ -30,6 +30,14 @@ function body$subjects(objs) {
 	return a;
 }
 
+function makeGwBody(mpTopic) {
+	return body$subjects(mpTopic.subjects);
+}
+
+function makeMpSubjects(gwTopic) {
+	return body$subjects(gwTopic.body);
+}
+
 function makeMpTopicx(gwTopicx) {
 	let type = $tid.type(gwTopicx.tid);
 	let mpTopic = makeMpTopic(type, gwTopicx.topic);
@@ -72,22 +80,30 @@ function makeMpTopicx(gwTopicx) {
 	};
 }
 
-function makeMpSubjects(gwTopic) {
-	return body$subjects(gwTopic.body);
+function addSubject(mpTopic, title) {
+	let sub = Subject(title);
+
+	mpTopic.subjects.push(sub);
+
+	return sub;
 }
 
 const notice = {
+	makeGwAction: (mpTopic) => true,
+	makeGwBody,
 	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, makeGwBody),
 	makeGwTopicx,
-	makeGwAction: (mpTopic) => true,
-	makeGwBody: (mpTopic) => body$subjects(mpTopic.subjects),
 
+	makeMpSubjects,
 	makeMpTopic: (type, gwTopic) => tp.makeMpTopic(type, gwTopic, makeMpSubjects),
 	makeMpTopicx,
 
-	newMpTopic: (uid, param = { title, content, after: 3 }) => tp.newMpTopic(uid, param, tp.type.notice.v),
-	addSubject: (mpTopic, title) => mpTopic.subjects.push(Subject(title)),
+	newMpTopic: (param = { title, content, after: 3 }) => tp.newMpTopic(param, tp.type.notice.v),
+	addSubject,
 	delSubject: (mpTopic, idx) => tp.delElement(mpTopic, "subjects", idx),
+
+	// no addOption
+	// no delOption
 };
 
 module.exports = {

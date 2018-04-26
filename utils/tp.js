@@ -127,13 +127,13 @@ function makeMpTopic(type, gwTopic, makeMpSubjects) {
 	return setTopic(mpTopic, gwTopic);
 }
 
-function newMpTopic(uid, param = { title, content, after: 3 }, type = $type.vote.v) {
+function newMpTopic(param = { title, content, after: 3 }, type = $type.vote.v) {
 	let now = new Date();
 	let deadline = helper.addDay(now, param.after);
 
 	return {
 		type,
-		creater: uid,
+		creater: app.user.uid,
 		create: helper.simTimeString(now),
 		deadline: helper.simTimeString(deadline),
 		title: param.title,

@@ -86,6 +86,7 @@ function makeMpTopicx(gwTopicx) {
 	let tpid = tp.tid.tpid(gwTopicx.tid);
 	let users = {};
 
+	// all user's action ==> users
 	gwTopicx.actions.map(gwAction => {
 		let user = MpUser(gwAction.uid, [], gwAction.time);
 		/*
@@ -102,11 +103,11 @@ function makeMpTopicx(gwTopicx) {
 
 	let mpTopic = makeMpTopic(type, gwTopicx.topic);
 
-	Object.keys(users).map(ukey => {
-		users[ukey].topic.options.map((opt, i) => {
-			opt.items.map((item, j) => {
-				mpTopic.options[i].items[j].selected++;
-			});
+	Object.keys(users).map(uid => {
+		users[uid].action.map((selection, i) => {
+			for (let j of selection) {
+				mpTopic.subjects[i].options[j].selected++;
+			}
 		});
 	});
 
@@ -139,7 +140,7 @@ const vote = {
 	makeMpTopic: (type, gwTopic) => tp.makeMpTopic(type, gwTopic, makeMpSubjects),
 	makeMpTopicx,
 
-	newMpTopic: (uid, param = { title, content, after: 3 }) => tp.newMpTopic(uid, param, tp.type.vote.v),
+	newMpTopic: (param = { title, content, after: 3 }) => tp.newMpTopic(param, tp.type.vote.v),
 
 	addSubject,
 	delSubject: (mpTopic, idx) => tp.delElement(mpTopic, "subjects", idx),
