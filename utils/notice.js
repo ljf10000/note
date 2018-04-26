@@ -1,18 +1,20 @@
 const $ = (name) => require(`${name}.js`)[name];
 const helper = $("helper");
 const res = $("res");
-const _tp = $("_tp");
+const tp = $("tp");
+
+const app = getApp();
 
 function Subject(title) {
 	return { title };
 }
 
 function GwTopic() {
-	return _tp.GwTopic("");
+	return tp.GwTopic("");
 }
 
 function GwAction() {
-	return _tp.GwAction(false);
+	return tp.GwAction(false);
 }
 
 function body$subjects(objs) {
@@ -27,15 +29,6 @@ function body$subjects(objs) {
 
 	return a;
 }
-
-const $notice = {
-	setMpTopicByAction: (mpTopic, gwAction) => {
-		gwAction.action.map((selection, iOpt) => {
-			mpTopic.options[iOpt].selection = selection;
-		});
-	},
-};
-
 
 function makeMpTopicx(gwTopicx) {
 	let type = $tid.type(gwTopicx.tid);
@@ -72,7 +65,7 @@ function makeMpTopicx(gwTopicx) {
 	});
 
 	return {
-		_tpid: $tid._tpid(gwTopicx.tid),
+		tpid: $tid.tpid(gwTopicx.tid),
 		topic: mpTopic,
 		type,
 		users,
@@ -84,21 +77,17 @@ function makeMpSubjects(gwTopic) {
 }
 
 const notice = {
-	type: $type,
-	state: $state,
-	tid: $tid,
-
-	makeGwTopic: (mpTopic) => _tp.makeGwTopic(mpTopic, makeGwBody),
+	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, makeGwBody),
 	makeGwTopicx,
 	makeGwAction: (mpTopic) => true,
 	makeGwBody: (mpTopic) => body$subjects(mpTopic.subjects),
 
-	makeMpTopic: (type, gwTopic) => _tp.makeMpTopic(type, gwTopic, makeMpSubjects),
+	makeMpTopic: (type, gwTopic) => tp.makeMpTopic(type, gwTopic, makeMpSubjects),
 	makeMpTopicx,
 
-	newMpTopic: _tp.newMpTopic,
+	newMpTopic: (uid, param = { title, content, after: 3 }) => tp.newMpTopic(uid, param, tp.type.notice.v),
 	addSubject: (mpTopic, title) => mpTopic.subjects.push(Subject(title)),
-	delSubject: (mpTopic, idx) => _tp.delElement(mpTopic, "subjects", idx),
+	delSubject: (mpTopic, idx) => tp.delElement(mpTopic, "subjects", idx),
 };
 
 module.exports = {

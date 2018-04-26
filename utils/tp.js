@@ -48,22 +48,6 @@ function tidType(tid) {
 	return ((tid >>> 0) & 0xff000000) >> 24;
 }
 
-
-function delElement(obj, key, idx) {
-	let old = obj[key];
-	if (idx < 0 | idx >= old.length) {
-		throw `delete element with count ${old.length} by index[${idx}]`;
-	}
-
-	let a = [];
-
-	old.map((v, i) => i == idx || a.push(v))
-
-	obj[key] = a;
-
-	return a;
-}
-
 function GwTopic() {
 	return {
 		creater: 0,		// UID
@@ -91,38 +75,22 @@ function MpTopic(body) {
 	};
 }
 
-function GwAction(action) {
-	return {
-		uid: app.user.uid,
-		time: helper.simNowString(),
-		action,
-	};
-}
-
-function GwTopicx(tid, gwTopic) {
+function GwTopicx(tid, gwTopic, actions = []) {
 	return {
 		tid, 			// TID
 		topic: gwTopic,
-		actions: [],	// Array GwAction
+		actions,	// Array GwAction
 	};
 }
 
-function MpTopicx(mpTopic) {
+function MpTopicx(tpid, mpTopic, users = {}) {
 	return {
-		type: 0,		// topic type
-		tpid: 0,		// topic id
-		topic: mpTopic,	// topic
+		type: mpTopic.type,	// topic type
+		tpid,				// topic id
+		topic: mpTopic,		// topic
 		// k: uid
-		// v: UserTopic
-		users: {},		// user's selection
-	};
-}
-
-function UserTopic(mpTopic) {
-	return {
-		uid: 0,			// UID
-		time: "",		// TimeString
-		topic: mpTopic,
+		// v: MpUser
+		users,				// user's selection
 	};
 }
 
@@ -174,12 +142,22 @@ function newMpTopic(uid, param = { title, content, after: 3 }, type = $type.vote
 	};
 }
 
+function delElement(obj, key, idx) {
+	let old = obj[key];
+	if (idx < 0 | idx >= old.length) {
+		throw `delete element with count ${old.length} by index[${idx}]`;
+	}
 
-function delSubject(topic, idx) {
-	return delElement(topic, "subjects", idx);
+	let a = [];
+
+	old.map((v, i) => i == idx || a.push(v))
+
+	obj[key] = a;
+
+	return a;
 }
 
-const _tp = {
+const tp = {
 	type: {
 		vote: $vote,
 		notice: $notice,
@@ -198,12 +176,8 @@ const _tp = {
 		type: tidType,
 	},
 
-	UserTopic,
-	GwAction,
-
 	GwTopic,
 	GwTopicx,
-
 	MpTopic,
 	MpTopicx,
 
@@ -212,9 +186,9 @@ const _tp = {
 	newMpTopic,
 
 	delElement,
-	delSubject,
+	delSubjec: (topic, idx) => delElement(topic, "subjects", idx),
 };
 
 module.exports = {
-	_tp: _tp,
+	tp: tp,
 };

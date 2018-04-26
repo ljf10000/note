@@ -1,48 +1,41 @@
 const $ = (name) => require(`${name}.js`)[name];
 const helper = $("helper");
 const res = $("res");
-const _tp = $("_tp");
+const tp = $("tp");
+
+const app = getApp();
 
 function GwOption(content = "") {
 	return { content };
 }
 
-function MpOption(content = "") {
+function MpOption(content, checked = false) {
 	return {
 		content,		// string
+		checked: false, // bool, just for checkin
 		selected: 0,	// int, just for show
 	};
 }
 
-function Subject(title, multi = false) {
+function MpUser(uid, subjects = [], time = helper.simNowString()) {
 	return {
-		multi,			// bool
-		title,			// string
-		options: [],	// GwOption or MpOption array
+		uid,			// UID
+		time,			// TimeString
+		subjects,		// selection array
+	};
+}
+
+function Subject(multi, title, options = []) {
+	return {
+		multi,		// bool
+		title,		// string
+		options,	// GwOption or MpOption array
 	};
 }
 
 function GwTopic() {
-	return _tp.GwTopic([]);
+	return tp.GwTopic([]);
 }
-
-function GwAction() {
-	return _tp.GwAction([]);
-}
-
-const $vote = {
-	setMpTopicByAction: (mpTopic, gwAction) => {
-		gwAction.action.map((selection, iOpt) => {
-			let opt = mpTopic.options[iOpt];
-			let items = opt.items;
-
-			for (let idx of selection) {
-				items[idx].selected++;
-			}
-			opt.selection = selection;
-		});
-	},
-};
 
 function makeSelection(subject) {
 	let s = "";
@@ -58,67 +51,56 @@ function makeSelection(subject) {
 	return s;
 }
 
-function makeGwBody(mpTopic) {
+function makeGwAction(mpTopic) {
 	let a = [];
 
-	mpTopic.subjects.map(sub => {
+	mpTopic.subjects.map(sub => a.push(makeSelection(sub)));
+
+	return a;
+}
+
+function body$subjects(objs) {
+	let a = [];
+
+	objs.map(obj => {
 		let options = [];
 
-		sub.options.map(opt => options.push(GwOption(opt.content)));
+		obj.options.map(opt => options.push(GwOption(opt.content)));
 
-		a.push({
-			multi: sub.multi,
-			title: sub.title,
-			options,
-		});
+		a.push(Subject(obj.multi, obj.title, options));
 	});
 
 	return a;
+}
+
+function makeGwBody(mpTopic) {
+	return body$subjects(mpTopic.subjects);
 }
 
 function makeMpSubjects(gwTopic) {
-	let a = [];
-
-	gwTopic.body.map(sub => {
-		let options = [];
-
-		sub.options.map(opt => options.push(MpOption(opt.content)));
-
-		a.push({
-			multi: sub.multi,
-			title: sub.title,
-			options,
-		});
-	});
-
-	return a;
+	return body$subjects(gwTopic.body);
 }
 
 function makeMpTopicx(gwTopicx) {
-	let type = _tp.tid.type(gwTopicx.tid);
-	let mpTopic = makeMpTopic(type, gwTopicx.topic);
+	let type = tp.tid.type(gwTopicx.tid);
+	let tpid = tp.tid.tpid(gwTopicx.tid);
 	let users = {};
 
 	gwTopicx.actions.map(gwAction => {
-		let topic = makeMpTopic(type, gwTopicx.topic);
-		let user = {
-			uid: gwAction.uid,
-			time: gwAction.time,
-			topic,
-		};
-
-		gwAction.action.map((selection, iOpt) => {
-			let opt = topic.options[iOpt];
-			let items = opt.items;
-
-			for (let idx of selection) {
-				items[idx].selected++;
-			}
-			opt.selection = selection;
-		});
+		let user = MpUser(gwAction.uid, [], gwAction.time);
+		/*
+		type GwTopicAction struct {
+			Uid    uint32      `json:"uid"`
+			Time   string      `json:"time"`
+			Action interface{} `json:"action"`
+		}
+		*/
+		gwAction.action.map(selection => user.action.push(selection));
 
 		users[gwAction.uid + ""] = user;
 	});
+
+	let mpTopic = makeMpTopic(type, gwTopicx.topic);
 
 	Object.keys(users).map(ukey => {
 		users[ukey].topic.options.map((opt, i) => {
@@ -128,51 +110,42 @@ function makeMpTopicx(gwTopicx) {
 		});
 	});
 
-	return {
-		tpid: $tid.tpid(gwTopicx.tid),
-		topic: mpTopic,
-		type,
-		users,
-	};
+	return tp.MpTopicx(tpid, mpTopic, users);
+}
+
+function addSubject(mpTopic, title, multi = false) {
+	let sub = Subject(multi, title);
+
+	mpTopic.subjects.push(sub);
+
+	return sub;
+}
+
+function addOption(subject, content) {
+	let opt = MpOption(content);
+
+	subject.options.push(opt);
+
+	return opt;
 }
 
 const vote = {
-	type: $type,
-	state: $state,
-	tid: $tid,
-
-	makeGwTopic: (mpTopic) => _tp.makeGwTopic(mpTopic, makeGwBody),
-	makeGwTopicx,
-	makeGwAction: (mpTopic) => {
-		let a = [];
-
-		mpTopic.subjects.map(sub => a.push(makeSelection(sub)));
-
-		return a;
-	},
+	makeGwAction,
 	makeGwBody,
+	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, makeGwBody),
+	makeGwTopicx,
 
-	makeMpTopic: (type, gwTopic) => _tp.makeMpTopic(type, gwTopic, makeMpSubjects),
+	makeMpSubjects,
+	makeMpTopic: (type, gwTopic) => tp.makeMpTopic(type, gwTopic, makeMpSubjects),
 	makeMpTopicx,
 
-	newMpTopic: _tp.newMpTopic,
-	addSubject: (mpTopic, title, multi = false) => {
-		let sub = Subject(title, multi);
+	newMpTopic: (uid, param = { title, content, after: 3 }) => tp.newMpTopic(uid, param, tp.type.vote.v),
 
-		mpTopic.subjects.push(sub);
+	addSubject,
+	delSubject: (mpTopic, idx) => tp.delElement(mpTopic, "subjects", idx),
 
-		return sub;
-	},
-	delSubject: (mpTopic, idx) => _tp.delElement(mpTopic, "subjects", idx),
-
-	addOption: (subject, content) => {
-		let opt = MpOption(content);
-
-		subject.options.push(opt);
-
-		return opt;
-	},
-	delOption: (subject, idx) => _tp.delElement(subject, "options", idx),
+	addOption,
+	delOption: (subject, idx) => tp.delElement(subject, "options", idx),
 };
 
 module.exports = {
