@@ -41,6 +41,22 @@ const helper = {
 		fn(obj);
 	}),
 
+	// obj[key] is array
+	delElement: (obj, key, idx) => {
+		let old = obj[key];
+		if (idx < 0 | idx >= old.length) {
+			throw `delete element with count ${old.length} by index[${idx}]`;
+		}
+
+		let a = [];
+
+		old.map((v, i) => i == idx || a.push(v))
+
+		obj[key] = a;
+
+		return a;
+	},
+
 	timeFormat: (split, ...list) => {
 		let [head, ...tail] = list;
 		let init = (head < 10) ? ("0" + head) : ("" + head);

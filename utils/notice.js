@@ -5,37 +5,24 @@ const tp = $("tp");
 
 const app = getApp();
 
-function Subject(title) {
-	return { title };
-}
-
 function GwTopic() {
 	return tp.GwTopic("");
+}
+
+function MpTopic() {
+	return tp.MpTopic(tp.type.notice.v, "");
 }
 
 function GwAction() {
 	return tp.GwAction(false);
 }
 
-function body$subjects(objs) {
-	let a = [];
-
-	objs.map(obj => {
-		a.push({
-			title: obj.title,
-			content: obj.content,
-		});
-	});
-
-	return a;
-}
-
 function makeGwBody(mpTopic) {
-	return body$subjects(mpTopic.subjects);
+	return "";
 }
 
-function makeMpSubjects(gwTopic) {
-	return body$subjects(gwTopic.body);
+function makeMpBody(gwTopic) {
+	return "";
 }
 
 function makeMpTopicx(gwTopicx) {
@@ -80,30 +67,21 @@ function makeMpTopicx(gwTopicx) {
 	};
 }
 
-function addSubject(mpTopic, title) {
-	let sub = Subject(title);
-
-	mpTopic.subjects.push(sub);
-
-	return sub;
-}
-
 const notice = {
+	// one acknowlage per notice
 	makeGwAction: (mpTopic) => true,
-	makeGwBody,
-	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, makeGwBody),
-	makeGwTopicx,
+	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, () => ""),
 
-	makeMpSubjects,
-	makeMpTopic: (type, gwTopic) => tp.makeMpTopic(type, gwTopic, makeMpSubjects),
+	makeMpTopic: (gwTopic) => tp.makeMpTopic(tp.type.notice.v, gwTopic, () => ""),
 	makeMpTopicx,
 
-	newMpTopic: (param = { title, content, after: 3 }) => tp.newMpTopic(param, tp.type.notice.v),
-	addSubject,
-	delSubject: (mpTopic, idx) => tp.delElement(mpTopic, "subjects", idx),
+	newMpTopic: (title, content, after = 3) => {
+		let mpTopic = tp.newMpTopic(tp.type.notice.v, title, content, after);
 
-	// no addOption
-	// no delOption
+		mpTopic.body = "";
+
+		return mpTopic;
+	},
 };
 
 module.exports = {

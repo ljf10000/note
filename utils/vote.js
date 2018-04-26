@@ -17,136 +17,88 @@ function MpOption(content, checked = false) {
 	};
 }
 
-function MpUser(uid, subjects = [], time = helper.simNowString()) {
+function GwTopic() {
+	return tp.GwTopic({ options: [] });
+}
+
+function MpTopic() {
+	return tp.MpTopic(tp.type.vote.v, { options: [] });
+}
+
+function MpUser(uid, selection, time = helper.simNowString()) {
 	return {
 		uid,			// UID
 		time,			// TimeString
-		subjects,		// selection array
+		selection,		// string
 	};
-}
-
-function Subject(multi, title, options = []) {
-	return {
-		multi,		// bool
-		title,		// string
-		options,	// GwOption or MpOption array
-	};
-}
-
-function GwTopic() {
-	return tp.GwTopic([]);
-}
-
-function makeSelection(subject) {
-	let s = "";
-
-	// 选项索引 0,1,2,3......
-	// 将选择的选项索引作为字符串 push 到 selection 中，表明用户的选择
-	subject.options.map((opt, idx) => {
-		if (opt.checked) {
-			s += idx + "";
-		}
-	});
-
-	return s;
 }
 
 function makeGwAction(mpTopic) {
-	let a = [];
+	let selection = "";
 
-	mpTopic.subjects.map(sub => a.push(makeSelection(sub)));
-
-	return a;
-}
-
-function body$subjects(objs) {
-	let a = [];
-
-	objs.map(obj => {
-		let options = [];
-
-		obj.options.map(opt => options.push(GwOption(opt.content)));
-
-		a.push(Subject(obj.multi, obj.title, options));
+	// 选项索引 0,1,2,3......
+	// 将选择的选项索引作为字符串 push 到 selection 中，表明用户的选择
+	mpTopic.body.options.map((opt, idx) => {
+		if (opt.checked) {
+			selection += idx + "";
+		}
 	});
 
-	return a;
+	return selection;
 }
 
-function makeGwBody(mpTopic) {
-	return body$subjects(mpTopic.subjects);
-}
-
-function makeMpSubjects(gwTopic) {
-	return body$subjects(gwTopic.body);
+function makeMpTopic(gwTopic) {
+	return tp.makeMpTopic(tp.type.vote.v, gwTopic, topic => makeBody(topic, MpOption));
 }
 
 function makeMpTopicx(gwTopicx) {
-	let type = tp.tid.type(gwTopicx.tid);
 	let tpid = tp.tid.tpid(gwTopicx.tid);
+	let mpTopic = makeMpTopic(gwTopicx.topic);
 	let users = {};
 
 	// all user's action ==> users
+	/*
+	type GwTopicAction struct {
+		Uid    uint32      `json:"uid"`
+		Time   string      `json:"time"`
+		Action interface{} `json:"action"`
+	}
+	*/
 	gwTopicx.actions.map(gwAction => {
-		let user = MpUser(gwAction.uid, [], gwAction.time);
-		/*
-		type GwTopicAction struct {
-			Uid    uint32      `json:"uid"`
-			Time   string      `json:"time"`
-			Action interface{} `json:"action"`
-		}
-		*/
-		gwAction.action.map(selection => user.action.push(selection));
-
-		users[gwAction.uid + ""] = user;
+		users[gwAction.uid + ""] = MpUser(gwAction.uid, gwAction.action, gwAction.time);
 	});
 
-	let mpTopic = makeMpTopic(type, gwTopicx.topic);
-
 	Object.keys(users).map(uid => {
-		users[uid].action.map((selection, i) => {
-			for (let j of selection) {
-				mpTopic.subjects[i].options[j].selected++;
-			}
-		});
+		let selection = users[uid].action;
+		let options = mpTopic.body.options;
+
+		for (let idx of selection) {
+			options[idx*1].selected++;
+		}
 	});
 
 	return tp.MpTopicx(tpid, mpTopic, users);
 }
 
-function addSubject(mpTopic, title, multi = false) {
-	let sub = Subject(multi, title);
+function makeBody(topic, Option) {
+	let options = [];
 
-	mpTopic.subjects.push(sub);
+	topic.body.options.map(opt => options.push(Option(opt.content)));
 
-	return sub;
-}
-
-function addOption(subject, content) {
-	let opt = MpOption(content);
-
-	subject.options.push(opt);
-
-	return opt;
+	return { options };
 }
 
 const vote = {
 	makeGwAction,
-	makeGwBody,
-	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, makeGwBody),
-	makeGwTopicx,
+	makeGwTopic: (mpTopic) => tp.makeGwTopic(mpTopic, topic => makeBody(topic, GwOption)),
 
-	makeMpSubjects,
-	makeMpTopic: (type, gwTopic) => tp.makeMpTopic(type, gwTopic, makeMpSubjects),
+	makeMpTopic: (gwTopic) => tp.makeMpTopic(tp.type.vote.v, gwTopic, topic => makeBody(topic, MpOption)),
 	makeMpTopicx,
 
-	newMpTopic: (param = { title, content, after: 3 }) => tp.newMpTopic(param, tp.type.vote.v),
+	newMpTopic: () => tp.newMpTopic(MpTopic),
 
-	addSubject,
-	delSubject: (mpTopic, idx) => tp.delElement(mpTopic, "subjects", idx),
-
-	addOption,
-	delOption: (subject, idx) => tp.delElement(subject, "options", idx),
+	addOption: (mpTopic, content) => mpTopic.body.options.push(MpOption(content)),
+	delOption: (mpTopic, idx) => helper.delElement(mpTopic.body, "options", idx),
 };
 
 module.exports = {

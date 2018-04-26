@@ -48,7 +48,7 @@ function tidType(tid) {
 	return ((tid >>> 0) & 0xff000000) >> 24;
 }
 
-function GwTopic() {
+function GwTopic(body) {
 	return {
 		creater: 0,		// UID
 		create: "",		// TimeString
@@ -56,11 +56,13 @@ function GwTopic() {
 		state: 0,		// state
 		title: "",		// string
 		content: "",	// string
+		body,
 	};
 }
 
-function MpTopic(body) {
+function MpTopic(type, body) {
 	return {
+		type,
 		creater: 0,		// UID
 		create: "",		// TimeString
 		deadline: "",	// TimeString
@@ -70,7 +72,6 @@ function MpTopic(body) {
 		},
 		title: "",		// string
 		content: "",	// string
-		subjects: [],	// Subject array
 		body,
 	};
 }
@@ -94,7 +95,7 @@ function MpTopicx(tpid, mpTopic, users = {}) {
 	};
 }
 
-function setTopic(dst, src) {
+function copyTopic(dst, src) {
 	dst.creater = src.creater;
 	dst.create = src.create;
 	dst.deadline = src.deadline;
@@ -110,7 +111,7 @@ function makeGwTopic(mpTopic, makeGwBody) {
 		body: makeGwBody(mpTopic),
 	};
 
-	return setTopic(gwTopic, mpTopic);
+	return copyTopic(gwTopic, mpTopic);
 }
 
 function makeMpTopic(type, gwTopic, makeMpSubjects) {
@@ -124,37 +125,24 @@ function makeMpTopic(type, gwTopic, makeMpSubjects) {
 		subjects: makeMpSubjects(type, gwTopic),
 	};
 
-	return setTopic(mpTopic, gwTopic);
+	return copyTopic(mpTopic, gwTopic);
 }
 
-function newMpTopic(param = { title, content, after: 3 }, type = $type.vote.v) {
-	let now = new Date();
-	let deadline = helper.addDay(now, param.after);
+function newMpTopic(MpTopic) {
+	let mpTopic = MpTopic();
 
-	return {
-		type,
-		creater: app.user.uid,
-		create: helper.simTimeString(now),
-		deadline: helper.simTimeString(deadline),
-		title: param.title,
-		content: param.content,
-		subjects: [],
-	};
+	mpTopic.creater = app.user.uid;
+	mpTopic.create = helper.simNowString();
+
+	return mpTopic;
 }
 
-function delElement(obj, key, idx) {
-	let old = obj[key];
-	if (idx < 0 | idx >= old.length) {
-		throw `delete element with count ${old.length} by index[${idx}]`;
-	}
+function setMpTopicAfter(mpTopic, after) {
+	let deadline = helper.addNowDay(after);
 
-	let a = [];
+	mpTopic.deadline = helper.simTimeString(deadline);
 
-	old.map((v, i) => i == idx || a.push(v))
-
-	obj[key] = a;
-
-	return a;
+	return mpTopic;
 }
 
 const tp = {
@@ -181,12 +169,11 @@ const tp = {
 	MpTopic,
 	MpTopicx,
 
-	setTopic,
+	copyTopic,
 	makeGwTopic,
-	newMpTopic,
 
-	delElement,
-	delSubjec: (topic, idx) => delElement(topic, "subjects", idx),
+	newMpTopic,
+	setMpTopicAfter,
 };
 
 module.exports = {
