@@ -96,7 +96,8 @@ const vote = {
 	makeMpTopicx,
 
 	newMpTopic: () => tp.newMpTopic(MpTopic),
-
+	setMpTopicAfter: tp.setMpTopicAfter,
+	
 	addOption: (mpTopic, content) => mpTopic.body.options.push(MpOption(content)),
 	delOption: (mpTopic, idx) => helper.delElement(mpTopic.body, "options", idx),
 };

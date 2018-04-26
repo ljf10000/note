@@ -60,6 +60,7 @@ const notice = {
 	makeMpTopicx,
 
 	newMpTopic: () => tp.newMpTopic(MpTopic),
+	setMpTopicAfter: tp.setMpTopicAfter,
 };
 
 module.exports = {
