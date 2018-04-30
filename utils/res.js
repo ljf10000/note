@@ -11,7 +11,6 @@ const $words = {
 
 	bear1: ["熊大"],
 	bear2: ["熊二"],
-	bear3: ["熊宝宝"],
 
 	checkin: ["等级"],
 	closed: ["已关闭"],

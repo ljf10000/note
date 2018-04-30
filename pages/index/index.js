@@ -10,11 +10,13 @@ function load(page, options) {
 
 	mp.start(app, app.login.shareTicket);
 
+	let interval = 100;
+
 	let id = setInterval(() => {
 		let time = page.data.time;
 
 		page.setData({
-			time: time - 1,
+			time: time - interval,
 		});
 
 		if (time == 0) {
@@ -22,13 +24,13 @@ function load(page, options) {
 
 			clearInterval(id);
 		}
-	}, 1000);
+	}, interval);
 }
 
 Page({
 	name: m_name,
 	data: {
-		time: 3,
+		time: 2000,
 	},
 
 	onLoad: function (options) {

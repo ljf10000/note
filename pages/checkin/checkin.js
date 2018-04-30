@@ -123,6 +123,7 @@ function checkin(page, ev) {
 }
 
 const mother = res.Word("mother");
+const father = res.Word("father");
 
 Page({
 	name: m_name,
@@ -138,8 +139,7 @@ Page({
 		students: [
 			newStudent(0, res.Word("bear1"), mother),
 			newStudent(1, res.Word("bear2"), mother),
-			newStudent(2, res.Word("bear3"), mother),
-			newStudent(3, res.Word("panda"), mother),
+			newStudent(2, res.Word("panda"), father),
 		],
 		role: 3,
 		name: "",
