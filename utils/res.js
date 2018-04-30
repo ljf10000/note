@@ -14,6 +14,7 @@ const $words = {
 	bear2: ["熊二"],
 
 	checkin: ["等级"],
+	["class"]: ["班级"],
 	closed: ["已关闭"],
 
 	del: ["删除"],
@@ -29,6 +30,7 @@ const $words = {
 
 	login: ["登陆"],
 
+	member: ["成员"],
 	mother: ["妈妈"],
 
 	name: ["名字"],

@@ -25,6 +25,12 @@ function load(page, options) {
 	mp.groupGet(page, { gid });
 }
 
+function swichTab(page, current) {
+	if (page.data.current != current) {
+		page.setData({ current });
+	}
+}
+
 function groupGet(page, obj) {
 	let gid = obj.gid;
 	let group = obj.group;
@@ -74,44 +80,63 @@ function groupGet(page, obj) {
 	}
 
 	page.setData({
-		"adviser.name": adviser.name,
-		"teacher.all": teachers,
-		"patriarch.all": patriarchs,
-		"student.all": students,
+		"group.adviser.name": adviser.name,
+		"group.teacher.all": teachers,
+		"group.patriarch.all": patriarchs,
+		"group.student.all": students,
 	});
 }
+
+const tabVote = {
+	title: res.Word("vote"),
+};
+
+const tabNotice = {
+	title: res.Word("notice"),
+};
+
+const tabGroup = {
+	title: res.Transfer("class member"),
+
+	opengid: "",
+
+	adviser: {
+		label: res.Word("adviser"),
+		name: "",
+	},
+	teacher: {
+		label: res.Word("teacher"),
+		all: [
+			// {idx: idx, name: name},
+		],
+	},
+	patriarch: {
+		label: res.Word("patriarch"),
+		all: [
+			// {idx: idx, name: name},
+		],
+	},
+	student: {
+		label: res.Word("student"),
+		all: [
+			// {idx: idx, name: name},
+		],
+	},
+};
 
 Page({
 	name: m_name,
 	data: {
-		adviser: {
-			label: res.Word("adviser"),
-			name: "",
-		},
-		teacher: {
-			label: res.Word("teacher"),
-			all: [
-				// {idx: idx, name: name},
-			],
-		},
-		patriarch: {
-			label: res.Word("patriarch"),
-			all: [
-				// {idx: idx, name: name},
-			],
-		},
-		student: {
-			label: res.Word("student"),
-			all: [
-				// {idx: idx, name: name},
-			],
-		},
+		vote: tabVote,
+		notice: tabNotice,
+		group: tabGroup,
+
 		/** 
-		* 页面配置 
+		* 页面配置
 		*/
 		winWidth: 0,
 		winHeight: 0,
-		currentTab: 0,
+		current: 2,
 	},
 
 	onLoad: function (options) {
@@ -130,20 +155,10 @@ Page({
 	},
 
 	bindChange: function (e) {
-		this.setData({
-			currentTab: e.detail.current,
-		});
+		swichTab(this, e.detail.current);
 	},
 
 	swichTab: function (e) {
-		let current = e.target.dataset.current;
-
-		if (this.data.currentTab == current) {
-			return false;
-		} else {
-			this.setData({
-				currentTab: current,
-			})
-		}
+		swichTab(this, e.target.dataset.current);
 	},
 })
