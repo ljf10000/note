@@ -4,8 +4,8 @@
     </view>
 
     <view class="buttonTab">
-        <button type="defaule" open-type="share" bindtap="evShare">邀请</button>
-        <button type="defaule" bindtap="evGroup">班级</button>
-        <button type="defaule" bindtap="evClear">修复</button>
+        <button open-type="share" bindtap="evShare">{{invite.title}}</button>
+        <button bindtap="evGroup">{{class.title}}</button>
+        <button bindtap="evClear">{{repair.title}}</button>
     </view>
 </view>

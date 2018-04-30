@@ -15,14 +15,16 @@ function load(page, options) {
 	let gid = options.gid * 1;
 	let opengid = options.opengid;
 
-	db.user.addGroup(app.user, gid, opengid);
-	db.user.save(app.user);
+	if (opengid && gid) {
+		db.user.addGroup(app.user, gid, opengid);
+		db.user.save(app.user);
 
-	page.setData({
-		"group.opengid": opengid,
-	});
+		page.data.opengid = opengid;
+	}
 
-	mp.groupGet(page, { gid });
+	if (gid) {
+		mp.groupGet(page, { gid });
+	}
 }
 
 function swichTab(page, current) {

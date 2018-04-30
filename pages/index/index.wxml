@@ -3,7 +3,8 @@
         <view class="container__image">
             <image src="../../image/girl.jpg"/>
         </view>
-        <view class="container__title">班级事务小助手</view>
+
+        <view class="container__title">{{APP}}</view>
         <view class="container__info">高效处理班级事务</view>
     </view>
 </view>

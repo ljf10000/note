@@ -27,6 +27,7 @@ const $words = {
 	group: ["群组"],
 
 	ing: ["进行中"],
+	invite: ["邀请"],
 
 	login: ["登陆"],
 
@@ -44,6 +45,7 @@ const $words = {
 	pre: ["预先"],
 
 	relation: ["关系"],
+	repair: ["修复"],
 
 	student: ["学生"],
 	success: ["成功"],

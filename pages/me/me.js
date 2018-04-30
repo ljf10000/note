@@ -5,10 +5,21 @@ const $ = (name) => require(`../../utils/${name}.js`)[name];
 const pg = $("pg");
 const mp = $("mp");
 const api = $("api");
+const res = $("res");
 
 Page({
 	name: m_name,
 	data: {
+		invite: {
+			title: res.Word("invite"),
+		},
+		["class"]: {
+			title: res.Word("class"),
+		},
+		repair: {
+			title: res.Word("repair"),
+		},
+
 		name: `Hello ${app.userInfo.nickName}`,
 	},
 
@@ -22,7 +33,7 @@ Page({
 
 	onShow: function () {
 		this.setData({
-			motto: `Hello ${app.userInfo.nickName}`,
+			name: `Hello ${app.userInfo.nickName}`,
 		});
 	},
 

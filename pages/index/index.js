@@ -4,6 +4,7 @@ const app = getApp();
 const $ = (name) => require(`../../utils/${name}.js`)[name];
 const mp = $("mp");
 const api = $("api");
+const res = $("res");
 
 function load(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
@@ -30,6 +31,7 @@ function load(page, options) {
 Page({
 	name: m_name,
 	data: {
+		APP: res.APP,
 		time: 2000,
 	},
 
