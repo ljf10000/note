@@ -6,8 +6,9 @@ const $words = {
 	app: ["班级事务小助手", "small assistant in class affairs"],
 	wx: ["微信", "webcat"],
 	mp: ["小程序", "mini program"],
-	
+
 	adviser: ["班主任"],
+	and: ["和"],
 
 	bear1: ["熊大"],
 	bear2: ["熊二"],
@@ -19,6 +20,7 @@ const $words = {
 
 	fail: ["失败"],
 	father: ["爸爸"],
+	fill: ["填写"],
 
 	["get"]: ["获取"],
 	group: ["群组"],
@@ -29,13 +31,17 @@ const $words = {
 
 	mother: ["妈妈"],
 
+	name: ["名字"],
 	["new"]: ["创建"],
 	notice: ["通知"],
 
-	patriarch: ["家长"],
 	panda: ["熊猫"],
+	patriarch: ["家长"],
 	pay: ["支付"],
+	please: ["请"],
 	pre: ["预先"],
+
+	relation: ["关系"],
 
 	student: ["学生"],
 	success: ["成功"],
@@ -51,6 +57,8 @@ const $words = {
 };
 
 function word(words, key) {
+	words = words || $words;
+	
 	let obj = words[key] || words.unknow;
 
 	return obj[lang] || key;
@@ -86,11 +94,11 @@ function transfer(words, sentence) {
 const APP = word($words, "app");
 
 const res = {
-	word: word,
-	join: join,
-	transfer: transfer,
+	word,
+	join,
+	transfer,
 
-	APP: APP,
+	APP,
 
 	Word: (key) => word($words, key),
 	Join: (...keys) => join($words, ...keys),
