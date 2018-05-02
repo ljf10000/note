@@ -9,21 +9,39 @@ const db = $("db");
 const api = $("api");
 const res = $("res");
 
-function load(page, options) {
-	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
-
+function loadByShared(page, options) {
 	let gid = options.gid * 1;
-	let opengid = options.opengid;
+	let opengid = options.opengid || "";
 
 	if (opengid && gid) {
 		db.user.addGroup(app.user, gid, opengid);
 		db.user.save(app.user);
-
-		page.data.opengid = opengid;
 	}
 
 	if (gid) {
 		mp.groupGet(page, { gid });
+	}
+
+	page.setData({ opengid });
+}
+
+function loadByGroup(page, options) {
+	let gid = options.gid * 1;
+	let opengid = db.user.getOpenGid(app.user, gid);
+	let group = db.group.load(app.groups, gid);
+
+	groupGet(page, group);
+
+	page.setData({ opengid });
+}
+
+function load(page, options) {
+	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
+
+	if (options.shared) {
+		loadByShared(page, options);
+	} else {
+		loadByGroup(page, options);
 	}
 }
 
@@ -89,17 +107,19 @@ function groupGet(page, obj) {
 
 	page.setData({
 		"group.adviser.obj": adviser,
-		"group.teacher.all": teachers,
-		"group.patriarch.all": patriarchs,
-		"group.student.all": students,
+		"group.teacher.list": teachers,
+		"group.patriarch.list": patriarchs,
+		"group.student.list": students,
 	});
 }
 
 const tabVote = {
+	title: res.Word("vote"),
 	list: [],
 };
 
 const tabNotice = {
+	title: res.Word("notice"),
 	list: [],
 };
 
@@ -114,36 +134,29 @@ const tabGroup = {
 	},
 	teacher: {
 		label: res.Word("teacher"),
-		all: [
-			// {idx: idx, name: name},
-		],
+		list: [],
 	},
 	patriarch: {
 		label: res.Word("patriarch"),
-		all: [
-			// {idx: idx, name: name},
-		],
+		list: [],
 	},
 	student: {
 		label: res.Word("student"),
-		all: [
-			// {idx: idx, name: name},
-		],
+		list: [],
 	},
 };
 
 Page({
 	name: m_name,
+	__i_am__: "page",
+
 	data: {
 		vote: tabVote,
 		notice: tabNotice,
 		group: tabGroup,
 
-		/** 
-		* 页面配置
-		*/
-		winWidth: 0,
-		winHeight: 0,
+		winWidth: app.sysinfo.windowWidth,
+		winHeight: app.sysinfo.windowHeight,
 		current: 2,
 	},
 
@@ -151,7 +164,6 @@ Page({
 		load(this, options);
 
 		let info = api.getSystemInfoSync();
-
 		this.setData({
 			winWidth: info.windowWidth,
 			winHeight: info.windowHeight,

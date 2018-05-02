@@ -75,10 +75,11 @@ App({
 	userInfo: {
 		nickName: "SB",
 	},
+	sysinfo: api.getSystemInfoSync(),
 
 	login: {},
 	options: {},
 
 	mq: new mq(),
-	__i_m_app__: true,
+	__i_am__: "app",
 });

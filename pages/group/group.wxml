@@ -34,21 +34,21 @@
 
             <view class="teacher">
                 {{group.teacher.label}}：
-                <view class="member" wx:for="{{group.teacher.all}}" wx:key="idx">
+                <view class="member" wx:for="{{group.teacher.list}}" wx:key="xid">
                     {{item.name}}
                 </view>
             </view>
 
             <view class="patriarch">
                 {{group.patriarch.label}}：
-                <view class="member" wx:for="{{group.patriarch.all}}" wx:key="idx">
+                <view class="member" wx:for="{{group.patriarch.list}}" wx:key="xid">
                     {{item.name}}
                 </view>
             </view>
 
             <view class="student">
                 {{group.student.label}}：
-                <view class="member" wx:for="{{group.student.all}}" wx:key="idx">
+                <view class="member" wx:for="{{group.student.list}}" wx:key="xid">
                     {{item.name}}
                 </view>
             </view>

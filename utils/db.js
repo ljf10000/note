@@ -51,7 +51,11 @@ const db = {
 		getOpenGid: (user, gid) => user.byid[gid + ""],
 
 		getGid: (user, opengid) => user.byname[opengid],
+		getFirstGid: (user) => {
+			let gids = Object.keys(user.byid);
 
+			return gids ? gids[0]: 0;
+		},
 		getGroupCount: (user) => Object.keys(user.byid).length,
 		getGroups: (user) => {
 			Object.keys(user.byid).reduce((pre, cur) => {

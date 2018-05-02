@@ -93,7 +93,7 @@ const $gw = {
 		$gw.check(name, obj.user, "uid", "session", "nn"),
 
 	success: (name, obj) => {
-		// do nothing
+		console.log(`gw ${name} success`);
 	},
 
 	request: (xid, path, data) => {
@@ -115,6 +115,17 @@ const $gw = {
 	},
 	login_fail: (obj, e) => $gw.fail(obj, e, "login"),
 };
+
+function tryPageCb(page, name) {
+	console.log(`try name: ${JSON.stringify(page)}`);
+	
+	if (helper.isPage(page)) {
+		let cb = page[name];
+		if (cb) {
+			cb(obj);
+		}
+	}
+}
 
 const randLogin = {
 	request: (param = { jscode }) =>
@@ -247,12 +258,11 @@ const groupGet = {
 		$gw.request(param.gid, $path.groupGet, param),
 	success: (page, obj) => {
 		let name = "groupGet";
-		let cb = page[name];
 
 		$gw.success(name, obj);
 		$gw.check(name, obj, "group");
 
-		cb(obj);
+		tryPageCb(page, name);
 	},
 	fail: (page, e) => $gw.fail(page, e, "group", "get"),
 };
@@ -265,6 +275,8 @@ const groupSync = {
 
 		$gw.success(name, obj);
 		$gw.check(name, obj);
+
+		tryPageCb(page, name);
 	},
 	fail: (page, e) => $gw.fail(page, e, "group", "sync"),
 };
@@ -361,6 +373,8 @@ const topicGet = {
 
 		$gw.success(name, obj);
 		$gw.check(name, obj, "topicx");
+
+		tryPageCb(page, name);
 	},
 	fail: (page, e) => $gw.fail(page, e, "topic", "get"),
 };
@@ -373,6 +387,8 @@ const topicGetOpen = {
 
 		$gw.success(name, obj);
 		$gw.check(name, obj, "summary");
+
+		tryPageCb(page, name);
 	},
 	fail: (page, e) => $gw.fail(page, e, "topic", "get", "open"),
 };
@@ -385,6 +401,8 @@ const topicGetClosed = {
 
 		$gw.success(name, obj);
 		$gw.check(name, obj, "summary");
+
+		tryPageCb(page, name);
 	},
 	fail: (page, e) => $gw.fail(page, e, "topic", "get", "closed"),
 };

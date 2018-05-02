@@ -4,11 +4,14 @@ const app = getApp();
 const $ = (name) => require(`../../utils/${name}.js`)[name];
 const pg = $("pg");
 const mp = $("mp");
+const db = $("db");
 const api = $("api");
 const res = $("res");
 
 Page({
 	name: m_name,
+	__i_am__: "page",
+
 	data: {
 		invite: {
 			title: res.Word("invite"),
@@ -42,7 +45,9 @@ Page({
 	},
 
 	evGroup: function (ev) {
-		api.navigateToEx("group");
+		let gid = db.user.getFirstGid(app.user);
+
+		api.navigateToEx("group", { gid });
 	},
 
 	evClear: function (ev) {

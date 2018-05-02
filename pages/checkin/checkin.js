@@ -116,6 +116,7 @@ function checkin(page, ev) {
 
 Page({
 	name: m_name,
+	__i_am__: "page",
 
 	data: {
 		opengid: "",

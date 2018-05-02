@@ -11,6 +11,8 @@ function load(page, options) {
 
 Page({
 	name: m_name,
+	__i_am__: "page",
+	
 	data: {
 
 	},

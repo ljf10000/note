@@ -1,17 +1,10 @@
 // mp.js
 const $ = (name) => require(`${name}.js`)[name];
 const _gw = $("_gw");
+const helper = $("helper");
 const res = $("res");
 const api = $("api");
 const gw = $("gw");
-
-function isApp(obj) {
-	return true === obj.__i_m_app__;
-}
-
-function isPage(obj) {
-	return !isApp(obj);
-}
 
 function initParam(app, param) {
 	let user = app.user;
@@ -111,7 +104,7 @@ function loginBy(app, method, param) {
 function callBy(obj, method, param) {
 	let r = gw[method];
 
-	if (isPage(obj)) {
+	if (helper.isPage(obj)) {
 		initParam(getApp(), param);
 	}
 

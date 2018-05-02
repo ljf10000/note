@@ -13,6 +13,10 @@ const helper = {
 		return n >>> 0;
 	},
 
+	im: obj => obj.__i_am__ || "",
+	isApp: obj => obj.__i_am__ == "app",
+	isPage: obj => obj.__i_am__ == "page",
+
 	url: (name, param = {}) => {
 		let url = `/pages/${name}/${name}`;
 		let keys = Object.keys(param);
