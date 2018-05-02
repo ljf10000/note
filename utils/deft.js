@@ -23,6 +23,4 @@ const deft = {
 	},
 };
 
-module.exports = {
-	deft: deft,
-};
+module.exports = { deft };

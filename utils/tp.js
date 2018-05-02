@@ -116,7 +116,7 @@ function makeGwTopic(mpTopic, makeGwBody) {
 
 function makeMpTopic(type, gwTopic, makeMpBody) {
 	let state = gwTopic.state;
-	
+
 	let mpTopic = {
 		type,
 		state: {
@@ -177,6 +177,4 @@ const tp = {
 	setMpTopicAfter,
 };
 
-module.exports = {
-	tp: tp,
-};
+module.exports = { tp };

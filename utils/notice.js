@@ -63,6 +63,4 @@ const notice = {
 	setMpTopicAfter: tp.setMpTopicAfter,
 };
 
-module.exports = {
-	notice: notice,
-};
+module.exports = { notice };

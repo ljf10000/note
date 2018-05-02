@@ -197,6 +197,4 @@ const typedef = {
 };
 */
 
-module.exports = {
-	helper: helper,
-};
+module.exports = { helper };

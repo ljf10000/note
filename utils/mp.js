@@ -236,6 +236,4 @@ const mp = {
 		callBy(page, "topicDel", param),
 };
 
-module.exports = {
-	mp: mp,
-};
+module.exports = { mp };

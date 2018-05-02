@@ -187,6 +187,4 @@ const api = {
 	reLaunch: (url) => wxPromisify("reLaunch", { url }),
 };
 
-module.exports = {
-	api: api,
-};
+module.exports = { api };

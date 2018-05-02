@@ -78,7 +78,7 @@ const db = {
 			dst.byid = {};
 			dst.byname = {},
 
-			Object.keys(src.byid).map(k => dst.byid[k] = src.byid[k]);
+				Object.keys(src.byid).map(k => dst.byid[k] = src.byid[k]);
 			Object.keys(src.byname).map(k => dst.byname[k] = src.byname[k]);
 
 			return dst;
@@ -146,6 +146,4 @@ const db = {
 	},
 };
 
-module.exports = {
-	db: db,
-};
+module.exports = { db };

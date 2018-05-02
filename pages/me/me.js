@@ -32,9 +32,9 @@ Page({
 	},
 
 	onShow: function () {
-		this.setData({
-			name: `Hello ${app.userInfo.nickName}`,
-		});
+		let name = `Hello ${app.userInfo.nickName}`;
+
+		this.setData({ name });
 	},
 
 	evShare: function (ev) {

@@ -23,11 +23,10 @@ updateManager.onUpdateFailed(function () {
 */
 
 const pages = [
-	"index",
-	"group",
-	"guide",
 	"checkin",
-	"list",
+	"group",
+	"index",
+	"me",
 	"notice",
 	"vote",
 ];

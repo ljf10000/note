@@ -56,13 +56,13 @@ const $words = {
 
 	unknow: ["未知"],
 	user: ["用户"],
-	
+
 	vote: ["投票"],
 };
 
 function word(words, key) {
 	words = words || $words;
-	
+
 	let obj = words[key] || words.unknow;
 
 	return obj[lang] || key;
@@ -109,6 +109,4 @@ const res = {
 	Transfer: (sentence) => transfer($words, sentence),
 };
 
-module.exports = {
-	res: res,
-};
+module.exports = { res };

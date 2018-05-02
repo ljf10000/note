@@ -98,7 +98,7 @@ class mq {
 
 	sendmsg(sender, recver, msg) {
 		let tp = this.box[recver];
-		
+
 		if (tp) {
 			tp.sendmsg(sender, msg);
 
@@ -108,14 +108,12 @@ class mq {
 
 	recvmsg(recver) {
 		let tp = this.box[recver];
-		let {sender, msg} = tp ? tp.recvmsg() : {};
+		let { sender, msg } = tp ? tp.recvmsg() : {};
 
 		console.log(`${recver} recv msg:${JSON.stringify(msg)} sender:${sender}`);
 
-		return {sender, msg};
+		return { sender, msg };
 	}
 }
 
-module.exports = {
-	mq: mq,
-};
+module.exports = { mq };

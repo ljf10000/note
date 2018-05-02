@@ -26,6 +26,4 @@ const pg = {
 	},
 };
 
-module.exports = {
-	pg: pg,
-};
+module.exports = { pg };
