@@ -1,5 +1,4 @@
-// pages/notice/notice.js
-const m_name = "notice";
+const m_name = "newvote";
 const app = getApp();
 
 const $ = (name) => require(`../../utils/${name}.js`)[name];

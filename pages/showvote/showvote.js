@@ -1,5 +1,4 @@
-// pages/vote/vote.js
-const m_name = "vote";
+const m_name = "showvote";
 const app = getApp();
 
 const $ = (name) => require(`../../utils/${name}.js`)[name];

@@ -1,29 +1,19 @@
 {
     "pages": [
-		"pages/index/index",
+        "pages/index/index",
+		"pages/checkin/checkin",
         "pages/me/me",
         "pages/group/group",
-        "pages/notice/notice",
-        "pages/vote/vote",
-        "pages/checkin/checkin"
+        "pages/newnotice/newnotice",
+        "pages/newvote/newvote",
+        "pages/showvote/showvote",
+        "pages/shownotice/shownotice"
     ],
     "window": {
         "backgroundTextStyle": "light",
         "navigationBarBackgroundColor": "#fff",
         "navigationBarTitleText": "WeChat",
         "navigationBarTextStyle": "black"
-    },
-    "tabBar": {
-        "list": [
-            {
-                "pagePath": "pages/vote/vote",
-                "text": "投票"
-            },
-            {
-                "pagePath": "pages/notice/notice",
-                "text": "通知"
-            }
-        ]
     },
     "networkTimeout": {
         "request": 5000

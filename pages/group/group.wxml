@@ -7,19 +7,23 @@
     </view>
 
     <swiper current="{{current}}" class="swiper-box" duration="300" style="height:{{winHeight - 31}}px" bindchange="bindChange">
-        <swiper-item>
-            <view>
-				{{vote.title}}
-			</view>
+        <swiper-item class="vote">
+            <view class="entry">
+                <view class="summary" wx:for="{{vote.list}}" wx:key="idx">
+                    {{item.title}}:{{item.content}}
+                </view>
+            </view>
         </swiper-item>
 
-        <swiper-item>
-            <view>
-				{{notice.title}}
-			</view>
+        <swiper-item class="notice">
+            <view class="entry">
+                <view class="summary" wx:for="{{notice.list}}" wx:key="idx">
+                    {{item.title}}:{{item.content}}
+                </view>
+            </view>
         </swiper-item>
 
-        <swiper-item>
+        <swiper-item class="group">
             <view class="group-name">
                 <open-data type="groupName" open-gid="{{group.opengid}}" auto-height="true"></open-data>
             </view>
@@ -30,21 +34,21 @@
 
             <view class="teacher">
                 {{group.teacher.label}}：
-                <view class="entry" wx:for="{{group.teacher.all}}" wx:key="idx">
+                <view class="member" wx:for="{{group.teacher.all}}" wx:key="idx">
                     {{item.name}}
                 </view>
             </view>
 
             <view class="patriarch">
                 {{group.patriarch.label}}：
-                <view class="entry" wx:for="{{group.patriarch.all}}" wx:key="idx">
+                <view class="member" wx:for="{{group.patriarch.all}}" wx:key="idx">
                     {{item.name}}
                 </view>
             </view>
 
             <view class="student">
                 {{group.student.label}}：
-                <view class="entry" wx:for="{{group.student.all}}" wx:key="idx">
+                <view class="member" wx:for="{{group.student.all}}" wx:key="idx">
                     {{item.name}}
                 </view>
             </view>

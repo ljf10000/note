@@ -27,8 +27,10 @@ const pages = [
 	"group",
 	"index",
 	"me",
-	"notice",
-	"vote",
+	"newvote",
+	"newnotice",
+	"showvote",
+	"shownotice",
 ];
 
 function load(app, options) {

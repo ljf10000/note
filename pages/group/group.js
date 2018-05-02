@@ -37,7 +37,7 @@ function groupGet(page, obj) {
 	let gid = obj.gid;
 	let group = obj.group;
 	let d = page.data;
-	let adviser = {name: ""};
+	let adviser = { name: "" };
 	let teachers = [];
 	let patriarchs = [];
 	let students = [];
@@ -47,15 +47,21 @@ function groupGet(page, obj) {
 	console.log(`group=${JSON.stringify(group)}`);
 
 	if (group.teachers) {
-		adviser.name = group.teachers[group.adviser + ""].name;
+		if (group.adviser) {
+			let teacher = group.teachers[group.adviser + ""];
+
+			adviser.name = teacher.name;
+			adviser.xid = group.adviser;
+		}
 
 		Object.keys(group.teachers).map((uid, idx) => {
+			// skip adviser
 			if ((uid * 1) != group.adviser) {
 				let teacher = group.teachers[uid];
 
 				teachers.push({
 					name: teacher.name,
-					idx: idx,
+					xid: uid * 1,
 				});
 			}
 		});
@@ -67,22 +73,22 @@ function groupGet(page, obj) {
 
 			patriarchs.push({
 				name: patriarch.name,
-				idx: idx,
+				xid: uid * 1,
 			});
 		});
 
-		Object.keys(group.students).map((uid, idx) => {
-			let student = group.students[uid];
+		Object.keys(group.students).map((sid, idx) => {
+			let student = group.students[sid];
 
 			students.push({
 				name: student.name,
-				idx: idx,
+				xid: sid * 1,
 			});
 		});
 	}
 
 	page.setData({
-		"group.adviser.name": adviser.name,
+		"group.adviser.obj": adviser,
 		"group.teacher.all": teachers,
 		"group.patriarch.all": patriarchs,
 		"group.student.all": students,
@@ -90,11 +96,11 @@ function groupGet(page, obj) {
 }
 
 const tabVote = {
-	title: res.Word("vote"),
+	list: [],
 };
 
 const tabNotice = {
-	title: res.Word("notice"),
+	list: [],
 };
 
 const tabGroup = {
@@ -104,7 +110,7 @@ const tabGroup = {
 
 	adviser: {
 		label: res.Word("adviser"),
-		name: "",
+		obj: {},
 	},
 	teacher: {
 		label: res.Word("teacher"),
