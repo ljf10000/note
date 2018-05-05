@@ -21,7 +21,7 @@ function load(page, options) {
 		});
 
 		if (time == 0) {
-			api.redirectToEx("me");
+			// api.redirectToEx("me");
 
 			clearInterval(id);
 		}
