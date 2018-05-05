@@ -58,6 +58,8 @@ const db = {
 		},
 		getGroupCount: (user) => Object.keys(user.byid).length,
 		getGroups: (user) => {
+			let groups = [];
+
 			Object.keys(user.byid).reduce((pre, cur) => {
 				pre.push({
 					gid: cur,
@@ -65,7 +67,9 @@ const db = {
 				});
 
 				return pre;
-			}, []);
+			}, groups);
+
+			return groups;
 		},
 
 		vcopy: (dst, src) => {

@@ -25,6 +25,15 @@ function loadByShared(page, options) {
 	page.setData({ opengid });
 }
 
+function loadByCheckin(page, options) {
+	let gid = options.gid * 1;
+	let opengid = options.opengid || "";
+
+	mp.groupGet(page, { gid });
+	
+	page.setData({ opengid });
+}
+
 function loadByGroup(page, options) {
 	let gid = options.gid * 1;
 	let opengid = db.user.getOpenGid(app.user, gid);
@@ -38,10 +47,13 @@ function loadByGroup(page, options) {
 function load(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 
-	if (options.shared) {
-		loadByShared(page, options);
-	} else {
-		loadByGroup(page, options);
+	switch (options.event) {
+		case "userCheckin":
+			loadByCheckin(page, options);
+			break;
+		default:
+			loadByGroup(page, options);
+			break;
 	}
 }
 

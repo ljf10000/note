@@ -3,9 +3,16 @@
         <text class="user-name">{{name}}</text>
     </view>
 
+    <view wx:if="{{group.count>0}}">
+        {{group.title}}
+        <view class="group" wx:for="{{group.groups}}" wx:key="gid">
+            <open-data type="groupName" open-gid="{{item.opengid}}" auto-height="true"></open-data>
+            <button bindtap="evGroup" id="gid-{{item.gid}}"></button>
+        </view>
+    </view>
+
     <view class="buttonTab">
         <button open-type="share" bindtap="evShare">{{invite.title}}</button>
-        <button bindtap="evGroup">{{class.title}}</button>
         <button bindtap="evClear">{{repair.title}}</button>
     </view>
 </view>

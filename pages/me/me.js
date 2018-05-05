@@ -13,11 +13,13 @@ Page({
 	__i_am__: "page",
 
 	data: {
+		group: {
+			title: res.Word("class"),
+			groups: [],
+			count: 0,
+		},
 		invite: {
 			title: res.Word("invite"),
-		},
-		["class"]: {
-			title: res.Word("class"),
 		},
 		repair: {
 			title: res.Word("repair"),
@@ -36,8 +38,13 @@ Page({
 
 	onShow: function () {
 		let name = `Hello ${app.userInfo.nickName}`;
+		let groups = db.user.getGroups(app.user) || [];
 
-		this.setData({ name });
+		this.setData({
+			name,
+			"group.groups": groups,
+			count: groups.length,
+		});
 	},
 
 	evShare: function (ev) {

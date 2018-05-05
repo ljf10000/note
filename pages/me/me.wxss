@@ -1,3 +1,9 @@
+.group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .buttonTab {
     display: flex;
     justify-content: center;

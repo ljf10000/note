@@ -16,7 +16,7 @@ body, page {
 
 .container__title {
     margin: auto;
-    font-size: 80rpx;
+    font-size: 50rpx;
     letter-spacing: 8rpx;
     color: #14b392;
 }

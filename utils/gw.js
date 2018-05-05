@@ -116,14 +116,16 @@ const $gw = {
 	login_fail: (obj, e) => $gw.fail(obj, e, "login"),
 };
 
-function tryPageCb(page, name) {
-	console.log(`try name: ${JSON.stringify(page)}`);
-	
+function tryPageCb(page, callback, obj) {
 	if (helper.isPage(page)) {
-		let cb = page[name];
+		console.log(`try page ${page.name} callback: ${callback}`);
+
+		let cb = page[callback];
 		if (cb) {
 			cb(obj);
 		}
+	} else {
+		console.log(`not page ${JSON.stringify(page)}`);
 	}
 }
 
@@ -230,10 +232,17 @@ const userCheckin = {
 		$gw.success(name, obj);
 		$gw.check(name, obj, "gid");
 
+		let app = getApp();
+		let gid = obj.gid;
+		let opengid = page.data.opengid;
+
+		db.user.addGroup(app.user, gid, opengid);
+		db.user.save(app.user);
+
 		api.redirectToEx("group", {
-			gid: obj.gid,
-			opengid: page.data.opengid,
-			event: "checkin",
+			gid,
+			opengid,
+			event: "userCheckin",
 			act: "redirect",
 			src: page.name,
 		});
@@ -262,7 +271,7 @@ const groupGet = {
 		$gw.success(name, obj);
 		$gw.check(name, obj, "group");
 
-		tryPageCb(page, name);
+		tryPageCb(page, name, obj);
 	},
 	fail: (page, e) => $gw.fail(page, e, "group", "get"),
 };
@@ -276,7 +285,7 @@ const groupSync = {
 		$gw.success(name, obj);
 		$gw.check(name, obj);
 
-		tryPageCb(page, name);
+		tryPageCb(page, name, obj);
 	},
 	fail: (page, e) => $gw.fail(page, e, "group", "sync"),
 };
@@ -374,7 +383,7 @@ const topicGet = {
 		$gw.success(name, obj);
 		$gw.check(name, obj, "topicx");
 
-		tryPageCb(page, name);
+		tryPageCb(page, name, obj);
 	},
 	fail: (page, e) => $gw.fail(page, e, "topic", "get"),
 };
@@ -388,7 +397,7 @@ const topicGetOpen = {
 		$gw.success(name, obj);
 		$gw.check(name, obj, "summary");
 
-		tryPageCb(page, name);
+		tryPageCb(page, name, obj);
 	},
 	fail: (page, e) => $gw.fail(page, e, "topic", "get", "open"),
 };
@@ -402,7 +411,7 @@ const topicGetClosed = {
 		$gw.success(name, obj);
 		$gw.check(name, obj, "summary");
 
-		tryPageCb(page, name);
+		tryPageCb(page, name, obj);
 	},
 	fail: (page, e) => $gw.fail(page, e, "topic", "get", "closed"),
 };
