@@ -1,6 +1,7 @@
 // pg.js
 const $ = (name) => require(`${name}.js`)[name];
 const res = $("res");
+const api = $("api");
 const mp = $("mp");
 
 const app = getApp();
@@ -17,10 +18,14 @@ const pg = {
 
 				console.info(`${page.name} share success v=${JSON.stringify(v)}`);
 
-				mp.start(app, shareTicket);
+				mp.start(app, page, shareTicket);
 			},
 			fail: e => {
-				console.info(`${page.name} share failed e=${e}`);
+				console.error(`${page.name} share failed e=${e}`);
+
+				let msg = res.Transfer("invite fail");
+
+				api.showModal(res.APP, msg);
 			},
 		};
 	},

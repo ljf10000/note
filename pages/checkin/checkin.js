@@ -22,27 +22,14 @@ function newStudent(k, name, relation) {
 	};
 }
 
-function roleChange (page, ev) {
+function roleChange(page, ev) {
 	console.log(`roleChange ${JSON.stringify(ev)}`);
 	let oldRole = page.data.role;
 	let newRole = ev.detail.value * 1;
 
-	page.setData({
-		role: newRole,
-	});
+	page.setData({ role: newRole });
 
 	console.log(`oldRole[${oldRole}] ==> newRole[${newRole}]`);
-}
-
-function page_load(page, options) {
-	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
-
-	let opengid = options.opengid;
-	if (opengid) {
-		page.setData({ opengid });
-
-		console.log(`${m_name} set data opengid:${opengid}`);
-	}
 }
 
 function saveStudent(page, ev) {
@@ -62,9 +49,16 @@ function saveStudent(page, ev) {
 	}
 }
 
+function saveName(page, ev) {
+	let v = ev.detail.value;
+
+	if (v) {
+		page.setData({ name: v });
+	}
+}
+
 function checkin(page, ev) {
 	let d = page.data;
-
 	if (!d.name) {
 		api.showModal("", res.Transfer("please fill name"));
 		return 0;
@@ -72,7 +66,7 @@ function checkin(page, ev) {
 
 	let students = [];
 	let count = d.students.length;
-	for (let i=0; i<count; i++) {
+	for (let i = 0; i < count; i++) {
 		let student = d.students[i];
 
 		if (!student.name.v && !student.relation.v) {
@@ -101,17 +95,24 @@ function checkin(page, ev) {
 		return 0;
 	}
 
-	let obj = {
+	mp.userCheckin(page, {
 		opengid: d.opengid,
 		role: d.role,
 		name: d.name,
 		students: students,
 		userInfo: app.userInfo,
-	};
+	});
+}
 
-	console.log(`checkin ${JSON.stringify(obj)}`);
+function load(page, options) {
+	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 
-	mp.userCheckin(page, obj);
+	let opengid = options.opengid;
+	if (opengid) {
+		page.setData({ opengid });
+
+		console.log(`${m_name} set data opengid:${opengid}`);
+	}
 }
 
 Page({
@@ -136,19 +137,15 @@ Page({
 	},
 
 	onLoad: function (options) {
-		page_load(this, options);
+		load(this, options);
 	},
 
 	roleChange: function (ev) {
 		roleChange(this, ev);
 	},
 
-	saveName: function(ev) {
-		let v = ev.detail.value;
-
-		if (v) {
-			this.setData({ name: v});
-		}
+	saveName: function (ev) {
+		saveName(this, ev);
 	},
 
 	saveStudent: function (ev) {

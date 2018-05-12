@@ -1,4 +1,5 @@
-// pages/group/group.js
+// 进入条件
+
 const m_name = "group";
 const app = getApp();
 
@@ -51,15 +52,12 @@ function load(page, options) {
 		case "userCheckin":
 			loadByCheckin(page, options);
 			break;
+		case "share":
+			loadByShared(page, options);
+			break;
 		default:
 			loadByGroup(page, options);
 			break;
-	}
-}
-
-function swichTab(page, current) {
-	if (page.data.current != current) {
-		page.setData({ current });
 	}
 }
 
@@ -123,6 +121,12 @@ function groupGet(page, obj) {
 		"group.patriarch.list": patriarchs,
 		"group.student.list": students,
 	});
+}
+
+function swichTab(page, current) {
+	if (page.data.current != current) {
+		page.setData({ current });
+	}
 }
 
 const tabVote = {

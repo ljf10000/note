@@ -6,20 +6,9 @@ const res = $("res");
 const api = $("api");
 const gw = $("gw");
 
-function initParam(app, param) {
-	let user = app.user;
-
-	param.uid = user.uid;
-	param.session = user.session;
-}
-
 const debug = true;
 
 function start(app, gsecret) {
-	if (gsecret) {
-		app.login.gsecret = gsecret;
-	}
-
 	if (debug || 0 == app.user.uid) {
 		return start_login(app);
 	} else {
@@ -32,6 +21,8 @@ function start(app, gsecret) {
 
 function start_normal(app) {
 	if (app.login.gsecret) {
+		console.log(`start normal gsecret`);
+
 		return userG(app);
 	} else {
 		console.log(`start normal`);
@@ -41,14 +32,10 @@ function start_normal(app) {
 }
 
 function start_login(app) {
-	// api.showLoadingEx(res.Transfer( "wx login"));
-
 	return api.login().then(
 		v => login(app, v.code),
 		e => {
 			let msg = res.Transfer("wx login fail");
-
-			api.hideLoadingEx();
 
 			console.error(`${msg}: ${JSON.stringify(e)}`);
 
@@ -59,8 +46,6 @@ function start_login(app) {
 
 function login(app, jscode) {
 	app.login.jscode = jscode;
-
-	// api.showLoadingEx(res.Transfer("mp login"));
 
 	if (debug || 0 == app.user.uid) {
 		if (app.login.gsecret) {
@@ -81,12 +66,7 @@ function loginBy(app, method, param) {
 	app.login.param = param;
 	app.login.method = method;
 
-	let msg = res.Word("login");
-
-	msg = `${msg} ${method}`;
-	// api.showLoadingEx(msg);
-
-	msg = `start ${msg} with`;
+	let msg = `start ${method} with`;
 	if (param.uid) {
 		msg = `${msg} uid:${param.uid}`;
 	}
@@ -94,7 +74,7 @@ function loginBy(app, method, param) {
 		msg = `${msg} jscode:${param.jscode}`;
 	}
 	if (param.gsecret) {
-		msg = `${msg} gsecret:${JSON.stringify({ iv: param.gsecret.iv })}`;
+		msg = `${msg} iv:${param.gsecret.iv}`;
 	}
 	console.log(msg);
 
@@ -105,19 +85,24 @@ function callBy(obj, method, param) {
 	let r = gw[method];
 
 	if (helper.isPage(obj)) {
-		initParam(getApp(), param);
+		let user = getApp().user;
+
+		param.uid = user.uid;
+		param.session = user.session;
 	}
+
+	console.log(`mp ${method} ${JSON.stringify(param)}`);
 
 	return r.request(param).then(
 		v => {
 			let d = v.data;
 
-			console.log(`${method} recv obj: ${JSON.stringify(d)}`);
+			console.log(`mp ${method} recv obj: ${JSON.stringify(d)}`);
 
 			return (!d || d.error) ? r.fail(obj, d) : r.success(obj, d);
 		},
 		e => {
-			console.log(`${method} recv error: ${JSON.stringify(d)}`);
+			console.log(`mp ${method} recv error: ${JSON.stringify(d)}`);
 
 			return r.fail(obj, e);
 		}
@@ -161,20 +146,25 @@ function userG(app) {
 }
 
 const mp = {
-	start: (app, shareTicket) => {
+	start: (app, page, shareTicket) => {
+		app.start.page = page.name;
+
 		if (shareTicket) {
 			console.log(`mp start with shareTicket:${shareTicket}`);
 
 			api.getShareInfo(shareTicket).then(v => {
 				console.log(`mp getShareInfo: shareTicket:${shareTicket} ==> iv:${v.iv}`);
 
-				start(app, {
+				let gsecret = {
 					iv: v.iv,
 					encryptedData: v.encryptedData,
-				});
+				};
+				app.login.gsecret = gsecret;
+
+				start(app, gsecret);
 			})
 		} else {
-			console.log(`mp start normal`);
+			console.log(`mp start without shareTicket`);
 
 			start(app);
 		}

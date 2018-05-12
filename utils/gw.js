@@ -109,8 +109,6 @@ const $gw = {
 		// obj is app or page
 		let msg = res.Join("mp", ...keys, "fail");
 
-		api.hideLoadingEx();
-
 		api.showModal(res.APP, msg);
 	},
 	login_fail: (obj, e) => $gw.fail(obj, e, "login"),

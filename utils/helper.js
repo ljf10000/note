@@ -108,6 +108,8 @@ const helper = {
 	addNowDay: (after) => helper.addDay(new Date(), after),
 };
 
+console.log(`now=[${helper.simTimeString()}]/[${helper.stdTimeString()}]`);
+
 /*
 const fsm = {
 	INIT: 0,

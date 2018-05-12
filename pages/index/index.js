@@ -1,3 +1,5 @@
+// 进入条件：启动
+
 const m_name = "index";
 const app = getApp();
 
@@ -9,23 +11,7 @@ const res = $("res");
 function load(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 
-	mp.start(app, app.login.shareTicket);
-
-	let interval = 100;
-
-	let id = setInterval(() => {
-		let time = page.data.time;
-
-		page.setData({
-			time: time - interval,
-		});
-
-		if (time == 0) {
-			// api.redirectToEx("me");
-
-			clearInterval(id);
-		}
-	}, interval);
+	mp.start(app, page, app.login.shareTicket);
 }
 
 Page({
@@ -34,7 +20,6 @@ Page({
 	
 	data: {
 		APP: res.APP,
-		time: 2000,
 	},
 
 	onLoad: function (options) {

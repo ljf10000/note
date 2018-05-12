@@ -1,3 +1,8 @@
+// 进入条件：
+// 1. without share ticket
+// 2. no group, or multi group
+// 3. start over
+
 const m_name = "me";
 const app = getApp();
 

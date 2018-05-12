@@ -1,4 +1,3 @@
-// app.js
 const $ = (name) => require(`utils/${name}.js`)[name];
 const helper = $("helper");
 const api = $("api");
@@ -22,7 +21,9 @@ updateManager.onUpdateFailed(function () {
 })
 */
 
-const pages = [
+const sysinfo = api.getSystemInfoSync();
+
+const topics = [
 	"checkin",
 	"group",
 	"index",
@@ -33,37 +34,37 @@ const pages = [
 	"shownotice",
 ];
 
-function load(app, options) {
+function launch(app, options) {
 	console.log(`app launch options=${JSON.stringify(options)}`);
-
-	console.log(`now=${helper.simTimeString()}/${helper.stdTimeString()}`);
-
-	pages.map(v => app.mq.addTopic(v));
 
 	api.getUserInfoEx(app);
 
+	topics.map(v => app.mq.addTopic(v));
+
 	db.user.load(app.user);
+
 	Object.values(app.user.byname).map(gid => {
 		db.group.load(app.groups, gid);
 	});
 }
 
 function show(app, options) {
+	console.log(`app show options=${JSON.stringify(options)}`);
+
 	app.options = options;
 
-	if (1044 == app.options.scene) {
-		let login = app.login;
-
-		login.shareTicket = options.shareTicket;
-		login.query = options.query;
+	switch (app.options.scene) {
+		// 群内打开带share ticket的小程序
+		case api.sence.shareTicket:
+			app.login.shareTicket = options.shareTicket;
+			app.login.query = options.query;
+			break;
 	}
-
-	console.log(`app show options=${JSON.stringify(options)}`);
 }
 
 App({
 	onLaunch: function (options) {
-		load(this, options);
+		launch(this, options);
 	},
 
 	onShow: function (options) {
@@ -75,11 +76,19 @@ App({
 	userInfo: {
 		nickName: "SB",
 	},
-	sysinfo: api.getSystemInfoSync(),
+	sysinfo,
 
-	login: {},
+	login: {
+		// shareTicket
+		// query
+		// gsecret
+	},
+	start: {
+		// page
+	},
 	options: {},
 
 	mq: new mq(),
+	name: "app",
 	__i_am__: "app",
 });
