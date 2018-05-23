@@ -8,49 +8,40 @@ const api = $("api");
 // userLogin
 // userLoginG
 // userG
-function start_post(app, param = {}) {
-	let target = "guide";
+function start_post(app, group = {}) {
+	let param = {};
 
-	db.user.save(app.user);
+	if (group.opengid) {
+		// 如果携带opengid，则说明从群组启动
+		console.log(`start post with ${JSON.stringify(group)}`);
 
-	api.hideLoadingEx();
-
-	console.log(`start over`);
-
-	if (param.opengid) {
-		if (param.gid) {
-			let gid = db.user.getGid(app.user, param.opengid);
-			if (gid != param.gid) {
-				db.user.addGroup(app.user, param.gid, param.opengid);
+		param.opengid = group.opengid;
+		if (group.gid) {
+			// 如果携带gid，则说明用户已经加入群组
+			// 先重定向到 me 页，携带 opengid & gid信息
+			let gid = db.user.getGid(app.user, group.opengid);
+			if (gid != group.gid) {
+				db.user.addGroup(app.user, group.gid, group.opengid);
 				db.user.save(app.user);
 			}
 
-			api.navigateToEx("group", {
-				opengid: param.opengid,
-				gid: param.gid,
-			});
+			param.gid = gid;
 		} else {
-			api.navigateToEx("checkin", { opengid: param.opengid });
+			// 如果未携带gid，则说明用户需要checkin
+			// 先重定向到 me 页，携带 opengid 信息
 		}
 	} else {
-		let groups = db.user.getGroups(app.user);
-		let count = groups ? groups.length : 0;
+		console.log(`start post`);
+	}
 
-		switch (count) {
-			case 1:
-				/*
-				api.navigateToEx("group", {
-					opengid: groups[0].opengid,
-					gid: groups[0].gid,
-				});
-				*/
-				api.redirectToEx("me");
-				break;
-			case 0:
-			default:
-				api.redirectToEx("me");
-				break;
+	if (app.start.invite) {
+		if (param.gid) {
+			api.navigateToEx("group", param);
+		} else {
+			api.navigateToEx("checkin", param);
 		}
+	} else {
+		api.redirectToEx("me", param);
 	}
 }
 

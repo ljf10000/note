@@ -2,12 +2,12 @@
     "pages": [
         "pages/index/index",
 		"pages/checkin/checkin",
+		"pages/group/group",
         "pages/me/me",
-        "pages/group/group",
         "pages/newnotice/newnotice",
         "pages/newvote/newvote",
-        "pages/showvote/showvote",
-        "pages/shownotice/shownotice"
+		"pages/shownotice/shownotice",
+        "pages/showvote/showvote"
     ],
     "window": {
         "backgroundTextStyle": "light",

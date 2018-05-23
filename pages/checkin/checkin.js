@@ -2,7 +2,6 @@ const m_name = "guide";
 const app = getApp();
 
 const $ = (name) => require(`../../utils/${name}.js`)[name];
-const pg = $("pg");
 const gw = $("gw");
 const mp = $("mp");
 const api = $("api");

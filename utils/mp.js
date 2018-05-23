@@ -6,28 +6,16 @@ const res = $("res");
 const api = $("api");
 const gw = $("gw");
 
-const debug = true;
+const mustLogin = true;
 
-function start(app, gsecret) {
-	if (debug || 0 == app.user.uid) {
+function start(app) {
+	if (mustLogin || 0 == app.user.uid) {
 		return start_login(app);
 	} else {
 		return api.checkSession().then(
 			v => start_normal(app),
 			e => start_login(app)
 		);
-	}
-}
-
-function start_normal(app) {
-	if (app.login.gsecret) {
-		console.log(`start normal gsecret`);
-
-		return userG(app);
-	} else {
-		console.log(`start normal`);
-
-		_gw.start_post(app);
 	}
 }
 
@@ -44,17 +32,29 @@ function start_login(app) {
 	);
 }
 
-function login(app, jscode) {
-	app.login.jscode = jscode;
+function start_normal(app) {
+	if (app.start.gsecret) {
+		console.log(`start normal gsecret`);
 
-	if (debug || 0 == app.user.uid) {
-		if (app.login.gsecret) {
+		return userG(app);
+	} else {
+		console.log(`start normal`);
+
+		_gw.start_post(app);
+	}
+}
+
+function login(app, jscode) {
+	app.start.jscode = jscode;
+
+	if (mustLogin || 0 == app.user.uid) {
+		if (app.start.gsecret) {
 			return randLoginG(app);
 		} else {
 			return randLogin(app);
 		}
 	} else {
-		if (app.login.gsecret) {
+		if (app.start.gsecret) {
 			return userLoginG(app);
 		} else {
 			return userLogin(app);
@@ -63,9 +63,6 @@ function login(app, jscode) {
 }
 
 function loginBy(app, method, param) {
-	app.login.param = param;
-	app.login.method = method;
-
 	let msg = `start ${method} with`;
 	if (param.uid) {
 		msg = `${msg} uid:${param.uid}`;
@@ -111,29 +108,29 @@ function callBy(obj, method, param) {
 
 function randLogin(app) {
 	return loginBy(app, "randLogin", {
-		jscode: app.login.jscode,
+		jscode: app.start.jscode,
 	});
 }
 
 function randLoginG(app) {
 	return loginBy(app, "randLoginG", {
-		jscode: app.login.jscode,
-		gsecret: app.login.gsecret,
+		jscode: app.start.jscode,
+		gsecret: app.start.gsecret,
 	});
 }
 
 function userLogin(app) {
 	return loginBy(app, "userLogin", {
 		uid: app.user.uid,
-		jscode: app.login.jscode,
+		jscode: app.start.jscode,
 	});
 }
 
 function userLoginG(app) {
 	return loginBy(app, "userLoginG", {
 		uid: app.user.uid,
-		jscode: app.login.jscode,
-		gsecret: app.login.gsecret,
+		jscode: app.start.jscode,
+		gsecret: app.start.gsecret,
 	});
 }
 
@@ -141,28 +138,28 @@ function userG(app) {
 	return loginBy(app, "userG", {
 		uid: app.user.uid,
 		session: app.user.session,
-		gsecret: app.login.gsecret,
+		gsecret: app.start.gsecret,
 	});
 }
 
 const mp = {
-	start: (app, page, shareTicket) => {
-		app.start.page = page.name;
+	start: (app, shareTicket, { invite = false } = {}) => {
+		app.start = { invite };
 
 		if (shareTicket) {
-			console.log(`mp start with shareTicket:${shareTicket}`);
+			let action = invite ? "invite" : "start";
+			console.log(`mp ${action} with shareTicket:${shareTicket}`);
 
 			api.getShareInfo(shareTicket).then(v => {
 				console.log(`mp getShareInfo: shareTicket:${shareTicket} ==> iv:${v.iv}`);
 
-				let gsecret = {
+				app.start.gsecret = {
 					iv: v.iv,
 					encryptedData: v.encryptedData,
 				};
-				app.login.gsecret = gsecret;
 
-				start(app, gsecret);
-			})
+				start(app);
+			});
 		} else {
 			console.log(`mp start without shareTicket`);
 

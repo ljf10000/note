@@ -4,7 +4,6 @@ const m_name = "group";
 const app = getApp();
 
 const $ = (name) => require(`../../utils/${name}.js`)[name];
-const pg = $("pg");
 const mp = $("mp");
 const db = $("db");
 const api = $("api");
@@ -45,7 +44,7 @@ function loadByGroup(page, options) {
 	page.setData({ opengid });
 }
 
-function load(page, options) {
+function onLoad(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 
 	switch (options.event) {
@@ -59,6 +58,12 @@ function load(page, options) {
 			loadByGroup(page, options);
 			break;
 	}
+
+	let info = api.getSystemInfoSync();
+	page.setData({
+		winWidth: info.windowWidth,
+		winHeight: info.windowHeight,
+	});
 }
 
 function groupGet(page, obj) {
@@ -177,13 +182,7 @@ Page({
 	},
 
 	onLoad: function (options) {
-		load(this, options);
-
-		let info = api.getSystemInfoSync();
-		this.setData({
-			winWidth: info.windowWidth,
-			winHeight: info.windowHeight,
-		});
+		onLoad(this, options);
 	},
 
 	groupGet: function (obj) {

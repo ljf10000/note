@@ -1,6 +1,7 @@
-<view class="container">
-    <view class="username">
-        <text class="user-name">{{name}}</text>
+<view class="container page">
+	<view class="page__hd"></view>
+    <view class="hello">
+        Hello <open-data type="userNickName"></open-data>
     </view>
 
     <view wx:if="{{group.count>0}}">
@@ -15,4 +16,5 @@
         <button open-type="share" bindtap="evShare">{{invite.title}}</button>
         <button bindtap="evClear">{{repair.title}}</button>
     </view>
+	<view class="page__bd"></view>
 </view>

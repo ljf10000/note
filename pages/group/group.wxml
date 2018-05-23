@@ -1,5 +1,4 @@
-<!--pages/group/group.wxml-->
-<view class="container">
+<view class="container page">
     <view class="swiper-tab">
         <view class="swiper-tab-list {{current==0 ? 'on' : ''}}" data-current="0" bindtap="swichTab">{{vote.title}}</view>
         <view class="swiper-tab-list {{current==1 ? 'on' : ''}}" data-current="1" bindtap="swichTab">{{notice.title}}</view>

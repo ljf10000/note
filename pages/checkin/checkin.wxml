@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container page">
     <view class="group-name">
         <open-data type="groupName" open-gid="{{opengid}}" auto-height="true"></open-data>
     </view>

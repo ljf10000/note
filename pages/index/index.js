@@ -8,10 +8,11 @@ const mp = $("mp");
 const api = $("api");
 const res = $("res");
 
-function load(page, options) {
+function onLoad(page, options) {
 	console.log(`${m_name} onload options:${JSON.stringify(options)}`);
 
-	mp.start(app, page, app.login.shareTicket);
+	// after start_post, goto page me
+	mp.start(app, app.login.shareTicket);
 }
 
 Page({
@@ -23,6 +24,6 @@ Page({
 	},
 
 	onLoad: function (options) {
-		load(this, options);
+		onLoad(this, options);
 	},
 })

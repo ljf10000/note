@@ -34,10 +34,14 @@ const topics = [
 	"shownotice",
 ];
 
-function launch(app, options) {
+function onLaunch(app, options) {
 	console.log(`app launch options=${JSON.stringify(options)}`);
 
-	api.getUserInfoEx(app);
+	/*
+	if (!app.userInfo.nickName) {
+		api.getUserInfoEx(app);
+	}
+	*/
 
 	topics.map(v => app.mq.addTopic(v));
 
@@ -48,7 +52,7 @@ function launch(app, options) {
 	});
 }
 
-function show(app, options) {
+function onShow(app, options) {
 	console.log(`app show options=${JSON.stringify(options)}`);
 
 	app.options = options;
@@ -57,34 +61,31 @@ function show(app, options) {
 		// 群内打开带share ticket的小程序
 		case api.sence.shareTicket:
 			app.login.shareTicket = options.shareTicket;
-			app.login.query = options.query;
 			break;
 	}
 }
 
 App({
 	onLaunch: function (options) {
-		launch(this, options);
+		onLaunch(this, options);
 	},
 
 	onShow: function (options) {
-		show(this, options);
+		onShow(this, options);
 	},
 
 	user: {},
 	groups: {},
-	userInfo: {
-		nickName: "SB",
-	},
+	userInfo: api.getStorageSync("userInfo") || {},
 	sysinfo,
 
 	login: {
 		// shareTicket
-		// query
-		// gsecret
 	},
 	start: {
 		// page
+		// gsecret
+		// jscode
 	},
 	options: {},
 

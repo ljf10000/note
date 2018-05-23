@@ -2,7 +2,6 @@ const m_name = "shownotice";
 const app = getApp();
 
 const $ = (name) => require(`../../utils/${name}.js`)[name];
-const pg = $("pg");
 const mp = $("mp");
 
 function load(page, options) {
